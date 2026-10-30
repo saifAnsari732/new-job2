@@ -431,20 +431,32 @@
             </div>
           </div>
 
-          <div class="flex items-center space-x-3">
+          <div class="flex flex-wrap items-center gap-3">
             <div class="bg-white px-4 py-2 rounded-xl border border-emerald-200 shadow-sm flex items-center space-x-2.5">
-              <span id="oauth-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <span id="oauth-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
               <div class="text-left">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block leading-none">Connected OAuth Mailbox</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block leading-none">Connected OAuth Mailbox (Auto-Polling)</span>
                 <span id="oauth-account-label" class="font-mono font-bold text-slate-900 text-xs mt-0.5 block">ansarisaifuddin732@gmail.com</span>
               </div>
             </div>
 
-            <button id="btn-verify-oauth" class="bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold px-4 py-2.5 rounded-xl text-sm flex items-center space-x-2 shadow-sm transition cursor-pointer">
+            <button id="btn-toggle-daemon" type="button" class="bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 font-semibold px-3.5 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-sm transition cursor-pointer">
+              <span id="daemon-dot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span id="daemon-status-text">Auto-Reply Daemon: ON</span>
+            </button>
+
+            <button id="btn-verify-oauth" type="button" class="bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold px-4 py-2.5 rounded-xl text-sm flex items-center space-x-2 shadow-sm transition cursor-pointer">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-              <span id="btn-verify-oauth-text">Sync Gmail Inbox</span>
+              <span id="btn-verify-oauth-text">Scan &amp; Sync Gmail Inbox</span>
+            </button>
+
+            <button id="btn-batch-autoreply" type="button" class="bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-semibold px-4 py-2.5 rounded-xl text-sm flex items-center space-x-2 shadow-sm transition cursor-pointer">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span id="btn-batch-autoreply-text">Auto-Reply All 5 Scenarios</span>
             </button>
           </div>
         </div>
@@ -635,6 +647,37 @@ Click "Run AI Auto-Reply &amp; Dispatch Real Email" on the left to execute the 4
 
             </div>
 
+          </div>
+
+          <!-- Live Auto-Reply Dispatch History Table -->
+          <div class="border-t border-slate-200 pt-6 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center space-x-2.5">
+                <h3 class="text-base font-bold text-slate-900">Automated Email Reply History &amp; Ticket Queue</h3>
+                <span id="ar-history-count" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">0 Tickets Processed</span>
+              </div>
+              <span class="text-xs text-slate-500">Every incoming author email or scenario test is logged here with full AI confidence &amp; SLA telemetry</span>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-slate-600 uppercase tracking-wider text-xs border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-4 font-bold">Ticket ID</th>
+                    <th class="py-3 px-4 font-bold">Resolved Author</th>
+                    <th class="py-3 px-4 font-bold">Detected Intent</th>
+                    <th class="py-3 px-4 font-bold">AI Confidence</th>
+                    <th class="py-3 px-4 font-bold">Gmail Delivery</th>
+                    <th class="py-3 px-4 text-right font-bold">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="ar-history-tbody" class="divide-y divide-slate-100">
+                  <tr id="ar-history-empty">
+                    <td colspan="6" class="py-6 text-center text-sm text-slate-400">No auto-reply tickets dispatched yet. Click "Run AI Auto-Reply &amp; Dispatch Real Email" or "Auto-Reply All 5 Scenarios" above.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
         </div>
@@ -1704,9 +1747,19 @@ Click "Run AI Auto-Reply &amp; Dispatch Real Email" on the left to execute the 4
     const btnRunAutoreplyText = document.getElementById("btn-run-autoreply-text");
     const btnVerifyOauth = document.getElementById("btn-verify-oauth");
     const btnVerifyOauthText = document.getElementById("btn-verify-oauth-text");
+    const btnToggleDaemon = document.getElementById("btn-toggle-daemon");
+    const daemonDot = document.getElementById("daemon-dot");
+    const daemonStatusText = document.getElementById("daemon-status-text");
+    const btnBatchAutoreply = document.getElementById("btn-batch-autoreply");
+    const btnBatchAutoreplyText = document.getElementById("btn-batch-autoreply-text");
+    const arHistoryCount = document.getElementById("ar-history-count");
+    const arHistoryTbody = document.getElementById("ar-history-tbody");
     const btnHeaderOauth = document.getElementById("btn-header-oauth");
     const headerOauthText = document.getElementById("header-oauth-text");
     const oauthTelemetrySub = document.getElementById("oauth-telemetry-sub");
+
+    let daemonActive = true;
+    let arHistoryItems = [];
 
     const arTicketBadge = document.getElementById("ar-ticket-badge");
     const arIntentBadge = document.getElementById("ar-intent-badge");
@@ -1749,18 +1802,84 @@ Click "Run AI Auto-Reply &amp; Dispatch Real Email" on the left to execute the 4
       showToast(`Loaded ${type.toLowerCase()} test scenario`);
     };
 
+    function renderAutoReplyRecord(r) {
+      arTicketBadge.textContent = `#${r.ticket_id}`;
+      arIntentBadge.textContent = r.intent_label;
+      arConfidenceBadge.textContent = `Confidence: ${r.confidence}%`;
+
+      if (r.needs_human_escalation) {
+        arEscalationBadge.classList.remove("hidden");
+        arConfidenceBadge.className = "px-3 py-1 rounded-lg text-xs font-mono font-bold bg-amber-50 border border-amber-200 text-amber-900";
+      } else {
+        arEscalationBadge.classList.add("hidden");
+        arConfidenceBadge.className = "px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 border border-emerald-200 text-emerald-900";
+      }
+
+      arMetaAuthor.textContent = `${r.author_name} (${r.author_id})`;
+      arMetaMethod.textContent = r.match_method;
+      arMetaSla.textContent = `${r.sla_window}`;
+      arOutputSubject.textContent = r.reply_subject;
+      arOutputBody.textContent = r.reply_body;
+
+      // Add to Auto-Reply History Table
+      const emptyEl = document.getElementById("ar-history-empty");
+      if (emptyEl) emptyEl.remove();
+
+      if (!arHistoryItems.find(x => x.ticket_id === r.ticket_id)) {
+        arHistoryItems.unshift(r);
+        arHistoryCount.textContent = `${arHistoryItems.length} Tickets Processed`;
+
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition";
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-mono font-bold text-indigo-700 text-xs">#${r.ticket_id}</td>
+          <td class="py-3 px-4">
+            <span class="font-bold text-slate-900 text-sm block">${r.author_name}</span>
+            <span class="text-xs text-slate-500 font-mono">${r.author_id} • ${r.match_method}</span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">${r.intent_label}</span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="font-mono font-bold text-xs ${r.needs_human_escalation ? 'text-amber-800 bg-amber-50 border-amber-200' : 'text-emerald-800 bg-emerald-50 border-emerald-200'} px-2.5 py-1 rounded-md border">
+              ${r.confidence}% ${r.needs_human_escalation ? '(Escalated)' : '(Verified)'}
+            </span>
+          </td>
+          <td class="py-3 px-4 text-xs text-emerald-700 font-semibold">
+            Sent to ${r.delivered_to || 'ansarisaifuddin732@gmail.com'} (${r.timestamp})
+          </td>
+          <td class="py-3 px-4 text-right">
+            <button type="button" onclick="inspectAutoReplyTicket('${r.ticket_id}')" class="text-emerald-700 hover:text-emerald-900 font-bold text-xs cursor-pointer">View Reply</button>
+          </td>
+        `;
+        arHistoryTbody.insertBefore(tr, arHistoryTbody.firstChild);
+      }
+    }
+
+    window.inspectAutoReplyTicket = function(ticketId) {
+      const found = arHistoryItems.find(x => x.ticket_id === ticketId);
+      if (found) {
+        renderAutoReplyRecord(found);
+        showToast(`Loaded Auto-Reply Ticket #${ticketId}`);
+      }
+    };
+
     async function verifyOAuthConnection(showFeedback = false) {
       if (showFeedback) {
-        btnVerifyOauthText.textContent = "Syncing IMAP:993...";
+        btnVerifyOauthText.textContent = "Scanning IMAP:993...";
       }
       try {
-        const res = await fetch("http://localhost:5001/api/oauth-status");
+        const endpoint = showFeedback ? "http://localhost:5001/api/scan-inbox" : "http://localhost:5001/api/oauth-status";
+        const res = await fetch(endpoint);
         const data = await res.json();
         if (data.success && data.oauth) {
           headerOauthText.textContent = `Gmail OAuth: Connected (${data.oauth.inbox_messages || 0} msgs)`;
-          oauthTelemetrySub.textContent = `IMAP:993 Synced (${data.oauth.inbox_messages || 0} msgs • ${data.oauth.latency_ms}ms)`;
+          oauthTelemetrySub.textContent = `IMAP:993 Synced (${data.oauth.inbox_messages || 0} msgs • ${data.oauth.total_auto_replies_sent || 0} Replies Sent)`;
+          if (Array.isArray(data.history)) {
+            data.history.slice().reverse().forEach(item => renderAutoReplyRecord(item));
+          }
           if (showFeedback) {
-            showToast(`OAuth Verified: ${data.oauth.account} (${data.oauth.inbox_messages} messages synced)`);
+            showToast(`Inbox Scanned & Synced: ${data.oauth.account} (${data.oauth.inbox_messages} messages)`);
           }
         }
       } catch (e) {
@@ -1769,7 +1888,7 @@ Click "Run AI Auto-Reply &amp; Dispatch Real Email" on the left to execute the 4
         }
       } finally {
         if (showFeedback) {
-          btnVerifyOauthText.textContent = "Sync Gmail Inbox";
+          btnVerifyOauthText.textContent = "Scan & Sync Gmail Inbox";
         }
       }
     }
@@ -1779,6 +1898,22 @@ Click "Run AI Auto-Reply &amp; Dispatch Real Email" on the left to execute the 4
       btnHeaderOauth.addEventListener("click", () => {
         document.getElementById("admin-autoreply-section")?.scrollIntoView({ behavior: "smooth" });
         verifyOAuthConnection(true);
+      });
+    }
+
+    if (btnToggleDaemon) {
+      btnToggleDaemon.addEventListener("click", async () => {
+        daemonActive = !daemonActive;
+        daemonDot.className = daemonActive ? "w-2 h-2 rounded-full bg-emerald-500" : "w-2 h-2 rounded-full bg-amber-500";
+        daemonStatusText.textContent = daemonActive ? "Auto-Reply Daemon: ON" : "Auto-Reply Daemon: PAUSED";
+        try {
+          await fetch("http://localhost:5001/api/oauth-status", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ auto_reply_enabled: daemonActive })
+          });
+        } catch (e) {}
+        showToast(daemonActive ? "24/7 IMAP Auto-Reply Daemon Enabled" : "IMAP Auto-Reply Daemon Paused");
       });
     }
 
@@ -1808,23 +1943,7 @@ Click "Run AI Auto-Reply &amp; Dispatch Real Email" on the left to execute the 4
         if (!data.success) throw new Error(data.error || "Auto-reply failed");
 
         const r = data.record;
-        arTicketBadge.textContent = `#${r.ticket_id}`;
-        arIntentBadge.textContent = r.intent_label;
-        arConfidenceBadge.textContent = `Confidence: ${r.confidence}%`;
-
-        if (r.needs_human_escalation) {
-          arEscalationBadge.classList.remove("hidden");
-          arConfidenceBadge.className = "px-3 py-1 rounded-lg text-xs font-mono font-bold bg-amber-50 border border-amber-200 text-amber-900";
-        } else {
-          arEscalationBadge.classList.add("hidden");
-          arConfidenceBadge.className = "px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 border border-emerald-200 text-emerald-900";
-        }
-
-        arMetaAuthor.textContent = `${r.author_name} (${r.author_id})`;
-        arMetaMethod.textContent = r.match_method;
-        arMetaSla.textContent = `${r.sla_window}`;
-        arOutputSubject.textContent = r.reply_subject;
-        arOutputBody.textContent = r.reply_body;
+        renderAutoReplyRecord(r);
 
         addAdminLog({
           author_name: `${r.author_name} (Auto-Reply)`,
@@ -1844,6 +1963,55 @@ Click "Run AI Auto-Reply &amp; Dispatch Real Email" on the left to execute the 4
         btnRunAutoreplyText.textContent = "Run AI Auto-Reply & Dispatch Real Email";
       }
     });
+
+    if (btnBatchAutoreply) {
+      btnBatchAutoreply.addEventListener("click", async () => {
+        const scenarios = [
+          { author_id: "AUTH009", query_text: "Hi BookLeaf team, why has my pending royalty of ₹850 for The Nagpur Notebooks not been transferred to my bank account yet?" },
+          { author_id: "AUTH004", query_text: "Urgent: My pending royalty of ₹3,350 for Debugging Life has been overdue for more than 90 days since August 2025. When will it be credited?" },
+          { author_id: "AUTH007", query_text: "Hello, what is the current production stage for my third book 'Midnight in Mysore' and how are sales doing on my other two romance books?" },
+          { author_id: "AUTH001", query_text: "Hi team, please share how many copies Whispers of the Ganges and The Saffron Diaries have sold on Amazon and Flipkart, and how my 80% net royalty is calculated." },
+          { author_id: "AUTH002", query_text: "I have a complex legal tax dispute regarding international GST and wire remittance for my ₹13,024 overdue balance. Please have a senior manager review this." }
+        ];
+
+        btnBatchAutoreply.disabled = true;
+        btnBatchAutoreply.classList.add("opacity-60");
+        showToast("Running 5-Scenario Automated Email Reply Suite...");
+
+        for (let i = 0; i < scenarios.length; i++) {
+          btnBatchAutoreplyText.textContent = `Dispatching (${i + 1}/5)...`;
+          try {
+            const res = await fetch("http://localhost:5001/api/auto-reply", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                author_id: scenarios[i].author_id,
+                query_text: scenarios[i].query_text,
+                send_real_email: true
+              })
+            });
+            const data = await res.json();
+            if (data.success && data.record) {
+              const r = data.record;
+              renderAutoReplyRecord(r);
+              addAdminLog({
+                author_name: `${r.author_name} (Auto-Reply)`,
+                author_id: `${r.ticket_id} • ${r.confidence}%`,
+                status: "Success",
+                subject: r.reply_subject,
+                timestamp: r.timestamp,
+                body: r.reply_body
+              });
+            }
+          } catch (e) {}
+        }
+
+        btnBatchAutoreply.disabled = false;
+        btnBatchAutoreply.classList.remove("opacity-60");
+        btnBatchAutoreplyText.textContent = "Auto-Reply All 5 Scenarios";
+        showToast("All 5 Author Email Scenarios Auto-Replied & Sent to Gmail!");
+      });
+    }
 
     // Author Self-Service Auto-Reply Desk
     const authorSupportQuery = document.getElementById("author-support-query");

@@ -121,6 +121,8 @@ const AUTHORS_DB = [
 ];
 
 let autoReplyHistory = [];
+let seenImapUids = new Set();
+let isScanningInbox = false;
 let oauthTelemetry = {
   connected: true,
   account: SMTP_USER,
@@ -128,7 +130,9 @@ let oauthTelemetry = {
   imap_host: "imap.gmail.com:993 (TLS)",
   smtp_host: "smtp.gmail.com:465 (SSL)",
   auto_reply_enabled: true,
+  daemon_interval_sec: 25,
   last_verified: new Date().toISOString(),
+  last_inbox_scan: new Date().toISOString(),
   total_auto_replies_sent: 0
 };
 
@@ -683,6 +687,213 @@ function verifyImapConnection() {
 }
 
 // ============================================================================
+// CORE AUTO-REPLY PIPELINE EXECUTOR (USED BY BOTH API & IMAP WATCHER DAEMON)
+// ============================================================================
+async function processAutoReplyJob(payload) {
+  const startTime = Date.now();
+  const {
+    author_id = "",
+    sender_email = "",
+    subject = "Author Royalty & Book Status Inquiry",
+    query_text = "Hello BookLeaf team, please share my current pending royalty payout status and book sales breakdown.",
+    target_recipient = SMTP_USER,
+    send_real_email = true,
+    source_channel = "API_SIMULATOR"
+  } = payload;
+
+  const ticketId = `BL-AUTO-${Math.floor(10000 + Math.random() * 90000)}`;
+
+  // STAGE 1: Resolve Identity
+  const identity = resolveAuthorIdentity({ author_id, sender_email, subject, query_text });
+  const author = identity.author;
+
+  // STAGE 2: Classify Intent, Sentiment & Confidence
+  const classification = classifyEmailIntent(query_text, subject, author);
+
+  // STAGE 3: Generate Grounded AI Response
+  const generated = await generateGroundedAutoReply(author, classification, query_text, ticketId);
+
+  // STAGE 4: Dispatch Real HTML Auto-Reply Email via Gmail SMTP
+  let emailResult = { sent: false, messageId: null };
+  if (send_real_email) {
+    const html = buildExecutiveEmailHtml({
+      author_name: author.name,
+      author_id: author.author_id,
+      author_email: author.email,
+      subject: generated.subject,
+      email_body: generated.body,
+      total_earned: author.total_earned,
+      total_paid: author.total_paid,
+      total_pending: author.total_pending,
+      books: author.books,
+      auto_reply_meta: {
+        ticket_id: ticketId,
+        intent_label: classification.intent_label,
+        match_method: identity.match_method,
+        confidence: classification.confidence,
+        needs_human_escalation: classification.needs_human_escalation,
+        original_query: query_text
+      }
+    });
+
+    const info = await transporter.sendMail({
+      from: `"BookLeaf AI Auto-Reply Desk" <${SMTP_USER}>`,
+      to: target_recipient || SMTP_USER,
+      replyTo: SMTP_USER,
+      subject: generated.subject,
+      text: generated.body,
+      html
+    });
+
+    emailResult = { sent: true, messageId: info.messageId, delivered_to: target_recipient || SMTP_USER };
+    oauthTelemetry.total_auto_replies_sent += 1;
+    console.log(`[AUTO-REPLY][${source_channel}] Ticket ${ticketId} -> ${author.name} (${classification.intent_id}, ${classification.confidence}%) -> Sent to ${emailResult.delivered_to}`);
+  }
+
+  const elapsedMs = Date.now() - startTime;
+  const record = {
+    ticket_id: ticketId,
+    source_channel,
+    timestamp: new Date().toLocaleTimeString(),
+    iso_time: new Date().toISOString(),
+    elapsed_ms: elapsedMs,
+    author_id: author.author_id,
+    author_name: author.name,
+    author_email: author.email,
+    author_badge: author.badge,
+    author_status: author.status,
+    match_method: identity.match_method,
+    intent_id: classification.intent_id,
+    intent_label: classification.intent_label,
+    sentiment: classification.sentiment,
+    confidence: classification.confidence,
+    needs_human_escalation: classification.needs_human_escalation,
+    sla_window: classification.sla_window,
+    original_query: query_text,
+    reply_subject: generated.subject,
+    reply_body: generated.body,
+    engine: generated.engine,
+    email_dispatched: emailResult.sent,
+    delivered_to: emailResult.delivered_to || SMTP_USER
+  };
+
+  autoReplyHistory.unshift(record);
+  return record;
+}
+
+// ============================================================================
+// REAL-TIME GMAIL IMAP UNREAD INBOX WATCHER DAEMON (POLLS EVERY 25 SECONDS)
+// ============================================================================
+function scanGmailInboxForNewAuthorEmails() {
+  return new Promise((resolve) => {
+    if (!oauthTelemetry.auto_reply_enabled || isScanningInbox) {
+      return resolve({ scanned: false, reason: "busy_or_disabled" });
+    }
+    isScanningInbox = true;
+    oauthTelemetry.last_inbox_scan = new Date().toISOString();
+
+    let settled = false;
+    const finish = (res) => {
+      if (!settled) {
+        settled = true;
+        isScanningInbox = false;
+        resolve(res);
+      }
+    };
+
+    const sock = tls.connect({ host: "imap.gmail.com", port: 993, rejectUnauthorized: false }, () => {
+      sock.write(`W1 LOGIN ${SMTP_USER} ${SMTP_PASS}\r\n`);
+    });
+
+    let buffer = "";
+    let step = "LOGIN";
+
+    sock.on("data", async (chunk) => {
+      buffer += chunk.toString();
+
+      if (step === "LOGIN" && buffer.includes("W1 OK")) {
+        step = "SELECT";
+        buffer = "";
+        sock.write("W2 SELECT INBOX\r\n");
+      } else if (step === "SELECT" && buffer.includes("W2 OK")) {
+        const existsMatch = buffer.match(/\*\s+(\d+)\s+EXISTS/);
+        const total = existsMatch ? Number(existsMatch[1]) : 0;
+        oauthTelemetry.inbox_messages = total;
+        if (total > 0) {
+          step = "FETCH";
+          buffer = "";
+          // Fetch headers of the latest email in inbox to check if it's an incoming author inquiry
+          sock.write(`W3 FETCH ${total} (UID BODY.PEEK[HEADER.FIELDS (FROM SUBJECT DATE)])\r\n`);
+        } else {
+          sock.write("W4 LOGOUT\r\n");
+          sock.end();
+          finish({ scanned: true, total_messages: 0, auto_replied: 0 });
+        }
+      } else if (step === "FETCH" && buffer.includes("W3 OK")) {
+        const raw = buffer;
+        step = "DONE";
+        sock.write("W4 LOGOUT\r\n");
+        sock.end();
+
+        const uidMatch = raw.match(/UID\s+(\d+)/i);
+        const uid = uidMatch ? uidMatch[1] : null;
+        const subjMatch = raw.match(/Subject:\s*([^\r\n]+)/i);
+        const fromMatch = raw.match(/From:\s*([^\r\n]+)/i);
+        const subj = subjMatch ? subjMatch[1].trim() : "";
+        const from = fromMatch ? fromMatch[1].trim() : "";
+
+        // First scan after server startup records current head UID so we only auto-reply to NEW incoming emails
+        if (seenImapUids.size === 0 && uid) {
+          seenImapUids.add(uid);
+          return finish({ scanned: true, initialized_head_uid: uid, latest_subject: subj });
+        }
+
+        // Prevent infinite loop: never auto-reply to our own automated replies (`[BookLeaf Ticket` or `BookLeaf Publishing —`)
+        const isSelfGenerated = subj.includes("[BookLeaf Ticket") || subj.includes("BookLeaf Publishing —") || from.includes("BookLeaf AI Auto-Reply Desk");
+        const isBookLeafQuery = /royalty|payout|bookleaf|book|isbn|overdue|copies|sales|author|whispers|saffron|karma|nagpur|mysore/i.test(`${subj} ${from}`);
+
+        if (uid && !seenImapUids.has(uid)) {
+          seenImapUids.add(uid);
+          if (!isSelfGenerated && isBookLeafQuery) {
+            try {
+              const emailMatch = from.match(/<([^>]+)>/) || [null, from];
+              const cleanEmail = (emailMatch[1] || "").trim();
+              const record = await processAutoReplyJob({
+                sender_email: cleanEmail,
+                subject: subj,
+                query_text: `Incoming Gmail Email — Subject: "${subj}" from ${from}`,
+                target_recipient: cleanEmail.includes("@") ? cleanEmail : SMTP_USER,
+                send_real_email: true,
+                source_channel: "IMAP_LIVE_WATCHER"
+              });
+              return finish({ scanned: true, new_uid: uid, auto_replied: 1, ticket_id: record.ticket_id });
+            } catch (e) {
+              return finish({ scanned: true, error: e.message });
+            }
+          }
+        }
+
+        finish({ scanned: true, latest_uid: uid, latest_subject: subj, auto_replied: 0 });
+      }
+    });
+
+    sock.on("error", (err) => finish({ scanned: false, error: err.message }));
+    setTimeout(() => {
+      try { sock.destroy(); } catch (e) {}
+      finish({ scanned: true, timeout: true });
+    }, 5000);
+  });
+}
+
+// Start background IMAP watcher every 25 seconds
+setInterval(() => {
+  scanGmailInboxForNewAuthorEmails().catch(() => {});
+}, 25000);
+setTimeout(() => {
+  scanGmailInboxForNewAuthorEmails().catch(() => {});
+}, 2000);
+
+// ============================================================================
 // HTTP SERVER ENDPOINTS (PORT 5001)
 // ============================================================================
 const server = http.createServer((req, res) => {
@@ -726,100 +937,28 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // 1B. On-Demand IMAP Inbox Scan & Auto-Reply Trigger
+  if (req.url === "/api/scan-inbox" && (req.method === "GET" || req.method === "POST")) {
+    scanGmailInboxForNewAuthorEmails().then((scanResult) => {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({
+        success: true,
+        scan: scanResult,
+        oauth: oauthTelemetry,
+        history: autoReplyHistory.slice(0, 20)
+      }));
+    });
+    return;
+  }
+
   // 2. Intelligent 4-Stage Author Email Auto-Reply Endpoint
   if (req.method === "POST" && req.url === "/api/auto-reply") {
     let body = "";
     req.on("data", (chunk) => (body += chunk));
     req.on("end", async () => {
-      const startTime = Date.now();
       try {
         const payload = JSON.parse(body || "{}");
-        const {
-          author_id = "",
-          sender_email = "",
-          subject = "Author Royalty & Book Status Inquiry",
-          query_text = "Hello BookLeaf team, please share my current pending royalty payout status and book sales breakdown.",
-          target_recipient = SMTP_USER,
-          send_real_email = true
-        } = payload;
-
-        const ticketId = `BL-AUTO-${Math.floor(10000 + Math.random() * 90000)}`;
-
-        // STAGE 1: Resolve Identity
-        const identity = resolveAuthorIdentity({ author_id, sender_email, subject, query_text });
-        const author = identity.author;
-
-        // STAGE 2: Classify Intent, Sentiment & Confidence
-        const classification = classifyEmailIntent(query_text, subject, author);
-
-        // STAGE 3: Generate Grounded AI Response
-        const generated = await generateGroundedAutoReply(author, classification, query_text, ticketId);
-
-        // STAGE 4: Dispatch Real HTML Auto-Reply Email via Gmail SMTP
-        let emailResult = { sent: false, messageId: null };
-        if (send_real_email) {
-          const html = buildExecutiveEmailHtml({
-            author_name: author.name,
-            author_id: author.author_id,
-            author_email: author.email,
-            subject: generated.subject,
-            email_body: generated.body,
-            total_earned: author.total_earned,
-            total_paid: author.total_paid,
-            total_pending: author.total_pending,
-            books: author.books,
-            auto_reply_meta: {
-              ticket_id: ticketId,
-              intent_label: classification.intent_label,
-              match_method: identity.match_method,
-              confidence: classification.confidence,
-              needs_human_escalation: classification.needs_human_escalation,
-              original_query: query_text
-            }
-          });
-
-          const info = await transporter.sendMail({
-            from: `"BookLeaf AI Auto-Reply Desk" <${SMTP_USER}>`,
-            to: target_recipient || SMTP_USER,
-            replyTo: SMTP_USER,
-            subject: generated.subject,
-            text: generated.body,
-            html
-          });
-
-          emailResult = { sent: true, messageId: info.messageId, delivered_to: target_recipient || SMTP_USER };
-          oauthTelemetry.total_auto_replies_sent += 1;
-          console.log(`[AUTO-REPLY] Ticket ${ticketId} -> ${author.name} (${classification.intent_id}, ${classification.confidence}%) -> Sent to ${emailResult.delivered_to}`);
-        }
-
-        const elapsedMs = Date.now() - startTime;
-        const record = {
-          ticket_id: ticketId,
-          timestamp: new Date().toLocaleTimeString(),
-          iso_time: new Date().toISOString(),
-          elapsed_ms: elapsedMs,
-          author_id: author.author_id,
-          author_name: author.name,
-          author_email: author.email,
-          author_badge: author.badge,
-          author_status: author.status,
-          match_method: identity.match_method,
-          intent_id: classification.intent_id,
-          intent_label: classification.intent_label,
-          sentiment: classification.sentiment,
-          confidence: classification.confidence,
-          needs_human_escalation: classification.needs_human_escalation,
-          sla_window: classification.sla_window,
-          original_query: query_text,
-          reply_subject: generated.subject,
-          reply_body: generated.body,
-          engine: generated.engine,
-          email_dispatched: emailResult.sent,
-          delivered_to: emailResult.delivered_to || SMTP_USER
-        };
-
-        autoReplyHistory.unshift(record);
-
+        const record = await processAutoReplyJob(payload);
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify({
           success: true,
