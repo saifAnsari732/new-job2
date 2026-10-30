@@ -440,7 +440,7 @@ function buildExecutiveEmailHtml(params) {
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size: 12px; color: #065f46;">
           <tr>
             <td>
-              <strong>🤖 Automated AI Reply • Ticket ${auto_reply_meta.ticket_id}</strong><br>
+              <strong>Automated AI Reply • Ticket ${auto_reply_meta.ticket_id}</strong><br>
               <span style="font-size: 11px; color: #047857;">Detected Intent: <b>${auto_reply_meta.intent_label}</b> • Match: <b>${auto_reply_meta.match_method}</b></span>
             </td>
             <td align="right">

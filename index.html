@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BookLeaf Publishing — Enterprise Royalty Dashboard & n8n AI Suite</title>
+  <title>BookLeaf Publishing — Enterprise Royalty & AI Automation Suite</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -25,7 +25,8 @@
             }
           },
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            sans: ['"Inter"', '"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           }
         }
@@ -36,275 +37,306 @@
     body {
       background-color: #F8FAFC;
       color: #0F172A;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     }
     .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scroll::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 9999px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
     .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-    .card-shadow {
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    .surface-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
     }
-    .card-hover:hover {
-      box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+    .surface-card-hover {
+      transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .surface-card-hover:hover {
+      border-color: #CBD5E1;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 4px 10px -4px rgba(15, 23, 42, 0.04);
       transform: translateY(-1px);
     }
-    @media print {
-      body * { visibility: hidden; }
-      #printable-statement, #printable-statement * { visibility: visible; }
-      #printable-statement { position: absolute; left: 0; top: 0; width: 100%; }
+    .scenario-btn.active {
+      border-color: #059669;
+      background-color: #ECFDF5;
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15);
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-brand-500 selection:text-white antialiased">
+<body class="min-h-screen flex flex-col selection:bg-brand-600 selection:text-white">
 
   <!-- ========================================================================= -->
-  <!-- TOP UNIVERSAL HEADER WITH HIGH-CONTRAST ROLE SWITCHER                    -->
+  <!-- TOP NAVIGATION HEADER                                                     -->
   <!-- ========================================================================= -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
       
-      <!-- Brand & Mode Title -->
-      <div class="flex items-center space-x-3.5">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-brand-500/20">
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      <!-- Brand Identity -->
+      <div class="flex items-center space-x-4">
+        <div class="w-11 h-11 rounded-2xl bg-slate-900 flex items-center justify-center text-white shadow-sm border border-slate-800">
+          <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
         </div>
         <div>
-          <div class="flex items-center space-x-2">
-            <h1 class="text-base font-bold text-slate-900 tracking-tight leading-none">BookLeaf Publishing</h1>
-            <span id="header-mode-badge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white">Operations Admin</span>
+          <div class="flex items-center space-x-2.5">
+            <h1 class="text-lg font-extrabold text-slate-900 tracking-tight">BookLeaf Publishing</h1>
+            <span id="header-mode-badge" class="px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider bg-slate-900 text-white">Operations Admin</span>
           </div>
-          <p id="header-mode-sub" class="text-[11px] text-slate-500 font-medium mt-1">Catalog Management, Payout Processing & n8n AI Engine</p>
+          <p id="header-mode-sub" class="text-sm text-slate-500 font-medium mt-0.5">Enterprise Royalty Ledger &amp; Autonomous AI Email Suite</p>
         </div>
       </div>
 
-      <!-- Navigation & Mode Switcher -->
-      <div class="flex items-center space-x-3 sm:space-x-4">
-        <!-- Switcher Pill -->
-        <div class="bg-slate-100 p-1 rounded-2xl flex items-center border border-slate-200 text-xs font-bold">
-          <button id="btn-switch-admin" class="px-3.5 py-2 rounded-xl bg-slate-900 text-white shadow-md transition duration-150 flex items-center space-x-1.5 cursor-pointer">
-            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+      <!-- Right Controls: Role Switcher & Live System Status -->
+      <div class="flex items-center space-x-3">
+        <!-- Role Switcher -->
+        <div class="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200 text-sm font-semibold">
+          <button id="btn-switch-admin" class="px-4 py-2 rounded-lg bg-slate-900 text-white shadow-sm transition duration-150 flex items-center space-x-2 cursor-pointer">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
             <span>Admin Console</span>
           </button>
-          <button id="btn-switch-author" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition duration-150 flex items-center space-x-1.5 cursor-pointer">
-            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+          <button id="btn-switch-author" class="px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition duration-150 flex items-center space-x-2 cursor-pointer">
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
             <span>Author Portal</span>
           </button>
         </div>
 
-        <!-- OAuth Email & Automation Health Indicators -->
-        <button id="btn-header-oauth" title="Click to verify OAuth Gmail IMAP/SMTP connection" class="hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-xs text-blue-900 font-semibold transition cursor-pointer">
-          <span class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></span>
-          <span id="header-oauth-text">OAuth Gmail: Connected</span>
+        <!-- OAuth Gmail Pill -->
+        <button id="btn-header-oauth" title="Verify OAuth Gmail IMAP/SMTP Connection" class="hidden xl:flex items-center space-x-2.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 shadow-sm transition cursor-pointer">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="header-oauth-text">Gmail OAuth: Connected</span>
         </button>
 
-        <div class="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-semibold">
+        <!-- n8n Engine Pill -->
+        <div class="hidden lg:flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 font-semibold">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>n8n Active (:5678)</span>
+          <span>n8n Engine (:5678)</span>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- Global Toast Notification -->
-  <div id="global-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 text-xs font-semibold flex items-center space-x-3 pointer-events-none">
-    <span id="toast-icon" class="text-base">✓</span>
+  <!-- Global Toast Notification (Crisp SVG Icon, Zero Emojis) -->
+  <div id="global-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-xl border border-slate-700 text-sm font-medium flex items-center space-x-3 pointer-events-none">
+    <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center shrink-0">
+      <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+      </svg>
+    </span>
     <span id="toast-msg">Action completed</span>
   </div>
 
-  <!-- Main Container -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 flex-1 space-y-7 w-full">
+  <!-- Main Workspace Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8 w-full">
 
     <!-- ========================================================================= -->
-    <!-- VIEW 1: ADMIN CONSOLE (Complete Enterprise Royalty Operations Management) -->
+    <!-- VIEW 1: ADMIN CONSOLE                                                     -->
     <!-- ========================================================================= -->
-    <div id="view-admin" class="space-y-6">
+    <div id="view-admin" class="space-y-8">
 
-      <!-- Admin Platform KPIs (Company-Wide Overview) -->
-      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Metric 1 -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
-          <div class="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
-            <span>Publisher Catalog</span>
-            <span class="w-7 h-7 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-700 font-mono text-xs">10</span>
+      <!-- 1. Executive KPI Cards -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="surface-card rounded-2xl p-6 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Publisher Catalog</span>
+            <div class="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
           </div>
-          <div class="mt-3">
-            <p class="text-3xl font-extrabold text-slate-900">10 Authors</p>
-            <p class="text-xs text-slate-500 mt-1">18 Registered Titles Across India</p>
+          <div class="mt-4">
+            <p class="text-3xl font-extrabold text-slate-900 tracking-tight">10 Authors</p>
+            <p class="text-sm text-slate-500 font-medium mt-1">18 Registered Titles Across India</p>
           </div>
         </div>
 
-        <!-- Metric 2 -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
-          <div class="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
-            <span>Total Author Earnings</span>
-            <span class="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 font-mono text-xs">₹</span>
+        <div class="surface-card rounded-2xl p-6 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Author Earnings</span>
+            <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
           </div>
-          <div class="mt-3">
-            <p class="text-3xl font-extrabold text-slate-900 font-mono">₹2,52,567</p>
-            <p class="text-xs text-emerald-600 font-semibold mt-1">80% Net Profit Share</p>
-          </div>
-        </div>
-
-        <!-- Metric 3 -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
-          <div class="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
-            <span>Cleared (Disbursed)</span>
-            <span class="w-7 h-7 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 text-xs">✓</span>
-          </div>
-          <div class="mt-3">
-            <p id="admin-kpi-disbursed" class="text-3xl font-extrabold text-blue-700 font-mono">₹2,09,423</p>
-            <p class="text-xs text-slate-500 mt-1">Paid to author bank accounts</p>
+          <div class="mt-4">
+            <p class="text-3xl font-extrabold text-slate-900 font-mono tracking-tight">₹2,52,567</p>
+            <p class="text-sm text-emerald-700 font-semibold mt-1">80% Net Author Profit Share</p>
           </div>
         </div>
 
-        <!-- Metric 4 -->
-        <div class="bg-amber-50/50 rounded-2xl p-5 border border-amber-300 card-shadow flex flex-col justify-between">
-          <div class="flex items-center justify-between text-amber-800 text-xs font-bold uppercase tracking-wider">
-            <span>Pending Disbursements</span>
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200 text-amber-900">Action Req</span>
+        <div class="surface-card rounded-2xl p-6 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Cleared (Disbursed)</span>
+            <div class="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
           </div>
-          <div class="mt-3">
-            <p id="admin-kpi-pending" class="text-3xl font-extrabold text-amber-900 font-mono">₹43,144</p>
-            <p class="text-xs text-amber-700 font-semibold mt-1">Ready for n8n AI Summary Trigger</p>
+          <div class="mt-4">
+            <p id="admin-kpi-disbursed" class="text-3xl font-extrabold text-blue-700 font-mono tracking-tight">₹2,09,423</p>
+            <p class="text-sm text-slate-500 font-medium mt-1">Settled via NEFT Bank Transfer</p>
+          </div>
+        </div>
+
+        <div class="bg-amber-50/60 rounded-2xl p-6 border border-amber-300/90 flex flex-col justify-between shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-900">Pending Disbursements</span>
+            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-200/80 text-amber-950">9 Eligible</span>
+          </div>
+          <div class="mt-4">
+            <p id="admin-kpi-pending" class="text-3xl font-extrabold text-amber-950 font-mono tracking-tight">₹43,144</p>
+            <p class="text-sm text-amber-800 font-semibold mt-1">Ready for Automated Dispatch</p>
           </div>
         </div>
       </section>
 
-      <!-- Admin Toolbar: Search, Filters & Bulk Operations -->
-      <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow flex flex-wrap items-center justify-between gap-3">
-        <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
-          <!-- Search input -->
-          <div class="relative flex-1 min-w-[200px]">
-            <input id="admin-search-input" type="text" placeholder="Search author by name, city or ID..." class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500" />
-            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+      <!-- 2. Search, Filter & Bulk Operations Toolbar -->
+      <section class="surface-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3 flex-1 min-w-[280px]">
+          <div class="relative flex-1 min-w-[240px]">
+            <input id="admin-search-input" type="text" placeholder="Search author by name, city or ID (e.g. Priya, Mumbai, AUTH001)..." class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600 transition" />
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
           </div>
 
-          <!-- City filter -->
-          <select id="admin-city-filter" class="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none cursor-pointer">
+          <select id="admin-city-filter" class="bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-brand-600 cursor-pointer">
             <option value="ALL">All Cities (10)</option>
           </select>
 
-          <!-- Status filter -->
-          <select id="admin-status-filter" class="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none cursor-pointer">
+          <select id="admin-status-filter" class="bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-brand-600 cursor-pointer">
             <option value="ALL">All Payout Statuses</option>
-            <option value="Green">Fully Paid (Green)</option>
-            <option value="Yellow">Pending Cycle (Yellow)</option>
-            <option value="Red">Overdue / Action (Red)</option>
+            <option value="Green">Fully Paid (Cleared)</option>
+            <option value="Yellow">Pending Cycle (Normal)</option>
+            <option value="Red">Overdue (&gt;90 Days)</option>
           </select>
 
-          <!-- Reset Filter Button -->
-          <button id="admin-reset-filter-btn" title="Reset all filters" class="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 transition cursor-pointer text-xs font-semibold flex items-center space-x-1">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-            <span class="hidden sm:inline">Reset</span>
+          <button id="admin-reset-filter-btn" title="Reset all filters" class="px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 transition cursor-pointer text-sm font-semibold flex items-center space-x-1.5">
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span>Reset</span>
           </button>
         </div>
 
-        <div class="flex items-center space-x-2">
-          <!-- Export CSV Button -->
-          <button id="admin-export-csv-btn" class="bg-white hover:bg-slate-50 text-slate-700 font-bold py-2 px-3 rounded-xl text-xs border border-slate-300 flex items-center space-x-1.5 shadow-sm transition cursor-pointer">
-            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+        <div class="flex items-center space-x-3">
+          <button id="admin-export-csv-btn" class="bg-white hover:bg-slate-50 text-slate-800 font-semibold py-2.5 px-4 rounded-xl text-sm border border-slate-300 flex items-center space-x-2 shadow-sm transition cursor-pointer">
+            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
             <span>Export CSV</span>
           </button>
 
-          <!-- Bulk Trigger Button -->
-          <button id="admin-bulk-btn" class="bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-bold py-2 px-3.5 rounded-xl text-xs flex items-center space-x-2 shadow-sm transition cursor-pointer">
-            <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+          <button id="admin-bulk-btn" class="bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-semibold py-2.5 px-4 rounded-xl text-sm flex items-center space-x-2 shadow-sm transition cursor-pointer">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
             <span>Bulk Trigger All (9)</span>
           </button>
         </div>
-      </div>
+      </section>
 
-      <!-- Admin Dual-Column Workspace -->
+      <!-- 3. Primary 2-Column Operations Workspace -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        <!-- Left: Author Selector & Books Details (5 cols) -->
+        <!-- Left Column (5 Cols): Author Profile & Book Ledger -->
         <div class="lg:col-span-5 space-y-6">
 
-          <!-- Author Profile Detail Card -->
-          <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-5">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <!-- Author Profile & Trigger Card -->
+          <div class="surface-card rounded-2xl p-6 space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">Author Profile Card</h3>
-                <p class="text-xs text-slate-500">Pick an author to inspect figures and trigger AI</p>
+                <h2 class="text-base font-bold text-slate-900">Author Profile &amp; Payout Control</h2>
+                <p class="text-sm text-slate-500 mt-0.5">Select an author to inspect ledger and dispatch statement</p>
               </div>
-              <span id="admin-city-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200">Mumbai</span>
+              <span id="admin-city-badge" class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-800 border border-slate-200">Mumbai</span>
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Author</label>
-              <select id="admin-author-select" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
-                <!-- Dynamically populated -->
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Selected Author Account</label>
+              <select id="admin-author-select" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600 cursor-pointer">
               </select>
             </div>
 
-            <!-- Dynamic Balance Box -->
-            <div id="admin-author-summary" class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
-              <!-- Dynamically populated -->
+            <!-- Dynamic Author Financial Summary -->
+            <div id="admin-author-summary" class="bg-slate-50/80 rounded-xl p-4 border border-slate-200/90 space-y-4">
             </div>
 
-            <!-- Admin Action Buttons (Single Trigger + Simulate Bank Clearance) -->
-            <div class="space-y-2.5 pt-1">
-              <button id="admin-trigger-btn" class="w-full bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-extrabold py-3 px-4 rounded-xl shadow-md shadow-brand-600/20 transition duration-150 flex items-center justify-center space-x-2 cursor-pointer">
+            <!-- Action Buttons -->
+            <div class="space-y-3 pt-1">
+              <button id="admin-trigger-btn" class="w-full bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition duration-150 flex items-center justify-center space-x-2.5 cursor-pointer">
                 <svg id="admin-btn-icon" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                <span id="admin-btn-text" class="text-xs sm:text-sm">Generate & Send Royalty Summary</span>
+                <span id="admin-btn-text" class="text-sm">Generate &amp; Send Royalty Summary</span>
               </button>
 
-              <div class="flex items-center space-x-2">
-                <!-- Mark Cleared (Payout simulated) -->
-                <button id="admin-mark-cleared-btn" class="flex-1 bg-white hover:bg-emerald-50 text-emerald-800 font-bold py-2 px-3 rounded-xl border border-emerald-300 text-xs flex items-center justify-center space-x-1.5 transition cursor-pointer">
-                  <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                  <span>Mark Payout as Cleared</span>
-                </button>
-              </div>
+              <button id="admin-mark-cleared-btn" class="w-full bg-white hover:bg-emerald-50 text-emerald-800 font-semibold py-2.5 px-4 rounded-xl border border-emerald-300 text-sm flex items-center justify-center space-x-2 transition cursor-pointer">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Mark Pending Payout as Cleared</span>
+              </button>
 
-              <p class="text-[11px] text-center text-slate-500 flex items-center justify-center space-x-1.5">
-                <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                <span>Automated Webhook • Live SMTP Gmail Dispatch</span>
-              </p>
+              <div class="flex items-center justify-center space-x-2 text-xs text-slate-500 pt-1">
+                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span>Secured by x-bookleaf-secret • Live Gmail SMTP Dispatch</span>
+              </div>
             </div>
           </div>
 
-          <!-- Author's Books Catalog -->
-          <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 class="text-sm font-bold text-slate-900">Author Titles & Royalty Badges</h3>
-              <span id="admin-titles-count" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">0 Titles</span>
+          <!-- Author Titles List -->
+          <div class="surface-card rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
+              <h3 class="text-base font-bold text-slate-900">Registered Book Catalog</h3>
+              <span id="admin-titles-count" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">0 Titles</span>
             </div>
-            <div id="admin-books-list" class="space-y-3 max-h-[340px] overflow-y-auto pr-1 custom-scroll">
-              <!-- Dynamically populated -->
+            <div id="admin-books-list" class="space-y-3 max-h-[380px] overflow-y-auto pr-1 custom-scroll">
             </div>
           </div>
 
         </div>
 
-        <!-- Right: AI Summary Display & Notification Audit Log (7 cols) -->
+        <!-- Right Column (7 Cols): AI Statement Output & Notification Audit Log -->
         <div class="lg:col-span-7 space-y-6">
 
-          <!-- Live AI Output Box -->
-          <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <!-- AI Royalty Statement Output Card -->
+          <div class="surface-card rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
               <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xs border border-emerald-200">
-                  AI
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
                 </div>
                 <div>
-                  <h3 class="text-sm font-bold text-slate-900">AI Royalty Statement Output</h3>
-                  <p class="text-xs text-slate-500">Live response from n8n + Google Gemini 2.5 Flash</p>
+                  <h2 class="text-base font-bold text-slate-900">AI Royalty Statement Output</h2>
+                  <p class="text-sm text-slate-500">Live synthesis via n8n Webhook + Google Gemini 2.5 Flash</p>
                 </div>
               </div>
               
-              <div class="flex items-center space-x-2">
-                <!-- Copy Email Action Button -->
-                <button id="admin-copy-email-btn" title="Copy email text" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-semibold transition flex items-center space-x-1 cursor-pointer">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                  <span>Copy</span>
+              <div class="flex items-center space-x-2.5">
+                <button id="admin-copy-email-btn" title="Copy statement text" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition flex items-center space-x-1.5 cursor-pointer">
+                  <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  <span>Copy Text</span>
                 </button>
-                <span id="admin-output-status" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                <span id="admin-output-status" class="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                   Ready
                 </span>
               </div>
@@ -313,55 +345,60 @@
             <!-- Empty State -->
             <div id="admin-output-empty" class="py-12 px-4 text-center space-y-3">
               <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 mx-auto">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
               </div>
-              <p class="text-sm font-bold text-slate-700">No Statement Triggered Yet</p>
-              <p class="text-xs text-slate-400 max-w-sm mx-auto">Click "Generate & Send Royalty Summary" on the left to trigger the automated pipeline.</p>
+              <p class="text-base font-bold text-slate-800">No Statement Generated Yet</p>
+              <p class="text-sm text-slate-500 max-w-md mx-auto">Select an author on the left panel and click "Generate &amp; Send Royalty Summary" to execute the n8n + Gemini pipeline.</p>
             </div>
 
-            <!-- Content Area -->
+            <!-- Generated Content Box -->
             <div id="admin-output-box" class="hidden space-y-3.5">
-              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
-                <span class="font-bold text-slate-500">Subject: </span>
+              <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-sm">
+                <span class="font-semibold text-slate-500">Subject: </span>
                 <span id="admin-output-subject" class="font-bold text-slate-900"></span>
               </div>
-              <div id="admin-output-body" class="bg-slate-50/80 p-4 rounded-xl border border-slate-200 text-xs leading-relaxed text-slate-800 whitespace-pre-wrap max-h-[320px] overflow-y-auto custom-scroll font-sans">
+              <div id="admin-output-body" class="bg-slate-50/70 p-4 rounded-xl border border-slate-200 text-sm leading-relaxed text-slate-800 whitespace-pre-wrap max-h-[320px] overflow-y-auto custom-scroll">
               </div>
-              <div class="flex items-center justify-between text-xs text-slate-400 pt-1">
-                <span id="admin-output-time" class="font-mono text-[11px]"></span>
-                <span class="text-emerald-700 font-bold text-[11px]">✓ Knowledge Base Verified</span>
+              <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
+                <span id="admin-output-time" class="font-mono"></span>
+                <span class="text-emerald-700 font-semibold flex items-center space-x-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                  <span>BookLeaf Policy Grounding Verified</span>
+                </span>
               </div>
             </div>
           </div>
 
-          <!-- Notification Audit Log with Clear History Action -->
-          <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <!-- Notification Audit Log -->
+          <div class="surface-card rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <h3 class="text-sm font-bold text-slate-900">Notification Audit Log</h3>
-                <p class="text-xs text-slate-500">Live callback records from n8n webhook</p>
+                <h3 class="text-base font-bold text-slate-900">Notification &amp; Webhook Audit Log</h3>
+                <p class="text-sm text-slate-500">Real-time execution callbacks from n8n &amp; Auto-Reply desk</p>
               </div>
-              <div class="flex items-center space-x-2">
-                <span id="admin-log-count" class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">0 Events</span>
-                <button id="admin-clear-log-btn" title="Clear log history" class="text-slate-400 hover:text-rose-600 transition p-1 text-xs font-semibold cursor-pointer">
-                  Clear
+              <div class="flex items-center space-x-3">
+                <span id="admin-log-count" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-800 border border-slate-200">0 Events</span>
+                <button id="admin-clear-log-btn" class="text-xs font-semibold text-slate-500 hover:text-rose-600 transition cursor-pointer">
+                  Clear History
                 </button>
               </div>
             </div>
 
             <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs">
-                <thead class="bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px] border-b border-slate-200">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-slate-600 uppercase tracking-wider text-xs border-b border-slate-200">
                   <tr>
-                    <th class="py-2.5 px-3 font-bold">Author</th>
-                    <th class="py-2.5 px-3 font-bold">Status</th>
-                    <th class="py-2.5 px-3 font-bold">Timestamp</th>
-                    <th class="py-2.5 px-3 text-right font-bold">Action</th>
+                    <th class="py-3 px-4 font-bold">Author</th>
+                    <th class="py-3 px-4 font-bold">Status</th>
+                    <th class="py-3 px-4 font-bold">Timestamp</th>
+                    <th class="py-3 px-4 text-right font-bold">Action</th>
                   </tr>
                 </thead>
                 <tbody id="admin-log-table" class="divide-y divide-slate-100">
                   <tr id="admin-empty-log-row">
-                    <td colspan="4" class="py-6 text-center text-slate-400">No notifications triggered in this session yet.</td>
+                    <td colspan="4" class="py-8 text-center text-sm text-slate-400">No webhook notifications triggered in this session yet.</td>
                   </tr>
                 </tbody>
               </table>
@@ -373,388 +410,453 @@
       </div>
 
       <!-- ===================================================================== -->
-      <!-- ADMIN OAUTH EMAIL & 4-STAGE AI AUTO-REPLY INTELLIGENCE CENTER         -->
+      <!-- 4. REDESIGNED OAUTH EMAIL & 4-STAGE AI AUTO-REPLY INTELLIGENCE CENTER -->
       <!-- ===================================================================== -->
-      <section id="admin-autoreply-section" class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 card-shadow space-y-6">
+      <section id="admin-autoreply-section" class="surface-card rounded-2xl overflow-hidden">
         
-        <!-- Top Header & Live OAuth Connection Bar -->
-        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
-          <div class="flex items-center space-x-3.5">
-            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-slate-900 to-brand-700 text-white flex items-center justify-center font-extrabold shadow-md">
-              <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+        <!-- Top Banner: Clean Single-Row Enterprise Header -->
+        <div class="bg-slate-900 px-6 py-5 text-white flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center space-x-4">
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
             </div>
             <div>
-              <div class="flex items-center space-x-2">
-                <h2 class="text-base sm:text-lg font-extrabold text-slate-900">AI Author Auto-Reply & OAuth Email Intelligence Center</h2>
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">24/7 Autonomous</span>
+              <div class="flex items-center space-x-2.5">
+                <h2 class="text-lg font-bold tracking-tight text-white">Autonomous Author Email Auto-Reply &amp; OAuth Intelligence</h2>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Gemini 2.5 Flash RAG</span>
               </div>
-              <p class="text-xs text-slate-500 mt-0.5">Multi-Stage Identity Resolution • Weighted Intent Vector • 80% Confidence Gate • Live Gmail IMAP/SMTP Sync</p>
+              <p class="text-sm text-slate-300 mt-0.5">Automatically resolves author identity, classifies query intent, enforces the 80% confidence gate, and replies via Gmail</p>
             </div>
           </div>
 
-          <div class="flex flex-wrap items-center gap-2.5">
-            <!-- Connected Gmail OAuth Badge -->
-            <div class="bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 flex items-center space-x-2.5 text-xs">
-              <span id="oauth-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <div>
-                <span class="text-[10px] font-bold uppercase text-slate-400 block leading-none">Connected Admin & Author Relay</span>
-                <span id="oauth-account-label" class="font-mono font-bold text-slate-900 text-xs">ansarisaifuddin732@gmail.com</span>
+          <div class="flex items-center space-x-3">
+            <div class="bg-slate-800/90 px-4 py-2 rounded-xl border border-slate-700 flex items-center space-x-2.5">
+              <span id="oauth-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+              <div class="text-left">
+                <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block leading-none">Connected OAuth Mailbox</span>
+                <span id="oauth-account-label" class="font-mono font-semibold text-white text-xs mt-0.5 block">ansarisaifuddin732@gmail.com</span>
               </div>
             </div>
 
-            <!-- Re-Verify OAuth & Sync Button -->
-            <button id="btn-verify-oauth" class="bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold px-3.5 py-2.5 rounded-xl text-xs flex items-center space-x-1.5 shadow-sm transition cursor-pointer">
-              <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-              <span id="btn-verify-oauth-text">Verify OAuth & Sync Inbox</span>
+            <button id="btn-verify-oauth" class="bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-semibold px-4 py-2.5 rounded-xl text-sm flex items-center space-x-2 shadow-sm transition cursor-pointer">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span id="btn-verify-oauth-text">Sync Gmail Inbox</span>
             </button>
           </div>
         </div>
 
-        <!-- 4-Stage Algorithm Pipeline Telemetry Strip -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200 flex items-start space-x-3">
-            <span class="w-6 h-6 rounded-lg bg-slate-900 text-white font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
-            <div>
-              <p class="text-xs font-extrabold text-slate-900">Identity & Book Resolver</p>
-              <p class="text-[11px] text-slate-500 mt-0.5">Matches Email, Author ID, Name or Book Title/ISBN in body</p>
-            </div>
-          </div>
+        <div class="p-6 sm:p-7 space-y-7">
 
-          <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200 flex items-start space-x-3">
-            <span class="w-6 h-6 rounded-lg bg-brand-600 text-white font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
-            <div>
-              <p class="text-xs font-extrabold text-slate-900">Weighted Intent Vector</p>
-              <p class="text-[11px] text-slate-500 mt-0.5">Classifies Overdue, ₹1K Rollover, Production, Sales & Bank</p>
-            </div>
-          </div>
-
-          <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200 flex items-start space-x-3">
-            <span class="w-6 h-6 rounded-lg bg-blue-600 text-white font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
-            <div>
-              <p class="text-xs font-extrabold text-slate-900">80% Confidence & RAG Gate</p>
-              <p class="text-[11px] text-slate-500 mt-0.5">Scores confidence; auto-escalates &lt;80% or Red overdue to Ops</p>
-            </div>
-          </div>
-
-          <div class="bg-emerald-50/70 rounded-2xl p-3.5 border border-emerald-200 flex items-start space-x-3">
-            <span class="w-6 h-6 rounded-lg bg-emerald-700 text-white font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">4</span>
-            <div>
-              <p class="text-xs font-extrabold text-emerald-950">Live IMAP/SMTP Dispatch</p>
-              <p id="oauth-telemetry-sub" class="text-[11px] text-emerald-700 font-semibold mt-0.5">IMAP:993 Synced • Real HTML Reply Active</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2-Column Auto-Reply Simulator & Live Output -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-          <!-- Left (5 cols): Incoming Author Email Simulator & Presets -->
-          <div class="lg:col-span-5 bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
-            <div class="flex items-center justify-between">
+          <!-- 4-Stage Pipeline Stepper (Crisp SVG Icons & High Contrast Typography) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start space-x-3.5">
+              <div class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" />
+                </svg>
+              </div>
               <div>
-                <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-900">Incoming Author Email Simulator</h3>
-                <p class="text-[11px] text-slate-500">Test how the algorithm auto-replies when any author emails</p>
-              </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white border border-slate-200 text-slate-700">Live SMTP</span>
-            </div>
-
-            <!-- 1-Click Scenario Preset Buttons -->
-            <div class="space-y-1.5">
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500">1-Click Algorithm Test Scenarios:</label>
-              <div class="flex flex-wrap gap-1.5">
-                <button type="button" onclick="loadAutoReplyPreset('THRESHOLD')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-amber-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
-                  🟡 &lt;₹1,000 Rollover (Kavita)
-                </button>
-                <button type="button" onclick="loadAutoReplyPreset('OVERDUE')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-rose-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
-                  🔴 &gt;90d Overdue (Vikram)
-                </button>
-                <button type="button" onclick="loadAutoReplyPreset('PRODUCTION')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-blue-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
-                  📘 In-Production (Sneha)
-                </button>
-                <button type="button" onclick="loadAutoReplyPreset('SALES')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-emerald-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
-                  📊 80/20 Sales Math (Priya)
-                </button>
-                <button type="button" onclick="loadAutoReplyPreset('ESCALATE')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-purple-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
-                  ⚠️ &lt;80% Confidence Dispute
-                </button>
+                <p class="text-sm font-bold text-slate-900">1. Identity Resolution</p>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">Matches Sender Email, Author ID, Name, or Book ISBN</p>
               </div>
             </div>
 
-            <!-- Select Sender Author -->
-            <div>
-              <label class="block text-[11px] font-bold text-slate-700 mb-1">Incoming Sender (Author)</label>
-              <select id="autoreply-author-select" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
-                <!-- Populated dynamically -->
-              </select>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start space-x-3.5">
+              <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-900">2. Intent Vector Classifier</p>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">Detects Overdue, ₹1K Rollover, Production, or Sales Math</p>
+              </div>
             </div>
 
-            <!-- Incoming Email Message Body -->
-            <div>
-              <label class="block text-[11px] font-bold text-slate-700 mb-1">Author's Email Message / Question</label>
-              <textarea id="autoreply-query-input" rows="4" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Type any question an author might email to BookLeaf Support...">Hi BookLeaf team, why has my pending royalty of ₹850 for The Nagpur Notebooks not been transferred to my bank account yet?</textarea>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start space-x-3.5">
+              <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-900">3. 80% Confidence Gate</p>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">Escalates &lt;80% confidence or &gt;90d overdue to Senior Ops</p>
+              </div>
             </div>
 
-            <!-- Trigger Auto-Reply Button -->
-            <button id="btn-run-autoreply" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-extrabold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2 cursor-pointer">
-              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
-              <span id="btn-run-autoreply-text" class="text-xs sm:text-sm">Run AI Auto-Reply & Send Real Email</span>
-            </button>
+            <div class="p-4 rounded-xl bg-emerald-50/80 border border-emerald-200 flex items-start space-x-3.5">
+              <div class="w-8 h-8 rounded-lg bg-emerald-700 text-white flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-emerald-950">4. Live Gmail Dispatch</p>
+                <p id="oauth-telemetry-sub" class="text-xs text-emerald-800 font-semibold mt-1 leading-relaxed">IMAP:993 Synced • Real HTML Reply Active</p>
+              </div>
+            </div>
           </div>
 
-          <!-- Right (7 cols): Algorithm Diagnostic Output & Auto-Reply Preview -->
-          <div class="lg:col-span-7 space-y-4">
-            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
-              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                <div class="flex items-center space-x-2">
-                  <span id="ar-ticket-badge" class="px-2.5 py-1 rounded-lg text-xs font-mono font-extrabold bg-slate-900 text-white">#BL-AUTO-READY</span>
-                  <span id="ar-intent-badge" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Awaiting Incoming Email</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <span id="ar-confidence-badge" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white border border-slate-200 text-slate-700">Confidence: --%</span>
-                  <span id="ar-escalation-badge" class="hidden px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300">⚠️ Human Escalated</span>
-                </div>
+          <!-- Main 2-Column Interactive Workspace -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+
+            <!-- Left (5 Cols): Incoming Email Composer & Clean Scenario Cards -->
+            <div class="lg:col-span-5 space-y-5">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">Incoming Author Email Simulator</h3>
+                <p class="text-sm text-slate-500 mt-0.5">Select a test scenario or compose any author inquiry below</p>
               </div>
 
-              <!-- Algorithm Resolution Metadata Grid -->
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
-                  <span class="text-[10px] font-bold uppercase text-slate-400 block">Resolved Identity</span>
-                  <span id="ar-meta-author" class="font-bold text-slate-900 block mt-0.5">Kavita Deshmukh (AUTH009)</span>
-                </div>
-                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
-                  <span class="text-[10px] font-bold uppercase text-slate-400 block">Match Algorithm</span>
-                  <span id="ar-meta-method" class="font-mono font-semibold text-slate-700 text-[11px] block mt-0.5">EXACT_AUTHOR_ID</span>
-                </div>
-                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
-                  <span class="text-[10px] font-bold uppercase text-slate-400 block">SLA & Delivery</span>
-                  <span id="ar-meta-sla" class="font-bold text-emerald-700 text-[11px] block mt-0.5">Ready for Gmail Dispatch</span>
-                </div>
-              </div>
-
-              <!-- Generated Auto-Reply Body -->
+              <!-- Structured Scenario Cards (No Emojis — Clean Status Dots & Typography) -->
               <div class="space-y-2">
-                <div class="bg-white px-3 py-2 rounded-xl border border-slate-200 text-xs">
-                  <span class="font-bold text-slate-400">Auto-Reply Subject: </span>
-                  <span id="ar-output-subject" class="font-bold text-slate-900">Click "Run AI Auto-Reply" on the left to test the algorithm</span>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Select Test Scenario</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <button type="button" onclick="loadAutoReplyPreset('THRESHOLD', this)" class="scenario-btn active text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
+                      <span class="text-xs font-bold text-slate-900 truncate">&lt;₹1,000 Rollover Rule</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1 truncate">Kavita Deshmukh (₹850)</p>
+                  </button>
+
+                  <button type="button" onclick="loadAutoReplyPreset('OVERDUE', this)" class="scenario-btn text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"></span>
+                      <span class="text-xs font-bold text-slate-900 truncate">&gt;90d Overdue Payout</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1 truncate">Vikram Joshi (₹3,350)</p>
+                  </button>
+
+                  <button type="button" onclick="loadAutoReplyPreset('PRODUCTION', this)" class="scenario-btn text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span>
+                      <span class="text-xs font-bold text-slate-900 truncate">In-Production Stage</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1 truncate">Sneha Kulkarni (Stage 3/8)</p>
+                  </button>
+
+                  <button type="button" onclick="loadAutoReplyPreset('SALES', this)" class="scenario-btn text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                      <span class="text-xs font-bold text-slate-900 truncate">80/20 Sales Breakdown</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1 truncate">Priya Sharma (531 Sold)</p>
+                  </button>
                 </div>
-                <div id="ar-output-body" class="bg-white p-4 rounded-xl border border-slate-200 text-xs leading-relaxed text-slate-800 whitespace-pre-wrap max-h-[250px] overflow-y-auto custom-scroll font-sans">Select any preset scenario on the left (e.g., &lt;₹1,000 Rollover, &gt;90d Overdue, In-Production, or &lt;80% Confidence Dispute) and click "Run AI Auto-Reply & Send Real Email". The 4-stage engine will classify the author's query, compute a confidence score, synthesize a grounded response, and send a real HTML auto-reply email to ansarisaifuddin732@gmail.com.</div>
+
+                <button type="button" onclick="loadAutoReplyPreset('ESCALATE', this)" class="scenario-btn w-full text-left p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-600 shrink-0"></span>
+                    <span class="text-xs font-bold text-slate-900">Complex Tax / Contract Dispute (&lt;80% Confidence Gate)</span>
+                  </div>
+                  <span class="text-[11px] font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">Human Escalation</span>
+                </button>
               </div>
+
+              <!-- Sender Author Dropdown -->
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Incoming Sender Profile</label>
+                <select id="autoreply-author-select" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600 cursor-pointer">
+                </select>
+              </div>
+
+              <!-- Query Textarea -->
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Author's Incoming Email Message</label>
+                <textarea id="autoreply-query-input" rows="4" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3.5 text-sm text-slate-900 leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600 transition" placeholder="Type any question an author might email to BookLeaf Support...">Hi BookLeaf team, why has my pending royalty of ₹850 for The Nagpur Notebooks not been transferred to my bank account yet?</textarea>
+              </div>
+
+              <!-- Primary CTA -->
+              <button id="btn-run-autoreply" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-bold py-3.5 px-5 rounded-xl shadow-sm transition flex items-center justify-center space-x-2.5 cursor-pointer">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+                <span id="btn-run-autoreply-text" class="text-sm">Run AI Auto-Reply &amp; Dispatch Real Email</span>
+              </button>
             </div>
+
+            <!-- Right (7 Cols): Modern Ticket Telemetry & Email Client Preview -->
+            <div class="lg:col-span-7 flex flex-col justify-between bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+              
+              <!-- Ticket Telemetry Header -->
+              <div class="bg-white px-6 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center space-x-2.5">
+                  <span id="ar-ticket-badge" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-slate-900 text-white">#BL-AUTO-READY</span>
+                  <span id="ar-intent-badge" class="px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">₹1,000 Minimum Threshold &amp; Rollover</span>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                  <span id="ar-confidence-badge" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 border border-emerald-200 text-emerald-900">Confidence: 97%</span>
+                  <span id="ar-escalation-badge" class="hidden px-3 py-1 rounded-lg text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200">Senior Ops Escalated</span>
+                </div>
+              </div>
+
+              <!-- 3-Column Algorithm Diagnostic Strip -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-200 bg-slate-100/70 border-b border-slate-200">
+                <div class="px-5 py-3.5">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">Resolved Author</span>
+                  <span id="ar-meta-author" class="text-sm font-bold text-slate-900 block mt-0.5">Kavita Deshmukh (AUTH009)</span>
+                </div>
+                <div class="px-5 py-3.5">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">Resolution Vector</span>
+                  <span id="ar-meta-method" class="text-xs font-mono font-semibold text-slate-800 block mt-1">EXACT_AUTHOR_ID</span>
+                </div>
+                <div class="px-5 py-3.5">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">SLA &amp; Dispatch</span>
+                  <span id="ar-meta-sla" class="text-xs font-bold text-emerald-700 block mt-1">Instant Autonomous Reply</span>
+                </div>
+              </div>
+
+              <!-- Email Client Message Preview -->
+              <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
+                <div class="space-y-3">
+                  <div class="bg-white px-4 py-3 rounded-xl border border-slate-200 text-sm">
+                    <span class="font-semibold text-slate-500">Subject: </span>
+                    <span id="ar-output-subject" class="font-bold text-slate-900">Re: [BookLeaf Ticket #BL-AUTO] ₹1,000 Minimum Threshold &amp; Rollover — Kavita Deshmukh</span>
+                  </div>
+
+                  <div id="ar-output-body" class="bg-white p-5 rounded-xl border border-slate-200 text-sm leading-relaxed text-slate-800 whitespace-pre-wrap max-h-[300px] overflow-y-auto custom-scroll">Dear Kavita Deshmukh,
+
+Thank you for reaching out to BookLeaf Publishing! Our AI Author Relations Engine is ready to process your inquiry.
+
+Click "Run AI Auto-Reply &amp; Dispatch Real Email" on the left to execute the 4-stage pipeline with Google Gemini 2.5 Flash and deliver the formatted HTML email directly to ansarisaifuddin732@gmail.com.</div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-slate-500 pt-2">
+                  <span>Engine: <strong class="text-slate-700">Google Gemini 2.5 Flash + BookLeaf RAG</strong></span>
+                  <span class="text-emerald-700 font-semibold">Live SMTP Relay Connected (:5001)</span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
 
         </div>
-
       </section>
 
     </div>
 
     <!-- ========================================================================= -->
-    <!-- VIEW 2: AUTHOR PORTAL (Distinct, Clean, Private Author Self-Service)      -->
+    <!-- VIEW 2: AUTHOR PORTAL (Private Self-Service Workspace)                    -->
     <!-- ========================================================================= -->
-    <div id="view-author" class="hidden space-y-6">
+    <div id="view-author" class="hidden space-y-8">
 
-      <!-- Author Portal Sandbox Banner (Allows HR to test all 10 author personas) -->
-      <div class="bg-emerald-50/90 border border-emerald-300 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-sm">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-brand-600 text-white font-bold flex items-center justify-center shadow-md">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+      <!-- Author Persona Sandbox Switcher (Requirement A4 Privacy Verification) -->
+      <div class="bg-emerald-50/90 border border-emerald-300 rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm shrink-0">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
           </div>
           <div>
-            <div class="flex items-center space-x-2">
-              <p class="text-xs font-bold text-slate-900">Author Portal Sandbox Mode</p>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-200 text-emerald-900 uppercase">Requirement A4: Privacy Rules</span>
+            <div class="flex items-center space-x-2.5">
+              <p class="text-sm font-bold text-slate-900">Author Portal Sandbox Mode</p>
+              <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-200/80 text-emerald-950">Requirement A4: Privacy Rules</span>
             </div>
-            <p class="text-[11px] text-slate-600 mt-0.5">Switch author persona below to verify that each author accesses strictly their own titles, sales & payouts.</p>
+            <p class="text-sm text-slate-600 mt-0.5">Switch author persona below to verify that each author accesses strictly their own titles, sales &amp; payouts.</p>
           </div>
         </div>
 
-        <div class="flex items-center space-x-2">
-          <label class="text-xs font-bold text-slate-700">Logged-in Persona:</label>
-          <select id="author-persona-select" class="bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer shadow-sm">
-            <!-- Dynamically populated with all 10 authors -->
+        <div class="flex items-center space-x-3">
+          <label class="text-sm font-bold text-slate-800">Simulate Login As:</label>
+          <select id="author-persona-select" class="bg-white border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-600 cursor-pointer shadow-sm">
           </select>
         </div>
       </div>
 
-      <!-- Author's Personal Welcome & Financial Hero Banner (Completely distinct from Admin) -->
-      <div class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-6">
+      <!-- Author Personal Hero Card -->
+      <div class="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 rounded-3xl p-7 sm:p-8 text-white shadow-lg space-y-7 border border-slate-800">
         
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div class="flex items-center space-x-2">
-              <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+            <div class="flex items-center space-x-2.5">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
                 Verified Author Workspace
               </span>
-              <span id="author-hero-status-pill" class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+              <span id="author-hero-status-pill" class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-400/20 text-amber-300 border border-amber-400/30">
                 Pending Cycle
               </span>
             </div>
-            <h2 id="author-hero-name" class="text-2xl sm:text-3xl font-black mt-2.5 tracking-tight text-white">Priya Sharma</h2>
-            <p id="author-hero-meta" class="text-xs text-emerald-200/90 font-medium mt-1">Author ID: AUTH001 • Mumbai • Joined March 15, 2023</p>
+            <h2 id="author-hero-name" class="text-3xl font-extrabold mt-3 tracking-tight text-white">Priya Sharma</h2>
+            <p id="author-hero-meta" class="text-sm text-emerald-200/90 font-medium mt-1">Author ID: AUTH001 • Mumbai • Member since 2023-03-15</p>
           </div>
 
-          <!-- Quick Personal Payout Highlight -->
-          <div class="bg-white/10 backdrop-blur-md px-6 py-3.5 rounded-2xl border border-white/15 text-right">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">Current Unpaid Balance</span>
-            <span id="author-hero-pending" class="text-2xl sm:text-3xl font-black font-mono block mt-0.5 text-white">₹3,570</span>
-            <span id="author-hero-threshold-note" class="text-[10px] text-emerald-300 font-semibold block mt-1">✓ Above ₹1,000 Payout Threshold</span>
-          </div>
-        </div>
-
-        <!-- 3 Personal Financial KPI Tiles for this Author -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
-          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/15">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">Lifetime Royalties Earned</span>
-            <p id="author-hero-earned" class="text-xl sm:text-2xl font-black font-mono mt-1 text-white">₹19,908</p>
-            <p class="text-[11px] text-emerald-300/80 mt-0.5">80% Net Author Share</p>
-          </div>
-
-          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/15">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">Already Disbursed (Paid)</span>
-            <p id="author-hero-paid" class="text-xl sm:text-2xl font-black font-mono mt-1 text-white">₹16,338</p>
-            <p class="text-[11px] text-emerald-300/80 mt-0.5">Direct to Bank via NEFT</p>
-          </div>
-
-          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/15">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">Total Copies Sold</span>
-            <p id="author-hero-copies" class="text-xl sm:text-2xl font-black font-mono mt-1 text-white">531 Copies</p>
-            <p class="text-[11px] text-emerald-300/80 mt-0.5">Amazon, Flipkart & Bookstore</p>
+          <div class="bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/15 text-right">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-200 block">Current Unpaid Balance</span>
+            <span id="author-hero-pending" class="text-3xl font-extrabold font-mono block mt-1 text-white">₹3,570</span>
+            <span id="author-hero-threshold-note" class="text-xs text-emerald-300 font-medium block mt-1">Above ₹1,000 Payout Threshold</span>
           </div>
         </div>
 
-        <!-- Author Direct Self-Service Action Toolbar -->
-        <div class="pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center space-x-2 text-xs text-emerald-200">
+        <!-- 3 Personal KPI Tiles -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-300 block">Lifetime Royalties Earned</span>
+            <p id="author-hero-earned" class="text-2xl font-extrabold font-mono mt-1.5 text-white">₹19,908</p>
+            <p class="text-xs text-emerald-300/90 mt-1">80% Net Author Share</p>
+          </div>
+
+          <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-300 block">Already Disbursed (Paid)</span>
+            <p id="author-hero-paid" class="text-2xl font-extrabold font-mono mt-1.5 text-white">₹16,338</p>
+            <p class="text-xs text-emerald-300/90 mt-1">Transferred via Direct NEFT</p>
+          </div>
+
+          <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-300 block">Total Copies Sold</span>
+            <p id="author-hero-copies" class="text-2xl font-extrabold font-mono mt-1.5 text-white">531 Copies</p>
+            <p class="text-xs text-emerald-300/90 mt-1">Amazon, Flipkart &amp; BookLeaf Store</p>
+          </div>
+        </div>
+
+        <!-- Author Self-Service Action Bar -->
+        <div class="pt-5 border-t border-white/15 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center space-x-2.5 text-sm text-emerald-100">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-            <span>Bank Linked: <b id="author-bank-label">HDFC Bank (•••• 4321)</b></span>
-            <button id="author-update-bank-btn" class="ml-2 text-[11px] text-white hover:text-emerald-300 underline font-semibold cursor-pointer">Edit Bank</button>
+            <span>Verified Bank: <strong id="author-bank-label" class="text-white">HDFC Bank (•••• 4321)</strong></span>
+            <button id="author-update-bank-btn" class="ml-2 text-xs font-semibold text-emerald-300 hover:text-white underline cursor-pointer">Edit Bank Details</button>
           </div>
 
-          <div class="flex flex-wrap items-center gap-2">
-            <!-- Email Me My Statement Button -->
-            <button id="author-email-me-btn" class="bg-brand-500 hover:bg-brand-400 active:scale-95 text-slate-900 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-md transition flex items-center space-x-1.5 cursor-pointer">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button id="author-email-me-btn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-sm shadow-sm transition flex items-center space-x-2 cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
               <span>Email Me My Statement</span>
             </button>
 
-            <!-- Download Statement PDF Button -->
-            <button id="author-download-btn" class="bg-white/15 hover:bg-white/25 active:scale-95 text-white font-bold px-3.5 py-2 rounded-xl text-xs border border-white/20 transition flex items-center space-x-1.5 cursor-pointer">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            <button id="author-download-btn" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-4 py-2.5 rounded-xl text-sm border border-white/20 transition flex items-center space-x-2 cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
               <span>Download Statement</span>
             </button>
 
-            <!-- Request Payout Expedite Button -->
-            <button id="author-expedite-btn" class="bg-white hover:bg-slate-100 active:scale-95 text-slate-900 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-md transition flex items-center space-x-1.5 cursor-pointer">
-              <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+            <button id="author-expedite-btn" class="bg-white hover:bg-slate-100 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-sm shadow-sm transition flex items-center space-x-2 cursor-pointer">
+              <svg class="w-4 h-4 text-brand-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
               <span>Request Priority Payout</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Author's Bookshelf & Sales Performance Ledger -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-5">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+      <!-- Author Bookshelf & Royalty Ledger -->
+      <div class="surface-card rounded-2xl p-6 sm:p-7 space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <div>
-            <h3 class="text-base font-bold text-slate-900">My Books & Royalty Ledger</h3>
-            <p class="text-xs text-slate-500">Real-time copy sales, platform distribution and payment status</p>
+            <h3 class="text-lg font-bold text-slate-900">My Books &amp; Royalty Ledger</h3>
+            <p class="text-sm text-slate-500 mt-0.5">Individual book performance, retail channels, and payout status</p>
           </div>
-          <span id="author-books-pill" class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">2 Published Titles</span>
+          <span id="author-books-pill" class="text-xs font-bold text-emerald-800 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200">2 Registered Titles</span>
         </div>
 
         <div id="author-books-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <!-- Dynamically populated based on chosen author persona -->
         </div>
       </div>
 
-      <!-- Author Instant Email Support & AI Auto-Reply Desk -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-5">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
-          <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-              ✉️
+      <!-- Author Instant Email Support & AI Auto-Reply Desk (Clean SVG Design) -->
+      <div class="surface-card rounded-2xl p-6 sm:p-7 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div class="flex items-center space-x-3.5">
+            <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
             </div>
             <div>
-              <h3 class="text-base font-bold text-slate-900">Email BookLeaf Author Relations (Instant AI Auto-Reply Desk)</h3>
-              <p class="text-xs text-slate-500">Send any question about your royalties or books — our OAuth-connected AI Engine replies immediately &amp; emails your inbox</p>
+              <h3 class="text-lg font-bold text-slate-900">Email BookLeaf Author Relations (Instant AI Auto-Reply Desk)</h3>
+              <p class="text-sm text-slate-500 mt-0.5">Ask any question about your royalties or books — our Gemini AI Desk replies immediately &amp; sends a copy to your Gmail</p>
             </div>
           </div>
-          <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">⚡ Instant Reply + Gmail Dispatch</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">24/7 Instant Auto-Reply</span>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <!-- Author Email Composer -->
-          <div class="lg:col-span-5 space-y-3">
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500">Quick Question Templates:</label>
-            <div class="flex flex-wrap gap-1.5">
-              <button type="button" onclick="setAuthorQuickQuery('When will my pending royalty balance be transferred to my bank account?')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-[11px] font-semibold transition cursor-pointer">
-                💰 When is my next payout?
-              </button>
-              <button type="button" onclick="setAuthorQuickQuery('Why is my pending royalty below ₹1,000 rolling over to the next cycle?')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-[11px] font-semibold transition cursor-pointer">
-                🔄 Explain ₹1,000 rollover rule
-              </button>
-              <button type="button" onclick="setAuthorQuickQuery('My royalty payout is overdue by more than 90 days. Please escalate this urgently!')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-[11px] font-semibold transition cursor-pointer">
-                🚨 Escalate overdue payout
-              </button>
-              <button type="button" onclick="setAuthorQuickQuery('What is the current production stage and release timeline for my upcoming book?')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-[11px] font-semibold transition cursor-pointer">
-                📘 Book production status
-              </button>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+          <div class="lg:col-span-5 space-y-4">
+            <div class="space-y-2">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Quick Inquiry Topics</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button type="button" onclick="setAuthorQuickQuery('When will my pending royalty balance be transferred to my bank account?')" class="text-left px-3 py-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-xs font-semibold transition cursor-pointer">
+                  When is my next payout?
+                </button>
+                <button type="button" onclick="setAuthorQuickQuery('Why is my pending royalty below ₹1,000 rolling over to the next cycle?')" class="text-left px-3 py-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-xs font-semibold transition cursor-pointer">
+                  Explain ₹1,000 rollover rule
+                </button>
+                <button type="button" onclick="setAuthorQuickQuery('My royalty payout is overdue by more than 90 days. Please escalate this urgently!')" class="text-left px-3 py-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-xs font-semibold transition cursor-pointer">
+                  Escalate overdue payout
+                </button>
+                <button type="button" onclick="setAuthorQuickQuery('What is the current production stage and release timeline for my upcoming book?')" class="text-left px-3 py-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-xs font-semibold transition cursor-pointer">
+                  Book production status
+                </button>
+              </div>
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Your Message to BookLeaf Support (<span class="font-mono text-[11px] text-emerald-700">support@bookleafpub.com</span>)</label>
-              <textarea id="author-support-query" rows="4" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Write your question here...">Hello BookLeaf Team, could you please confirm when my pending royalty balance will be disbursed to my linked bank account and share my latest book sales breakdown?</textarea>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Your Message to BookLeaf Support</label>
+              <textarea id="author-support-query" rows="4" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3.5 text-sm text-slate-900 leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600" placeholder="Write your question here...">Hello BookLeaf Team, could you please confirm when my pending royalty balance will be disbursed to my linked bank account and share my latest book sales breakdown?</textarea>
             </div>
 
-            <button id="btn-author-send-query" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.99] text-white font-extrabold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2 cursor-pointer">
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-              <span id="btn-author-send-query-text" class="text-xs sm:text-sm">Send Email &amp; Receive Instant AI Auto-Reply</span>
+            <button id="btn-author-send-query" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.99] text-white font-bold py-3.5 px-5 rounded-xl shadow-sm transition flex items-center justify-center space-x-2.5 cursor-pointer">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+              <span id="btn-author-send-query-text" class="text-sm">Send Email &amp; Receive Instant AI Reply</span>
             </button>
           </div>
 
-          <!-- Instant AI Reply Display for Author -->
-          <div class="lg:col-span-7 bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
-            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
-              <span id="author-ar-ticket" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-slate-900 text-white">Auto-Reply Inbox</span>
-              <span id="author-ar-status" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Ready • Connected to Gmail</span>
+          <div class="lg:col-span-7 bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-4 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                <span id="author-ar-ticket" class="px-3 py-1 rounded-lg text-xs font-mono font-bold bg-slate-900 text-white">Auto-Reply Desk</span>
+                <span id="author-ar-status" class="px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">Connected to Gmail</span>
+              </div>
+              <div class="bg-white px-4 py-3 rounded-xl border border-slate-200 text-sm">
+                <span class="font-semibold text-slate-500">Subject: </span>
+                <span id="author-ar-subject" class="font-bold text-slate-900">Instant AI Response will appear here &amp; in your Gmail inbox</span>
+              </div>
+              <div id="author-ar-body" class="bg-white p-5 rounded-xl border border-slate-200 text-sm leading-relaxed text-slate-800 whitespace-pre-wrap max-h-[260px] overflow-y-auto custom-scroll">Send a question on the left to receive an immediate, policy-grounded response tailored to your book catalog and royalty ledger, plus an official HTML copy in your email inbox (ansarisaifuddin732@gmail.com).</div>
             </div>
-            <div class="bg-white px-3 py-2 rounded-xl border border-slate-200 text-xs">
-              <span class="font-bold text-slate-400">Subject: </span>
-              <span id="author-ar-subject" class="font-bold text-slate-900">Instant AI Response will appear here &amp; in your Gmail inbox</span>
-            </div>
-            <div id="author-ar-body" class="bg-white p-4 rounded-xl border border-slate-200 text-xs leading-relaxed text-slate-800 whitespace-pre-wrap max-h-[240px] overflow-y-auto custom-scroll font-sans">Send a question on the left to receive an immediate, policy-grounded response tailored to your book catalog and royalty ledger, plus an official HTML copy in your email inbox (ansarisaifuddin732@gmail.com).</div>
           </div>
         </div>
       </div>
 
-      <!-- BookLeaf Policy Transparency FAQ (Quarterly, 80/20, ₹1,000 rollover) -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-2">
-          <div class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-brand-700 font-bold text-sm">
+      <!-- BookLeaf Policy Reference Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="surface-card rounded-2xl p-6 space-y-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-brand-700 font-bold text-sm">
             80%
           </div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">80/20 Net Profit Split</h4>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h4 class="text-sm font-bold text-slate-900">80/20 Net Profit Split</h4>
+          <p class="text-sm text-slate-600 leading-relaxed">
             Authors receive 80% of net profit from all retail sales across Amazon India, Flipkart, and the BookLeaf Bookstore.
           </p>
         </div>
 
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-2">
-          <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-sm">
+        <div class="surface-card rounded-2xl p-6 space-y-2.5">
+          <div class="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-sm">
             45d
           </div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">Quarterly Payout Cycle</h4>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h4 class="text-sm font-bold text-slate-900">Quarterly Payout Cycle</h4>
+          <p class="text-sm text-slate-600 leading-relaxed">
             Calculated at the end of every calendar quarter and disbursed within 45 days directly to your verified bank account.
           </p>
         </div>
 
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-2">
-          <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 font-bold text-sm">
+        <div class="surface-card rounded-2xl p-6 space-y-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-800 font-bold text-sm">
             ₹1K
           </div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">₹1,000 Minimum Threshold</h4>
-          <p class="text-xs text-slate-600 leading-relaxed">
+          <h4 class="text-sm font-bold text-slate-900">₹1,000 Minimum Threshold</h4>
+          <p class="text-sm text-slate-600 leading-relaxed">
             Pending royalties under ₹1,000 automatically roll over to the subsequent quarter until the minimum threshold is met.
           </p>
         </div>
@@ -765,51 +867,52 @@
   </main>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: UPDATE BANK DETAILS (Interactive Author Self-Service)              -->
+  <!-- MODAL: UPDATE BANK DETAILS                                                -->
   <!-- ========================================================================= -->
   <div id="modal-bank" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl border border-slate-200 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div class="flex items-center space-x-2.5">
-          <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-            🏦
+    <div class="bg-white rounded-2xl p-6 sm:p-7 max-w-md w-full shadow-2xl border border-slate-200 space-y-5">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
           </div>
           <h3 class="text-base font-bold text-slate-900">Update Payout Bank Account</h3>
         </div>
-        <button id="modal-bank-close-btn" class="text-slate-400 hover:text-slate-600 text-lg cursor-pointer font-bold">✕</button>
+        <button id="modal-bank-close-btn" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
       </div>
 
-      <div class="space-y-3 text-xs">
+      <div class="space-y-4 text-sm">
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Account Holder Name</label>
-          <input id="bank-input-name" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500" value="Priya Sharma" />
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Account Holder Name</label>
+          <input id="bank-input-name" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600" value="Priya Sharma" />
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Bank Name</label>
-          <input id="bank-input-bank" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500" value="HDFC Bank" />
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Bank Name</label>
+          <input id="bank-input-bank" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600" value="HDFC Bank" />
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Account Number</label>
-          <input id="bank-input-account" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500" value="50100492814321" />
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Account Number</label>
+          <input id="bank-input-account" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-mono font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600" value="50100492814321" />
         </div>
         <div>
-          <label class="block font-bold text-slate-700 mb-1">IFSC Code</label>
-          <input id="bank-input-ifsc" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500 uppercase" value="HDFC0000123" />
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">IFSC Code</label>
+          <input id="bank-input-ifsc" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-900 font-mono font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600 uppercase" value="HDFC0000123" />
         </div>
       </div>
 
-      <div class="pt-3 border-t border-slate-100 flex items-center justify-end space-x-2">
-        <button id="modal-bank-cancel-btn" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition cursor-pointer">Cancel</button>
-        <button id="modal-bank-save-btn" class="px-5 py-2 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm cursor-pointer">Save Bank Details</button>
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-end space-x-2.5">
+        <button id="modal-bank-cancel-btn" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition cursor-pointer">Cancel</button>
+        <button id="modal-bank-save-btn" class="px-5 py-2.5 rounded-xl text-sm font-bold bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm cursor-pointer">Save Bank Account</button>
       </div>
     </div>
   </div>
 
-  <!-- Hidden Container for Printable Official Statement -->
-  <div id="printable-statement" class="hidden"></div>
-
   <!-- ========================================================================= -->
-  <!-- JAVASCRIPT STATE & APPLICATION ENGINE                                     -->
+  <!-- APPLICATION JAVASCRIPT ENGINE                                             -->
   <!-- ========================================================================= -->
   <script>
     const AUTHORS = [
@@ -893,23 +996,21 @@
       }
     ];
 
-    // Toast Utility
+    // Toast Notification Helper (Clean SVG Icon, No Emojis)
     const toast = document.getElementById("global-toast");
     const toastMsg = document.getElementById("toast-msg");
-    const toastIcon = document.getElementById("toast-icon");
     let toastTimeout;
 
-    function showToast(msg, icon = "✓", color = "bg-slate-900") {
+    function showToast(msg) {
       clearTimeout(toastTimeout);
       toastMsg.textContent = msg;
-      toastIcon.textContent = icon;
-      toast.className = `fixed bottom-6 right-6 z-50 transform translate-y-0 opacity-100 transition-all duration-300 ease-out ${color} text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 text-xs font-semibold flex items-center space-x-3`;
+      toast.className = "fixed bottom-6 right-6 z-50 transform translate-y-0 opacity-100 transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-xl border border-slate-700 text-sm font-medium flex items-center space-x-3";
       toastTimeout = setTimeout(() => {
-        toast.className = "fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 text-xs font-semibold flex items-center space-x-3 pointer-events-none";
-      }, 3500);
+        toast.className = "fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-xl border border-slate-700 text-sm font-medium flex items-center space-x-3 pointer-events-none";
+      }, 3600);
     }
 
-    // Role Switcher Logic
+    // Role Switcher
     const btnSwitchAdmin = document.getElementById("btn-switch-admin");
     const btnSwitchAuthor = document.getElementById("btn-switch-author");
     const viewAdmin = document.getElementById("view-admin");
@@ -918,39 +1019,40 @@
     const headerModeSub = document.getElementById("header-mode-sub");
 
     btnSwitchAdmin.addEventListener("click", () => {
-      btnSwitchAdmin.className = "px-3.5 py-2 rounded-xl bg-slate-900 text-white shadow-md transition duration-150 flex items-center space-x-1.5 cursor-pointer";
-      btnSwitchAuthor.className = "px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition duration-150 flex items-center space-x-1.5 cursor-pointer";
-      headerModeBadge.className = "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white";
+      btnSwitchAdmin.className = "px-4 py-2 rounded-lg bg-slate-900 text-white shadow-sm transition duration-150 flex items-center space-x-2 cursor-pointer";
+      btnSwitchAuthor.className = "px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition duration-150 flex items-center space-x-2 cursor-pointer";
+      headerModeBadge.className = "px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider bg-slate-900 text-white";
       headerModeBadge.textContent = "Operations Admin";
-      headerModeSub.textContent = "Catalog Management, Payout Processing & n8n AI Engine";
+      headerModeSub.textContent = "Enterprise Royalty Ledger & Autonomous AI Email Suite";
       viewAdmin.classList.remove("hidden");
       viewAuthor.classList.add("hidden");
       showToast("Switched to Admin Operations Console");
     });
 
     btnSwitchAuthor.addEventListener("click", () => {
-      btnSwitchAuthor.className = "px-3.5 py-2 rounded-xl bg-brand-600 text-white shadow-md transition duration-150 flex items-center space-x-1.5 cursor-pointer";
-      btnSwitchAdmin.className = "px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition duration-150 flex items-center space-x-1.5 cursor-pointer";
-      headerModeBadge.className = "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300";
-      headerModeBadge.textContent = "Author Portal (Private)";
-      headerModeSub.textContent = "Personal Earnings, Sales Ledger & Payout Requests";
+      btnSwitchAuthor.className = "px-4 py-2 rounded-lg bg-brand-600 text-white shadow-sm transition duration-150 flex items-center space-x-2 cursor-pointer";
+      btnSwitchAdmin.className = "px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition duration-150 flex items-center space-x-2 cursor-pointer";
+      headerModeBadge.className = "px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-900 border border-emerald-300";
+      headerModeBadge.textContent = "Author Portal";
+      headerModeSub.textContent = "Private Author Earnings, Book Ledger & Instant Support Desk";
       viewAuthor.classList.remove("hidden");
       viewAdmin.classList.add("hidden");
-      showToast("Switched to Author Self-Service Portal");
+      showToast("Switched to Private Author Portal");
     });
 
+    // Clean Status Pill Builder (Crisp Status Dots, Zero Emojis)
     function getBadgeHtml(badge, text) {
       if (badge === "Green") {
-        return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">🟢 ${text || 'Fully Paid'}</span>`;
+        return `<span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>${text || 'Fully Paid'}</span></span>`;
       }
       if (badge === "Red") {
-        return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300">🔴 ${text || 'Overdue (>90d)'}</span>`;
+        return `<span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>${text || 'Overdue (>90d)'}</span></span>`;
       }
-      return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">🟡 ${text || 'Pending Cycle'}</span>`;
+      return `<span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>${text || 'Pending Cycle'}</span></span>`;
     }
 
     // -------------------------------------------------------------
-    // ADMIN CONSOLE CONTROLS & LOGIC
+    // ADMIN CONSOLE LOGIC
     // -------------------------------------------------------------
     const adminSearchInput = document.getElementById("admin-search-input");
     const adminCityFilter = document.getElementById("admin-city-filter");
@@ -979,12 +1081,10 @@
     const adminOutputBody = document.getElementById("admin-output-body");
     const adminOutputTime = document.getElementById("admin-output-time");
     const adminLogTable = document.getElementById("admin-log-table");
-    const adminEmptyLogRow = document.getElementById("admin-empty-log-row");
     const adminLogCount = document.getElementById("admin-log-count");
 
     let adminLogs = [];
 
-    // Populate City filter
     const uniqueCities = [...new Set(AUTHORS.map(a => a.city))].sort();
     uniqueCities.forEach(c => {
       const opt = document.createElement("option");
@@ -1027,7 +1127,7 @@
 
     function renderAdminAuthorDetails(authorId) {
       if (!authorId) {
-        adminAuthorSummary.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">No author selected.</p>`;
+        adminAuthorSummary.innerHTML = `<p class="text-sm text-slate-400 text-center py-3">No author selected.</p>`;
         adminBooksList.innerHTML = "";
         adminTitlesCount.textContent = "0 Titles";
         return;
@@ -1037,26 +1137,26 @@
       adminCityBadge.textContent = author.city;
 
       adminAuthorSummary.innerHTML = `
-        <div class="flex items-center justify-between">
+        <div class="flex items-start justify-between gap-2">
           <div>
-            <p class="font-extrabold text-slate-900 text-sm">${author.name}</p>
-            <p class="text-[11px] text-slate-500 font-mono mt-0.5">${author.email} • ID: ${author.author_id}</p>
-            <p class="text-[10px] text-slate-400 mt-0.5">Bank: ${author.bank}</p>
+            <p class="font-bold text-slate-900 text-base">${author.name}</p>
+            <p class="text-xs text-slate-500 font-mono mt-0.5">${author.email} • ${author.author_id}</p>
+            <p class="text-xs text-slate-500 mt-1">Bank: <strong class="text-slate-700">${author.bank}</strong></p>
           </div>
           ${getBadgeHtml(author.badge, author.status)}
         </div>
-        <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-200 text-center">
-          <div class="bg-white p-2 rounded-xl border border-slate-200 card-shadow">
-            <span class="text-[10px] text-slate-500 block font-bold">TOTAL EARNED</span>
-            <span class="text-xs font-extrabold text-slate-900 font-mono block mt-0.5">₹${author.total_earned.toLocaleString('en-IN')}</span>
+        <div class="grid grid-cols-3 gap-2.5 pt-3 border-t border-slate-200/80 text-center">
+          <div class="bg-white p-3 rounded-xl border border-slate-200">
+            <span class="text-[11px] text-slate-500 block font-semibold uppercase">Earned</span>
+            <span class="text-sm font-extrabold text-slate-900 font-mono block mt-1">₹${author.total_earned.toLocaleString('en-IN')}</span>
           </div>
-          <div class="bg-white p-2 rounded-xl border border-slate-200 card-shadow">
-            <span class="text-[10px] text-slate-500 block font-bold">CLEARED (PAID)</span>
-            <span class="text-xs font-extrabold text-emerald-700 font-mono block mt-0.5">₹${author.total_paid.toLocaleString('en-IN')}</span>
+          <div class="bg-white p-3 rounded-xl border border-slate-200">
+            <span class="text-[11px] text-slate-500 block font-semibold uppercase">Disbursed</span>
+            <span class="text-sm font-extrabold text-emerald-700 font-mono block mt-1">₹${author.total_paid.toLocaleString('en-IN')}</span>
           </div>
-          <div class="bg-white p-2 rounded-xl border border-slate-200 card-shadow">
-            <span class="text-[10px] text-slate-500 block font-bold">NET PENDING</span>
-            <span class="text-xs font-extrabold ${author.total_pending > 0 ? 'text-amber-800' : 'text-emerald-700'} font-mono block mt-0.5">₹${author.total_pending.toLocaleString('en-IN')}</span>
+          <div class="bg-white p-3 rounded-xl border border-slate-200">
+            <span class="text-[11px] text-slate-500 block font-semibold uppercase">Pending</span>
+            <span class="text-sm font-extrabold ${author.total_pending > 0 ? 'text-amber-800' : 'text-emerald-700'} font-mono block mt-1">₹${author.total_pending.toLocaleString('en-IN')}</span>
           </div>
         </div>
       `;
@@ -1066,25 +1166,24 @@
 
       author.books.forEach(b => {
         const item = document.createElement("div");
-        item.className = "p-3.5 rounded-xl bg-slate-50 border border-slate-200 card-hover transition space-y-1.5";
+        item.className = "p-4 rounded-xl bg-slate-50 border border-slate-200 surface-card-hover space-y-2";
         item.innerHTML = `
-          <div class="flex items-start justify-between">
+          <div class="flex items-start justify-between gap-2">
             <div>
-              <p class="font-bold text-slate-900 text-xs">${b.title}</p>
-              <p class="text-[10px] text-slate-500 font-mono">${b.isbn} • ${b.genre}</p>
+              <p class="font-bold text-slate-900 text-sm">${b.title}</p>
+              <p class="text-xs text-slate-500 font-mono mt-0.5">${b.isbn} • ${b.genre}</p>
             </div>
             ${getBadgeHtml(b.badge, b.status.includes('In Production') ? 'In Production' : b.badge)}
           </div>
-          <div class="flex items-center justify-between text-[11px] text-slate-600 pt-1 border-t border-slate-200">
-            <span>Sold: <b>${b.copies}</b> copies (MRP: ₹${b.mrp})</span>
-            <span>Pending: <b class="${b.pending > 0 ? 'text-amber-800' : 'text-emerald-700'} font-mono">₹${b.pending.toLocaleString('en-IN')}</b></span>
+          <div class="flex items-center justify-between text-xs text-slate-600 pt-2 border-t border-slate-200/80">
+            <span>Sold: <strong class="text-slate-900">${b.copies} copies</strong> (MRP: ₹${b.mrp})</span>
+            <span>Pending: <strong class="${b.pending > 0 ? 'text-amber-800' : 'text-emerald-700'} font-mono">₹${b.pending.toLocaleString('en-IN')}</strong></span>
           </div>
         `;
         adminBooksList.appendChild(item);
       });
     }
 
-    // Reset Filters Button
     adminResetFilterBtn.addEventListener("click", () => {
       adminSearchInput.value = "";
       adminCityFilter.value = "ALL";
@@ -1093,7 +1192,6 @@
       showToast("Filters reset to default");
     });
 
-    // Export CSV Button
     adminExportCsvBtn.addEventListener("click", () => {
       let csv = "Author ID,Name,Email,City,Total Earned,Total Paid,Total Pending,Status\n";
       AUTHORS.forEach(a => {
@@ -1107,35 +1205,32 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      showToast("Exported BookLeaf Authors CSV Ledger!");
+      showToast("Exported BookLeaf Authors CSV Ledger");
     });
 
-    // Copy Email Text Button
     adminCopyEmailBtn.addEventListener("click", () => {
       const text = adminOutputBody.innerText || adminOutputBody.textContent;
-      if (!text || text.includes("No Statement Triggered")) {
-        showToast("No generated email to copy!", "⚠️", "bg-amber-800");
+      if (!text || text.includes("No Statement Generated")) {
+        showToast("No generated statement to copy yet");
         return;
       }
       navigator.clipboard.writeText(text);
-      showToast("Copied email statement to clipboard!", "📋", "bg-brand-700");
+      showToast("Copied statement text to clipboard");
     });
 
-    // Clear Notification Log Button
     adminClearLogBtn.addEventListener("click", () => {
       adminLogs = [];
       adminLogCount.textContent = "0 Events";
-      adminLogTable.innerHTML = `<tr id="admin-empty-log-row"><td colspan="4" class="py-6 text-center text-slate-400">Notification log cleared.</td></tr>`;
-      showToast("Notification log history cleared");
+      adminLogTable.innerHTML = `<tr id="admin-empty-log-row"><td colspan="4" class="py-8 text-center text-sm text-slate-400">Audit log history cleared.</td></tr>`;
+      showToast("Audit log history cleared");
     });
 
-    // Simulate Bank Clearance Button (Admin marks paid)
     adminMarkClearedBtn.addEventListener("click", () => {
       const authorId = adminAuthorSelect.value;
       if (!authorId) return;
       const author = AUTHORS.find(a => a.author_id === authorId);
       if (author.total_pending === 0) {
-        showToast(`${author.name} is already fully paid!`, "ℹ️", "bg-emerald-800");
+        showToast(`${author.name} is already fully paid`);
         return;
       }
 
@@ -1151,7 +1246,6 @@
         b.last_payout = new Date().toISOString().slice(0, 10);
       });
 
-      // Recalculate totals
       const totalPending = AUTHORS.reduce((acc, a) => acc + a.total_pending, 0);
       const totalDisbursed = AUTHORS.reduce((acc, a) => acc + a.total_paid, 0);
       adminKpiPending.textContent = `₹${totalPending.toLocaleString('en-IN')}`;
@@ -1166,10 +1260,10 @@
         status: "Cleared",
         subject: `Disbursement Cleared: ₹${clearedAmount.toLocaleString('en-IN')}`,
         timestamp: new Date().toLocaleTimeString(),
-        body: `Bank transfer cleared for ${author.name} via NEFT to ${author.bank}. Amount: ₹${clearedAmount.toLocaleString('en-IN')}. New balance: ₹0.`
+        body: `Bank transfer cleared for ${author.name} via NEFT to ${author.bank}. Amount: ₹${clearedAmount.toLocaleString('en-IN')}. New pending balance: ₹0.`
       });
 
-      showToast(`Cleared ₹${clearedAmount.toLocaleString('en-IN')} for ${author.name}! Updated to Fully Paid.`, "🏦", "bg-brand-700");
+      showToast(`Cleared ₹${clearedAmount.toLocaleString('en-IN')} for ${author.name}`);
     });
 
     adminSearchInput.addEventListener("input", filterAndRenderAdminAuthors);
@@ -1177,7 +1271,6 @@
     adminStatusFilter.addEventListener("change", filterAndRenderAdminAuthors);
     adminAuthorSelect.addEventListener("change", (e) => renderAdminAuthorDetails(e.target.value));
 
-    // Admin Single Trigger
     adminTriggerBtn.addEventListener("click", async () => {
       const authorId = adminAuthorSelect.value;
       if (!authorId) return;
@@ -1189,8 +1282,8 @@
       adminBtnText.textContent = "Running n8n Automation Engine...";
       adminBtnIcon.classList.add("animate-spin");
 
-      adminOutputStatus.className = "px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200 animate-pulse";
-      adminOutputStatus.textContent = "AI Generating...";
+      adminOutputStatus.className = "px-3 py-1 rounded-full text-xs font-mono font-semibold bg-amber-50 text-amber-800 border border-amber-200 animate-pulse";
+      adminOutputStatus.textContent = "Generating...";
 
       try {
         const res = await fetch("http://localhost:5678/webhook/bookleaf-royalty-summary", {
@@ -1210,7 +1303,6 @@
         if (!res.ok) throw new Error("HTTP " + res.status);
         const data = await res.json();
 
-        // Dispatch live HTML Email to user Gmail inbox
         let mailSent = false;
         try {
           const emailRes = await fetch("http://localhost:5001/api/send-real-email", {
@@ -1235,12 +1327,12 @@
         adminOutputEmpty.classList.add("hidden");
         adminOutputBox.classList.remove("hidden");
 
-        adminOutputStatus.className = "px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-300";
-        adminOutputStatus.textContent = mailSent ? "Success (Delivered to Gmail ✉️)" : "Success (200 OK)";
+        adminOutputStatus.className = "px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200";
+        adminOutputStatus.textContent = mailSent ? "Delivered to Gmail" : "Success (200 OK)";
 
         adminOutputSubject.textContent = data.email_subject || `BookLeaf Royalty Statement for ${author.name}`;
         adminOutputBody.textContent = data.email_body;
-        adminOutputTime.textContent = `Completed at: ${new Date().toLocaleTimeString()} via n8n`;
+        adminOutputTime.textContent = `Completed at ${new Date().toLocaleTimeString()} via n8n`;
 
         addAdminLog({
           author_name: author.name,
@@ -1251,18 +1343,18 @@
           body: data.email_body
         });
 
-        showToast(`AI Royalty Summary generated & delivered to Gmail for ${author.name}!`, "✉️", "bg-brand-700");
+        showToast(`Royalty summary generated and emailed for ${author.name}`);
 
       } catch (err) {
         adminOutputEmpty.classList.add("hidden");
         adminOutputBox.classList.remove("hidden");
 
-        adminOutputStatus.className = "px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-rose-50 text-rose-800 border border-rose-300";
+        adminOutputStatus.className = "px-3 py-1 rounded-full text-xs font-mono font-semibold bg-rose-50 text-rose-800 border border-rose-200";
         adminOutputStatus.textContent = "Failed";
 
         adminOutputSubject.textContent = "Automation Error";
         adminOutputBody.textContent = `Webhook execution failed: ${err.message}. Please verify n8n is running at :5678.`;
-        adminOutputTime.textContent = `Failed at: ${new Date().toLocaleTimeString()}`;
+        adminOutputTime.textContent = `Failed at ${new Date().toLocaleTimeString()}`;
 
         addAdminLog({
           author_name: author.name,
@@ -1273,24 +1365,23 @@
           body: err.message
         });
 
-        showToast(`Execution failed: ${err.message}`, "❌", "bg-rose-700");
+        showToast(`Execution failed: ${err.message}`);
       } finally {
         setTimeout(() => {
           adminTriggerBtn.disabled = false;
           adminTriggerBtn.classList.remove("opacity-60", "cursor-wait");
           adminBtnText.textContent = "Generate & Send Royalty Summary";
           adminBtnIcon.classList.remove("animate-spin");
-        }, 600);
+        }, 500);
       }
     });
 
-    // Admin Bulk Trigger
     adminBulkBtn.addEventListener("click", async () => {
       const eligible = AUTHORS.filter(a => a.total_pending > 0);
       adminBulkBtn.disabled = true;
       adminBulkBtn.classList.add("opacity-60");
-      adminBulkBtn.innerHTML = `<span>Triggering ${eligible.length} Webhooks...</span>`;
-      showToast(`Initiating bulk trigger for ${eligible.length} authors...`, "⚡");
+      adminBulkBtn.innerHTML = `<span>Processing ${eligible.length} Authors...</span>`;
+      showToast(`Initiating bulk trigger for ${eligible.length} authors`);
 
       for (const a of eligible) {
         try {
@@ -1330,8 +1421,8 @@
 
       adminBulkBtn.disabled = false;
       adminBulkBtn.classList.remove("opacity-60");
-      adminBulkBtn.innerHTML = `<svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg><span>Bulk Trigger All (9)</span>`;
-      showToast(`Bulk processing finished! Synchronized all pending authors.`, "✓", "bg-emerald-800");
+      adminBulkBtn.innerHTML = `<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg><span>Bulk Trigger All (9)</span>`;
+      showToast(`Bulk processing completed for 9 authors`);
     });
 
     function addAdminLog(item) {
@@ -1343,18 +1434,18 @@
       const tr = document.createElement("tr");
       tr.className = "hover:bg-slate-50 transition";
       tr.innerHTML = `
-        <td class="py-3 px-3">
-          <p class="font-bold text-slate-900 text-xs">${item.author_name}</p>
-          <span class="text-[10px] text-slate-500 font-mono">${item.author_id}</span>
+        <td class="py-3.5 px-4">
+          <p class="font-bold text-slate-900 text-sm">${item.author_name}</p>
+          <span class="text-xs text-slate-500 font-mono">${item.author_id}</span>
         </td>
-        <td class="py-3 px-3">
-          <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono ${item.status === 'Success' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : (item.status === 'Cleared' ? 'bg-blue-100 text-blue-800 border border-blue-300' : 'bg-rose-100 text-rose-800 border border-rose-300')}">
+        <td class="py-3.5 px-4">
+          <span class="px-2.5 py-1 rounded-md text-xs font-semibold ${item.status === 'Success' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : (item.status === 'Cleared' ? 'bg-blue-50 text-blue-800 border border-blue-200' : 'bg-rose-50 text-rose-800 border border-rose-200')}">
             ${item.status}
           </span>
         </td>
-        <td class="py-3 px-3 text-slate-500 font-mono text-[11px]">${item.timestamp}</td>
-        <td class="py-3 px-3 text-right">
-          <button onclick="inspectAdminLog('${item.author_name}', '${encodeURIComponent(item.body || item.subject)}')" class="text-brand-700 hover:text-brand-800 font-bold text-[11px] cursor-pointer">Inspect</button>
+        <td class="py-3.5 px-4 text-slate-500 font-mono text-xs">${item.timestamp}</td>
+        <td class="py-3.5 px-4 text-right">
+          <button onclick="inspectAdminLog('${item.author_name}', '${encodeURIComponent(item.body || item.subject)}')" class="text-brand-700 hover:text-brand-800 font-semibold text-xs cursor-pointer">Inspect</button>
         </td>
       `;
       adminLogTable.insertBefore(tr, adminLogTable.firstChild);
@@ -1367,12 +1458,12 @@
       adminOutputEmpty.classList.add("hidden");
       adminOutputBox.classList.remove("hidden");
       adminOutputStatus.textContent = "Archived";
-      adminOutputStatus.className = "px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-50 text-blue-800 border border-blue-200";
-      showToast(`Viewing statement for ${name}`, "👁️");
+      adminOutputStatus.className = "px-3 py-1 rounded-full text-xs font-mono font-semibold bg-blue-50 text-blue-800 border border-blue-200";
+      showToast(`Viewing archived statement for ${name}`);
     };
 
     // -------------------------------------------------------------
-    // AUTHOR PORTAL CONTROLS & SELF-SERVICE LOGIC
+    // AUTHOR PORTAL LOGIC
     // -------------------------------------------------------------
     const authorPersonaSelect = document.getElementById("author-persona-select");
     const authorHeroName = document.getElementById("author-hero-name");
@@ -1400,7 +1491,6 @@
     const bankInputBank = document.getElementById("bank-input-bank");
     const bankInputAccount = document.getElementById("bank-input-account");
 
-    // Populate Author Persona Switcher
     AUTHORS.forEach(a => {
       const opt = document.createElement("option");
       opt.value = a.author_id;
@@ -1423,57 +1513,56 @@
       authorBankLabel.textContent = author.bank;
       authorBooksPill.textContent = `${author.books.length} Registered Titles`;
 
-      // Status pill & threshold note
       if (author.badge === "Green") {
-        authorHeroStatusPill.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
-        authorHeroStatusPill.textContent = "🟢 All Clear (Fully Paid)";
-        authorHeroThresholdNote.textContent = "✓ No pending balance outstanding";
+        authorHeroStatusPill.className = "px-3 py-1 rounded-full text-xs font-semibold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
+        authorHeroStatusPill.textContent = "All Clear (Fully Paid)";
+        authorHeroThresholdNote.textContent = "No pending balance outstanding";
       } else if (author.badge === "Red") {
-        authorHeroStatusPill.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-rose-500/25 text-rose-300 border border-rose-400/40";
-        authorHeroStatusPill.textContent = "🔴 Action Needed (>90 Days Overdue)";
-        authorHeroThresholdNote.textContent = "⚠️ Overdue for disbursement — priority escalation active";
+        authorHeroStatusPill.className = "px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/25 text-rose-300 border border-rose-400/40";
+        authorHeroStatusPill.textContent = "Action Needed (>90 Days Overdue)";
+        authorHeroThresholdNote.textContent = "Overdue for disbursement — priority escalation active";
       } else {
-        authorHeroStatusPill.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30";
-        authorHeroStatusPill.textContent = author.total_pending < 1000 ? "🟡 Rolling Over (<₹1,000)" : "🟡 Normal Cycle";
-        authorHeroThresholdNote.textContent = author.total_pending < 1000 ? "ℹ️ Below ₹1,000 threshold (will roll over)" : "✓ Above ₹1,000 Payout Threshold";
+        authorHeroStatusPill.className = "px-3 py-1 rounded-full text-xs font-semibold bg-amber-400/20 text-amber-300 border border-amber-400/30";
+        authorHeroStatusPill.textContent = author.total_pending < 1000 ? "Rolling Over (<₹1,000)" : "Normal Cycle";
+        authorHeroThresholdNote.textContent = author.total_pending < 1000 ? "Below ₹1,000 threshold (rolls over to next quarter)" : "Above ₹1,000 Payout Threshold";
       }
 
       authorBooksGrid.innerHTML = "";
       author.books.forEach(b => {
         const card = document.createElement("div");
-        card.className = "p-5 rounded-2xl bg-slate-50 border border-slate-200 card-hover transition space-y-4";
+        card.className = "p-6 rounded-2xl bg-slate-50 border border-slate-200 surface-card-hover space-y-4";
         card.innerHTML = `
-          <div class="flex items-start justify-between">
+          <div class="flex items-start justify-between gap-2">
             <div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-700">${b.genre}</span>
-              <h4 class="text-base font-extrabold text-slate-900 mt-1">${b.title}</h4>
+              <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-slate-200/80 text-slate-700">${b.genre}</span>
+              <h4 class="text-base font-bold text-slate-900 mt-2">${b.title}</h4>
               <p class="text-xs text-slate-500 font-mono mt-0.5">ISBN: ${b.isbn}</p>
             </div>
             ${getBadgeHtml(b.badge, b.status.includes('In Production') ? b.status : (b.badge === 'Green' ? 'Fully Paid' : (b.badge === 'Red' ? 'Overdue' : 'Pending Cycle')))}
           </div>
 
-          <div class="grid grid-cols-2 gap-2 text-xs bg-white p-3.5 rounded-xl border border-slate-200">
+          <div class="grid grid-cols-2 gap-3 text-sm bg-white p-4 rounded-xl border border-slate-200">
             <div>
-              <span class="text-slate-400 block text-[10px] font-bold">MRP / ROYALTY</span>
-              <span class="font-bold text-slate-900">₹${b.mrp} (80% net)</span>
+              <span class="text-slate-500 block text-xs font-semibold uppercase">MRP / Share</span>
+              <span class="font-bold text-slate-900 mt-0.5 block">₹${b.mrp} (80% net)</span>
             </div>
             <div>
-              <span class="text-slate-400 block text-[10px] font-bold">COPIES SOLD</span>
-              <span class="font-bold text-slate-900 font-mono">${b.copies} copies</span>
+              <span class="text-slate-500 block text-xs font-semibold uppercase">Copies Sold</span>
+              <span class="font-bold text-slate-900 font-mono mt-0.5 block">${b.copies} copies</span>
             </div>
-            <div class="pt-2 border-t border-slate-100">
-              <span class="text-slate-400 block text-[10px] font-bold">EARNED / PAID</span>
-              <span class="font-bold text-slate-900 font-mono">₹${b.earned.toLocaleString('en-IN')} / ₹${b.paid.toLocaleString('en-IN')}</span>
+            <div class="pt-2.5 border-t border-slate-100">
+              <span class="text-slate-500 block text-xs font-semibold uppercase">Earned / Paid</span>
+              <span class="font-bold text-slate-900 font-mono mt-0.5 block">₹${b.earned.toLocaleString('en-IN')} / ₹${b.paid.toLocaleString('en-IN')}</span>
             </div>
-            <div class="pt-2 border-t border-slate-100">
-              <span class="text-slate-400 block text-[10px] font-bold">PENDING BALANCE</span>
-              <span class="font-bold ${b.pending > 0 ? 'text-amber-800' : 'text-emerald-700'} font-mono">₹${b.pending.toLocaleString('en-IN')}</span>
+            <div class="pt-2.5 border-t border-slate-100">
+              <span class="text-slate-500 block text-xs font-semibold uppercase">Pending Balance</span>
+              <span class="font-bold ${b.pending > 0 ? 'text-amber-800' : 'text-emerald-700'} font-mono mt-0.5 block">₹${b.pending.toLocaleString('en-IN')}</span>
             </div>
           </div>
 
           <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 pt-1 gap-1">
-            <span>Last Payout: <b class="text-slate-700">${b.last_payout}</b></span>
-            <span>Platforms: <b class="text-slate-700">${b.platforms}</b></span>
+            <span>Last Payout: <strong class="text-slate-800">${b.last_payout}</strong></span>
+            <span>Channels: <strong class="text-slate-800">${b.platforms}</strong></span>
           </div>
         `;
         authorBooksGrid.appendChild(card);
@@ -1486,12 +1575,11 @@
       showToast(`Simulated login as ${chosen.name} (${chosen.city})`);
     });
 
-    // Author Email Me My Statement Button
     authorEmailMeBtn.addEventListener("click", async () => {
       const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
       authorEmailMeBtn.disabled = true;
       authorEmailMeBtn.classList.add("opacity-60");
-      showToast(`Generating & sending statement to ${currentAuthor.name}...`, "✉️");
+      showToast(`Generating and emailing statement for ${currentAuthor.name}`);
 
       try {
         const res = await fetch("http://localhost:5678/webhook/bookleaf-royalty-summary", {
@@ -1510,7 +1598,6 @@
 
         const data = await res.json();
 
-        // Also trigger real SMTP
         await fetch("http://localhost:5001/api/send-real-email", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1527,58 +1614,31 @@
           })
         });
 
-        showToast(`Official Royalty Statement sent to your inbox (ansarisaifuddin732@gmail.com)!`, "✓", "bg-emerald-800");
-
+        showToast(`Official statement delivered to ansarisaifuddin732@gmail.com`);
       } catch (err) {
-        showToast(`Email dispatch: ${err.message}`, "❌", "bg-rose-700");
+        showToast(`Email dispatch error: ${err.message}`);
       } finally {
         setTimeout(() => {
           authorEmailMeBtn.disabled = false;
           authorEmailMeBtn.classList.remove("opacity-60");
-        }, 800);
+        }, 600);
       }
     });
 
-    // Author Download Statement Action (Formatted TXT Receipt)
     authorDownloadBtn.addEventListener("click", () => {
       const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
       let content = `========================================================\n`;
       content += `BOOKLEAF PUBLISHING — OFFICIAL AUTHOR ROYALTY STATEMENT\n`;
       content += `========================================================\n\n`;
-      content += `STATEMENT DETAILS:\n`;
-      content += `-------------------\n`;
-      content += `Author Name    : ${currentAuthor.name}\n`;
-      content += `Author ID      : ${currentAuthor.author_id}\n`;
-      content += `Registered City: ${currentAuthor.city}\n`;
-      content += `Registered Mail: ${currentAuthor.email}\n`;
+      content += `Author Name    : ${currentAuthor.name} (${currentAuthor.author_id})\n`;
+      content += `Registered Mail: ${currentAuthor.email} | City: ${currentAuthor.city}\n`;
       content += `Linked Bank    : ${currentAuthor.bank}\n`;
-      content += `Issue Date     : ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}\n\n`;
-      content += `ROYALTY POLICY & LEDGER SUMMARY:\n`;
-      content += `--------------------------------\n`;
-      content += `Contract Split : 80% Author Net Profit / 20% Publisher\n`;
-      content += `Payout Schedule: Quarterly (within 45 days of quarter close)\n`;
-      content += `Threshold Rule : ₹1,000 Minimum (Balances under ₹1,000 rollover)\n\n`;
-      content += `FINANCIAL BALANCES:\n`;
-      content += `-------------------\n`;
-      content += `Total Lifetime Royalties Earned : ₹${currentAuthor.total_earned.toLocaleString('en-IN')}\n`;
-      content += `Total Royalties Disbursed (Paid): ₹${currentAuthor.total_paid.toLocaleString('en-IN')}\n`;
-      content += `Current Pending Payout Balance  : ₹${currentAuthor.total_pending.toLocaleString('en-IN')}\n`;
-      content += `Status Assessment               : ${currentAuthor.status}\n\n`;
-      content += `BOOK BREAKDOWN (${currentAuthor.books.length} TITLES):\n`;
-      content += `--------------------------------------------------------\n`;
+      content += `Total Earned   : ₹${currentAuthor.total_earned.toLocaleString('en-IN')}\n`;
+      content += `Total Paid     : ₹${currentAuthor.total_paid.toLocaleString('en-IN')}\n`;
+      content += `Pending Balance: ₹${currentAuthor.total_pending.toLocaleString('en-IN')}\n\n`;
       currentAuthor.books.forEach((b, i) => {
-        content += `[${i + 1}] "${b.title}"\n`;
-        content += `    ISBN       : ${b.isbn}\n`;
-        content += `    Genre      : ${b.genre}\n`;
-        content += `    Retail MRP : ₹${b.mrp}\n`;
-        content += `    Copies Sold: ${b.copies}\n`;
-        content += `    Earned     : ₹${b.earned.toLocaleString('en-IN')} | Paid: ₹${b.paid.toLocaleString('en-IN')} | Pending: ₹${b.pending.toLocaleString('en-IN')}\n`;
-        content += `    Platforms  : ${b.platforms}\n`;
-        content += `    Last Payout: ${b.last_payout}\n\n`;
+        content += `[${i + 1}] "${b.title}" (${b.isbn}) — Sold: ${b.copies} | Earned: ₹${b.earned} | Pending: ₹${b.pending}\n`;
       });
-      content += `========================================================\n`;
-      content += `BookLeaf Publishing India • support@bookleafpub.com\n`;
-      content += `Generated electronically for author verified record.\n`;
 
       const blob = new Blob([content], { type: "text/plain;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
@@ -1588,23 +1648,21 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      showToast(`Downloaded royalty statement for ${currentAuthor.name}!`, "📄");
+      showToast(`Downloaded official statement for ${currentAuthor.name}`);
     });
 
-    // Author Request Payout Priority Action
     authorExpediteBtn.addEventListener("click", () => {
       const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
       if (currentAuthor.total_pending === 0) {
-        showToast(`You have ₹0 pending balance — all past royalties are fully paid!`, "ℹ️", "bg-emerald-800");
+        showToast(`You have ₹0 pending balance — all royalties are settled`);
       } else if (currentAuthor.total_pending < 1000) {
-        showToast(`Balance (₹${currentAuthor.total_pending}) is below ₹1,000 threshold. Will roll over!`, "ℹ️", "bg-amber-800");
+        showToast(`Balance (₹${currentAuthor.total_pending}) is below ₹1,000 threshold and will roll over`);
       } else {
         const ticketId = `BL-${Math.floor(10000 + Math.random() * 90000)}`;
-        showToast(`Priority Payout Ticket #${ticketId} created with BookLeaf Finance!`, "🚀", "bg-brand-700");
+        showToast(`Priority Payout Ticket #${ticketId} logged with Finance`);
       }
     });
 
-    // Author Update Bank Modal Handlers
     authorUpdateBankBtn.addEventListener("click", () => {
       const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
       bankInputName.value = currentAuthor.name;
@@ -1634,7 +1692,7 @@
 
       modalBank.classList.add("hidden");
       modalBank.classList.remove("flex");
-      showToast(`Updated payout bank account to ${masked}!`, "✓", "bg-emerald-800");
+      showToast(`Updated payout bank account to ${masked}`);
     });
 
     // -------------------------------------------------------------
@@ -1660,17 +1718,18 @@
     const arOutputSubject = document.getElementById("ar-output-subject");
     const arOutputBody = document.getElementById("ar-output-body");
 
-    // Populate Auto-Reply Author Selector
     AUTHORS.forEach(a => {
       const opt = document.createElement("option");
       opt.value = a.author_id;
       opt.textContent = `${a.name} (${a.author_id}) — ${a.email} [${a.status}]`;
       autoreplyAuthorSelect.appendChild(opt);
     });
-    autoreplyAuthorSelect.value = "AUTH009"; // Default to Kavita (<₹1,000 rollover scenario)
+    autoreplyAuthorSelect.value = "AUTH009";
 
-    // Preset Scenario Loader
-    window.loadAutoReplyPreset = function(type) {
+    window.loadAutoReplyPreset = function(type, btnEl) {
+      document.querySelectorAll(".scenario-btn").forEach(b => b.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+
       if (type === "THRESHOLD") {
         autoreplyAuthorSelect.value = "AUTH009";
         autoreplyQueryInput.value = "Hi BookLeaf team, why has my pending royalty of ₹850 for The Nagpur Notebooks not been transferred to my bank account yet?";
@@ -1687,31 +1746,30 @@
         autoreplyAuthorSelect.value = "AUTH002";
         autoreplyQueryInput.value = "I have a complex legal tax dispute regarding international GST and wire remittance for my ₹13,024 overdue balance. Please have a senior manager review this.";
       }
-      showToast(`Loaded ${type} scenario into Auto-Reply Simulator`, "⚡");
+      showToast(`Loaded ${type.toLowerCase()} test scenario`);
     };
 
-    // OAuth & Live IMAP Verification
     async function verifyOAuthConnection(showFeedback = false) {
       if (showFeedback) {
-        btnVerifyOauthText.textContent = "Verifying IMAP:993 & SMTP:465...";
+        btnVerifyOauthText.textContent = "Syncing IMAP:993...";
       }
       try {
         const res = await fetch("http://localhost:5001/api/oauth-status");
         const data = await res.json();
         if (data.success && data.oauth) {
-          headerOauthText.textContent = `OAuth Gmail: Connected (${data.oauth.inbox_messages || 0} msgs)`;
-          oauthTelemetrySub.textContent = `IMAP:993 Synced (${data.oauth.inbox_messages || 0} msgs, ${data.oauth.latency_ms}ms)`;
+          headerOauthText.textContent = `Gmail OAuth: Connected (${data.oauth.inbox_messages || 0} msgs)`;
+          oauthTelemetrySub.textContent = `IMAP:993 Synced (${data.oauth.inbox_messages || 0} msgs • ${data.oauth.latency_ms}ms)`;
           if (showFeedback) {
-            showToast(`OAuth Verified: ${data.oauth.account} (${data.oauth.inbox_messages} inbox emails synced in ${data.oauth.latency_ms}ms)`, "🔐", "bg-emerald-800");
+            showToast(`OAuth Verified: ${data.oauth.account} (${data.oauth.inbox_messages} messages synced)`);
           }
         }
       } catch (e) {
         if (showFeedback) {
-          showToast(`OAuth Bridge check: ${e.message}`, "⚠️", "bg-amber-800");
+          showToast(`OAuth verification error: ${e.message}`);
         }
       } finally {
         if (showFeedback) {
-          btnVerifyOauthText.textContent = "Verify OAuth & Sync Inbox";
+          btnVerifyOauthText.textContent = "Sync Gmail Inbox";
         }
       }
     }
@@ -1724,18 +1782,17 @@
       });
     }
 
-    // Run Admin Auto-Reply Simulator
     btnRunAutoreply.addEventListener("click", async () => {
       const authorId = autoreplyAuthorSelect.value;
       const queryText = autoreplyQueryInput.value.trim();
       if (!queryText) {
-        showToast("Please enter an author email query to test!", "⚠️", "bg-amber-800");
+        showToast("Please enter an author email query to test");
         return;
       }
 
       btnRunAutoreply.disabled = true;
       btnRunAutoreply.classList.add("opacity-60");
-      btnRunAutoreplyText.textContent = "Running 4-Stage AI Auto-Reply & Dispatching Email...";
+      btnRunAutoreplyText.textContent = "Synthesizing via Gemini 2.5 Flash & Sending Email...";
 
       try {
         const res = await fetch("http://localhost:5001/api/auto-reply", {
@@ -1757,15 +1814,15 @@
 
         if (r.needs_human_escalation) {
           arEscalationBadge.classList.remove("hidden");
-          arConfidenceBadge.className = "px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-amber-50 border border-amber-300 text-amber-900";
+          arConfidenceBadge.className = "px-3 py-1 rounded-lg text-xs font-mono font-bold bg-amber-50 border border-amber-200 text-amber-900";
         } else {
           arEscalationBadge.classList.add("hidden");
-          arConfidenceBadge.className = "px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 border border-emerald-300 text-emerald-900";
+          arConfidenceBadge.className = "px-3 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 border border-emerald-200 text-emerald-900";
         }
 
         arMetaAuthor.textContent = `${r.author_name} (${r.author_id})`;
         arMetaMethod.textContent = r.match_method;
-        arMetaSla.textContent = `${r.sla_window} (${r.elapsed_ms}ms)`;
+        arMetaSla.textContent = `${r.sla_window}`;
         arOutputSubject.textContent = r.reply_subject;
         arOutputBody.textContent = r.reply_body;
 
@@ -1778,17 +1835,17 @@
           body: r.reply_body
         });
 
-        showToast(`Auto-Reply #${r.ticket_id} (${r.intent_label}) sent to ${r.delivered_to}!`, "🤖", "bg-brand-700");
+        showToast(`Auto-Reply #${r.ticket_id} delivered to ${r.delivered_to}`);
       } catch (err) {
-        showToast(`Auto-Reply Error: ${err.message}`, "❌", "bg-rose-700");
+        showToast(`Auto-Reply Error: ${err.message}`);
       } finally {
         btnRunAutoreply.disabled = false;
         btnRunAutoreply.classList.remove("opacity-60");
-        btnRunAutoreplyText.textContent = "Run AI Auto-Reply & Send Real Email";
+        btnRunAutoreplyText.textContent = "Run AI Auto-Reply & Dispatch Real Email";
       }
     });
 
-    // Author Portal Self-Service Instant Auto-Reply Desk
+    // Author Self-Service Auto-Reply Desk
     const authorSupportQuery = document.getElementById("author-support-query");
     const btnAuthorSendQuery = document.getElementById("btn-author-send-query");
     const btnAuthorSendQueryText = document.getElementById("btn-author-send-query-text");
@@ -1799,7 +1856,7 @@
 
     window.setAuthorQuickQuery = function(q) {
       authorSupportQuery.value = q;
-      showToast("Question template loaded — click Send Email!", "✍️");
+      showToast("Inquiry template loaded");
     };
 
     btnAuthorSendQuery.addEventListener("click", async () => {
@@ -1809,7 +1866,7 @@
 
       btnAuthorSendQuery.disabled = true;
       btnAuthorSendQuery.classList.add("opacity-60");
-      btnAuthorSendQueryText.textContent = "Processing & Sending Auto-Reply to Gmail...";
+      btnAuthorSendQueryText.textContent = "Generating AI Response & Sending to Gmail...";
 
       try {
         const res = await fetch("http://localhost:5001/api/auto-reply", {
@@ -1827,17 +1884,17 @@
 
         const r = data.record;
         authorArTicket.textContent = `Ticket #${r.ticket_id} • ${r.intent_label}`;
-        authorArStatus.textContent = `✓ Sent to Gmail (${r.confidence}% Confidence)`;
+        authorArStatus.textContent = `Delivered to Gmail (${r.confidence}% Confidence)`;
         authorArSubject.textContent = r.reply_subject;
         authorArBody.textContent = r.reply_body;
 
-        showToast(`Instant AI Auto-Reply received & delivered to your Gmail inbox!`, "✉️", "bg-emerald-800");
+        showToast(`Instant AI response generated and emailed to your inbox`);
       } catch (err) {
-        showToast(`Error: ${err.message}`, "❌", "bg-rose-700");
+        showToast(`Error: ${err.message}`);
       } finally {
         btnAuthorSendQuery.disabled = false;
         btnAuthorSendQuery.classList.remove("opacity-60");
-        btnAuthorSendQueryText.textContent = "Send Email & Receive Instant AI Auto-Reply";
+        btnAuthorSendQueryText.textContent = "Send Email & Receive Instant AI Reply";
       }
     });
 
