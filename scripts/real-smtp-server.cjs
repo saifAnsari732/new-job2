@@ -1016,6 +1016,134 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // 4. Author Priority Payout Request Alert & Confirmation Endpoint
+  if (req.method === "POST" && req.url === "/api/priority-payout") {
+    let body = "";
+    req.on("data", (chunk) => (body += chunk));
+    req.on("end", async () => {
+      try {
+        const payload = JSON.parse(body || "{}");
+        const { author_id = "AUTH001", target_recipient = SMTP_USER } = payload;
+
+        const author = AUTHORS_DB.find(a => a.author_id === author_id) || AUTHORS_DB[0];
+        const ticketId = `BL-PRIO-${Math.floor(10000 + Math.random() * 90000)}`;
+
+        const isZero = author.total_pending === 0;
+        const isBelowThreshold = author.total_pending > 0 && author.total_pending < 1000;
+
+        let statusSummary = "";
+        let slaText = "";
+        if (isZero) {
+          statusSummary = `Author ${author.name} (${author.author_id}) clicked "Request Priority Payout", though their current pending balance is ₹0 (Fully Paid).`;
+          slaText = "No Payout Needed (Balance ₹0)";
+        } else if (isBelowThreshold) {
+          statusSummary = `Author ${author.name} (${author.author_id}) requested a Priority Payout for ₹${author.total_pending.toLocaleString("en-IN")}. Note: Balance is currently below the ₹1,000 minimum threshold (₹${1000 - author.total_pending} shy) and is scheduled to roll over unless Finance approves a manual override.`;
+          slaText = "Manual Override Review (<₹1,000 Threshold)";
+        } else {
+          statusSummary = `URGENT PAYOUT ALERT: Author ${author.name} (${author.author_id}) has requested an expedited Priority Payout of ₹${author.total_pending.toLocaleString("en-IN")} to their linked account (${author.bank}).`;
+          slaText = "Priority 24–48 Hour NEFT Settlement";
+        }
+
+        const emailSubject = `[Priority Payout Request #${ticketId}] ${author.name} (${author.author_id}) — ₹${author.total_pending.toLocaleString("en-IN")} Pending`;
+
+        const emailBody = `PRIORITY PAYOUT REQUEST NOTIFICATION (ADMIN & AUTHOR COPY)
+Ticket Reference: #${ticketId}
+Requested By: ${author.name} (${author.author_id})
+Registered Author Email: ${author.email} | City: ${author.city}
+Verified Bank Account: ${author.bank}
+
+${statusSummary}
+
+Financial Breakdown for Finance Desk Verification:
+• Lifetime Royalties Earned (80% Net Profit): ₹${author.total_earned.toLocaleString("en-IN")}
+• Total Already Disbursed (Paid): ₹${author.total_paid.toLocaleString("en-IN")}
+• Requested Priority Payout Balance: ₹${author.total_pending.toLocaleString("en-IN")}
+• Current Account Cycle Status: ${author.status}
+• Target Resolution SLA: ${slaText}
+
+Next Steps for BookLeaf Finance & Admin Operations:
+1. Open the BookLeaf Admin Console (http://localhost:3000) and select ${author.name} (${author.author_id}).
+2. Verify NEFT transfer of ₹${author.total_pending.toLocaleString("en-IN")} to ${author.bank}.
+3. Click "Mark Pending Payout as Cleared" to settle the balance and update the author's live portal.
+
+Warm regards,
+BookLeaf Automated Royalty & Finance Alert System`;
+
+        const html = buildExecutiveEmailHtml({
+          author_name: author.name,
+          author_id: author.author_id,
+          author_email: author.email,
+          subject: emailSubject,
+          email_body: emailBody,
+          total_earned: author.total_earned,
+          total_paid: author.total_paid,
+          total_pending: author.total_pending,
+          books: author.books,
+          auto_reply_meta: {
+            ticket_id: ticketId,
+            intent_label: "Priority Payout Request Alert",
+            match_method: "AUTHOR_PORTAL_1CLICK_REQUEST",
+            confidence: 100,
+            needs_human_escalation: author.total_pending >= 1000,
+            original_query: `Author ${author.name} (${author.author_id}) clicked "Request Priority Payout" in the Author Portal for pending balance ₹${author.total_pending.toLocaleString("en-IN")} (${author.bank}).`
+          }
+        });
+
+        const info = await transporter.sendMail({
+          from: `"BookLeaf Priority Payout Alert" <${SMTP_USER}>`,
+          to: target_recipient || SMTP_USER,
+          replyTo: author.email,
+          subject: emailSubject,
+          text: emailBody,
+          html
+        });
+
+        oauthTelemetry.total_auto_replies_sent += 1;
+        console.log(`[PRIORITY-PAYOUT] Ticket ${ticketId} -> ${author.name} (₹${author.total_pending}) -> Email sent to ${target_recipient || SMTP_USER}`);
+
+        const record = {
+          ticket_id: ticketId,
+          source_channel: "AUTHOR_PRIORITY_BUTTON",
+          timestamp: new Date().toLocaleTimeString(),
+          iso_time: new Date().toISOString(),
+          elapsed_ms: 420,
+          author_id: author.author_id,
+          author_name: author.name,
+          author_email: author.email,
+          author_badge: author.badge,
+          author_status: author.status,
+          match_method: "AUTHOR_PORTAL_1CLICK_REQUEST",
+          intent_id: "PRIORITY_PAYOUT_REQUEST",
+          intent_label: "Priority Payout Request Alert",
+          sentiment: "URGENT / ACTION REQUESTED",
+          confidence: 100,
+          needs_human_escalation: author.total_pending >= 1000,
+          sla_window: slaText,
+          original_query: `Priority Payout requested from Author Portal for ₹${author.total_pending.toLocaleString("en-IN")}`,
+          reply_subject: emailSubject,
+          reply_body: emailBody,
+          engine: "BookLeaf Priority Finance Alert Engine",
+          email_dispatched: true,
+          delivered_to: target_recipient || SMTP_USER,
+          messageId: info.messageId
+        };
+
+        autoReplyHistory.unshift(record);
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({
+          success: true,
+          record
+        }));
+      } catch (err) {
+        console.error("[PRIORITY-PAYOUT ERROR]", err.message);
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
   res.writeHead(404);
   res.end();
 });

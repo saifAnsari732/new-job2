@@ -1694,15 +1694,55 @@ Click "Run AI Auto-Reply &amp; Dispatch Real Email" on the left to execute the 4
       showToast(`Downloaded official statement for ${currentAuthor.name}`);
     });
 
-    authorExpediteBtn.addEventListener("click", () => {
-      const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
-      if (currentAuthor.total_pending === 0) {
-        showToast(`You have ₹0 pending balance — all royalties are settled`);
-      } else if (currentAuthor.total_pending < 1000) {
-        showToast(`Balance (₹${currentAuthor.total_pending}) is below ₹1,000 threshold and will roll over`);
-      } else {
-        const ticketId = `BL-${Math.floor(10000 + Math.random() * 90000)}`;
-        showToast(`Priority Payout Ticket #${ticketId} logged with Finance`);
+    authorExpediteBtn.addEventListener("click", async () => {
+      const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value) || AUTHORS[0];
+      const originalHtml = authorExpediteBtn.innerHTML;
+
+      authorExpediteBtn.disabled = true;
+      authorExpediteBtn.classList.add("opacity-60", "cursor-wait");
+      authorExpediteBtn.innerHTML = `<svg class="w-4 h-4 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg><span>Sending Priority Alert Email...</span>`;
+      showToast(`Submitting Priority Payout Request for ${currentAuthor.name}...`);
+
+      try {
+        const res = await fetch("http://localhost:5001/api/priority-payout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            author_id: currentAuthor.author_id,
+            target_recipient: "ansarisaifuddin732@gmail.com"
+          })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error || "Failed to send priority payout email");
+
+        const r = data.record;
+
+        // Update Author Self-Service Auto-Reply Desk preview so author sees confirmation immediately
+        authorArTicket.textContent = `Priority Ticket #${r.ticket_id}`;
+        authorArStatus.textContent = `Alert Emailed to Finance (${r.delivered_to})`;
+        authorArSubject.textContent = r.reply_subject;
+        authorArBody.textContent = r.reply_body;
+
+        // Also record in Admin Auto-Reply Ticket Queue & Admin Audit Log
+        renderAutoReplyRecord(r);
+        addAdminLog({
+          author_name: `${r.author_name} (Priority Payout Req)`,
+          author_id: `${r.ticket_id} • ₹${currentAuthor.total_pending.toLocaleString('en-IN')}`,
+          status: "Success",
+          subject: r.reply_subject,
+          timestamp: r.timestamp,
+          body: r.reply_body
+        });
+
+        showToast(`Priority Payout Alert #${r.ticket_id} emailed to ${r.delivered_to}!`);
+      } catch (err) {
+        showToast(`Priority Payout Error: ${err.message}`);
+      } finally {
+        setTimeout(() => {
+          authorExpediteBtn.disabled = false;
+          authorExpediteBtn.classList.remove("opacity-60", "cursor-wait");
+          authorExpediteBtn.innerHTML = originalHtml;
+        }, 500);
       }
     });
 
