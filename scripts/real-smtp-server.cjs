@@ -1,6 +1,23 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const http = require("http");
 const tls = require("tls");
+const fs = require("fs");
+const path = require("path");
 const nodemailer = require("H:/Desktop/New-job/node_modules/nodemailer");
+
+// Load .env if present
+try {
+  const envPath = path.join(__dirname, "..", ".env");
+  if (fs.existsSync(envPath)) {
+    const envLines = fs.readFileSync(envPath, "utf8").split(/\r?\n/);
+    for (const line of envLines) {
+      const m = line.match(/^\s*([A-Za-z0-9_]+)\s*=\s*(.*)\s*$/);
+      if (m && !process.env[m[1]]) {
+        process.env[m[1]] = m[2].replace(/^['"]|['"]$/g, "").trim();
+      }
+    }
+  }
+} catch (e) {}
 
 const SMTP_USER = process.env.SMTP_USER || "ansarisaifuddin732@gmail.com";
 const SMTP_PASS = process.env.SMTP_PASS || ("ambr" + "whkx" + "szxf" + "nuhp"); // Gmail App Password
