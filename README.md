@@ -248,6 +248,11 @@ Our n8n workflow (`4. Prepare Author Context & AI Prompt`) injects the **BookLea
 3. **Graceful Error Handling (n8n + Bubble):**
    - Node `5. Call AI API` has `onError: continueErrorOutput` enabled, routing any LLM timeout, quota error, or network failure to Node `6b. Format Failure Log` -> `9b. Respond Failure to Bubble`.
    - Bubble receives a structured `{ "status": "Failed", "error_message": "..." }` response, logs the failure in `Notification_Log`, hides the loading spinner, and shows an error toast to the Admin.
+4. **Bonus: 4-Stage AI Inbound Author Auto-Reply & OAuth Gmail IMAP/SMTP Bridge (`:5001`):**
+   - **Stage 1 (Multi-Key Identity & Book Resolver):** Resolves incoming author inquiries by matching `author_id`, sender email, author name, or book title/ISBN mentioned in the email body.
+   - **Stage 2 (Weighted Intent & Sentiment Classifier):** Classifies author inquiries into `PAYOUT_OVERDUE_ESCALATION`, `THRESHOLD_ROLLOVER_INQUIRY`, `PRODUCTION_STAGE_INQUIRY`, `SALES_AND_ROYALTY_BREAKDOWN`, `BANK_ACCOUNT_UPDATE`, or `AMBIGUOUS_OR_CUSTOM_DISPUTE`.
+   - **Stage 3 (80% Confidence Gate & RAG Synthesis):** Computes an AI Confidence Score (`0–100%`) and automatically flags `<80%` confidence or `Red (>90d Overdue)` tickets for Human-in-the-Loop Senior Ops Escalation (24–48h SLA), while synthesizing a grounded response using Gemini 2.5 Flash + BookLeaf RAG.
+   - **Stage 4 (Live IMAP/SMTP Sync & Threaded HTML Auto-Reply):** Verifies live inbox connectivity on `imap.gmail.com:993` (TLS) and dispatches a branded HTML auto-reply email via `smtp.gmail.com:465` (SSL) with Ticket ID, quoted query, and full book-by-book royalty table.
 
 ---
 

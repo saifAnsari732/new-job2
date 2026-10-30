@@ -94,7 +94,12 @@
           </button>
         </div>
 
-        <!-- Automation Health Indicator -->
+        <!-- OAuth Email & Automation Health Indicators -->
+        <button id="btn-header-oauth" title="Click to verify OAuth Gmail IMAP/SMTP connection" class="hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-xs text-blue-900 font-semibold transition cursor-pointer">
+          <span class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></span>
+          <span id="header-oauth-text">OAuth Gmail: Connected</span>
+        </button>
+
         <div class="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-semibold">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>n8n Active (:5678)</span>
@@ -367,6 +372,180 @@
 
       </div>
 
+      <!-- ===================================================================== -->
+      <!-- ADMIN OAUTH EMAIL & 4-STAGE AI AUTO-REPLY INTELLIGENCE CENTER         -->
+      <!-- ===================================================================== -->
+      <section id="admin-autoreply-section" class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 card-shadow space-y-6">
+        
+        <!-- Top Header & Live OAuth Connection Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div class="flex items-center space-x-3.5">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-slate-900 to-brand-700 text-white flex items-center justify-center font-extrabold shadow-md">
+              <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <h2 class="text-base sm:text-lg font-extrabold text-slate-900">AI Author Auto-Reply & OAuth Email Intelligence Center</h2>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">24/7 Autonomous</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">Multi-Stage Identity Resolution • Weighted Intent Vector • 80% Confidence Gate • Live Gmail IMAP/SMTP Sync</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2.5">
+            <!-- Connected Gmail OAuth Badge -->
+            <div class="bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 flex items-center space-x-2.5 text-xs">
+              <span id="oauth-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <div>
+                <span class="text-[10px] font-bold uppercase text-slate-400 block leading-none">Connected Admin & Author Relay</span>
+                <span id="oauth-account-label" class="font-mono font-bold text-slate-900 text-xs">ansarisaifuddin732@gmail.com</span>
+              </div>
+            </div>
+
+            <!-- Re-Verify OAuth & Sync Button -->
+            <button id="btn-verify-oauth" class="bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold px-3.5 py-2.5 rounded-xl text-xs flex items-center space-x-1.5 shadow-sm transition cursor-pointer">
+              <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+              <span id="btn-verify-oauth-text">Verify OAuth & Sync Inbox</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4-Stage Algorithm Pipeline Telemetry Strip -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200 flex items-start space-x-3">
+            <span class="w-6 h-6 rounded-lg bg-slate-900 text-white font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+            <div>
+              <p class="text-xs font-extrabold text-slate-900">Identity & Book Resolver</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Matches Email, Author ID, Name or Book Title/ISBN in body</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200 flex items-start space-x-3">
+            <span class="w-6 h-6 rounded-lg bg-brand-600 text-white font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+            <div>
+              <p class="text-xs font-extrabold text-slate-900">Weighted Intent Vector</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Classifies Overdue, ₹1K Rollover, Production, Sales & Bank</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200 flex items-start space-x-3">
+            <span class="w-6 h-6 rounded-lg bg-blue-600 text-white font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+            <div>
+              <p class="text-xs font-extrabold text-slate-900">80% Confidence & RAG Gate</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Scores confidence; auto-escalates &lt;80% or Red overdue to Ops</p>
+            </div>
+          </div>
+
+          <div class="bg-emerald-50/70 rounded-2xl p-3.5 border border-emerald-200 flex items-start space-x-3">
+            <span class="w-6 h-6 rounded-lg bg-emerald-700 text-white font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">4</span>
+            <div>
+              <p class="text-xs font-extrabold text-emerald-950">Live IMAP/SMTP Dispatch</p>
+              <p id="oauth-telemetry-sub" class="text-[11px] text-emerald-700 font-semibold mt-0.5">IMAP:993 Synced • Real HTML Reply Active</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2-Column Auto-Reply Simulator & Live Output -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          <!-- Left (5 cols): Incoming Author Email Simulator & Presets -->
+          <div class="lg:col-span-5 bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-900">Incoming Author Email Simulator</h3>
+                <p class="text-[11px] text-slate-500">Test how the algorithm auto-replies when any author emails</p>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white border border-slate-200 text-slate-700">Live SMTP</span>
+            </div>
+
+            <!-- 1-Click Scenario Preset Buttons -->
+            <div class="space-y-1.5">
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-500">1-Click Algorithm Test Scenarios:</label>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="loadAutoReplyPreset('THRESHOLD')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-amber-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
+                  🟡 &lt;₹1,000 Rollover (Kavita)
+                </button>
+                <button type="button" onclick="loadAutoReplyPreset('OVERDUE')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-rose-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
+                  🔴 &gt;90d Overdue (Vikram)
+                </button>
+                <button type="button" onclick="loadAutoReplyPreset('PRODUCTION')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-blue-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
+                  📘 In-Production (Sneha)
+                </button>
+                <button type="button" onclick="loadAutoReplyPreset('SALES')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-emerald-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
+                  📊 80/20 Sales Math (Priya)
+                </button>
+                <button type="button" onclick="loadAutoReplyPreset('ESCALATE')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-purple-50 text-slate-800 border border-slate-300 text-[11px] font-bold transition cursor-pointer">
+                  ⚠️ &lt;80% Confidence Dispute
+                </button>
+              </div>
+            </div>
+
+            <!-- Select Sender Author -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Incoming Sender (Author)</label>
+              <select id="autoreply-author-select" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <!-- Incoming Email Message Body -->
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Author's Email Message / Question</label>
+              <textarea id="autoreply-query-input" rows="4" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Type any question an author might email to BookLeaf Support...">Hi BookLeaf team, why has my pending royalty of ₹850 for The Nagpur Notebooks not been transferred to my bank account yet?</textarea>
+            </div>
+
+            <!-- Trigger Auto-Reply Button -->
+            <button id="btn-run-autoreply" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.99] text-white font-extrabold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2 cursor-pointer">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
+              <span id="btn-run-autoreply-text" class="text-xs sm:text-sm">Run AI Auto-Reply & Send Real Email</span>
+            </button>
+          </div>
+
+          <!-- Right (7 cols): Algorithm Diagnostic Output & Auto-Reply Preview -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                <div class="flex items-center space-x-2">
+                  <span id="ar-ticket-badge" class="px-2.5 py-1 rounded-lg text-xs font-mono font-extrabold bg-slate-900 text-white">#BL-AUTO-READY</span>
+                  <span id="ar-intent-badge" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Awaiting Incoming Email</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span id="ar-confidence-badge" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-white border border-slate-200 text-slate-700">Confidence: --%</span>
+                  <span id="ar-escalation-badge" class="hidden px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300">⚠️ Human Escalated</span>
+                </div>
+              </div>
+
+              <!-- Algorithm Resolution Metadata Grid -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                  <span class="text-[10px] font-bold uppercase text-slate-400 block">Resolved Identity</span>
+                  <span id="ar-meta-author" class="font-bold text-slate-900 block mt-0.5">Kavita Deshmukh (AUTH009)</span>
+                </div>
+                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                  <span class="text-[10px] font-bold uppercase text-slate-400 block">Match Algorithm</span>
+                  <span id="ar-meta-method" class="font-mono font-semibold text-slate-700 text-[11px] block mt-0.5">EXACT_AUTHOR_ID</span>
+                </div>
+                <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                  <span class="text-[10px] font-bold uppercase text-slate-400 block">SLA & Delivery</span>
+                  <span id="ar-meta-sla" class="font-bold text-emerald-700 text-[11px] block mt-0.5">Ready for Gmail Dispatch</span>
+                </div>
+              </div>
+
+              <!-- Generated Auto-Reply Body -->
+              <div class="space-y-2">
+                <div class="bg-white px-3 py-2 rounded-xl border border-slate-200 text-xs">
+                  <span class="font-bold text-slate-400">Auto-Reply Subject: </span>
+                  <span id="ar-output-subject" class="font-bold text-slate-900">Click "Run AI Auto-Reply" on the left to test the algorithm</span>
+                </div>
+                <div id="ar-output-body" class="bg-white p-4 rounded-xl border border-slate-200 text-xs leading-relaxed text-slate-800 whitespace-pre-wrap max-h-[250px] overflow-y-auto custom-scroll font-sans">Select any preset scenario on the left (e.g., &lt;₹1,000 Rollover, &gt;90d Overdue, In-Production, or &lt;80% Confidence Dispute) and click "Run AI Auto-Reply & Send Real Email". The 4-stage engine will classify the author's query, compute a confidence score, synthesize a grounded response, and send a real HTML auto-reply email to ansarisaifuddin732@gmail.com.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
     </div>
 
     <!-- ========================================================================= -->
@@ -485,6 +664,66 @@
 
         <div id="author-books-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <!-- Dynamically populated based on chosen author persona -->
+        </div>
+      </div>
+
+      <!-- Author Instant Email Support & AI Auto-Reply Desk -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+              ✉️
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Email BookLeaf Author Relations (Instant AI Auto-Reply Desk)</h3>
+              <p class="text-xs text-slate-500">Send any question about your royalties or books — our OAuth-connected AI Engine replies immediately &amp; emails your inbox</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">⚡ Instant Reply + Gmail Dispatch</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Author Email Composer -->
+          <div class="lg:col-span-5 space-y-3">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500">Quick Question Templates:</label>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="setAuthorQuickQuery('When will my pending royalty balance be transferred to my bank account?')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-[11px] font-semibold transition cursor-pointer">
+                💰 When is my next payout?
+              </button>
+              <button type="button" onclick="setAuthorQuickQuery('Why is my pending royalty below ₹1,000 rolling over to the next cycle?')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-[11px] font-semibold transition cursor-pointer">
+                🔄 Explain ₹1,000 rollover rule
+              </button>
+              <button type="button" onclick="setAuthorQuickQuery('My royalty payout is overdue by more than 90 days. Please escalate this urgently!')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-[11px] font-semibold transition cursor-pointer">
+                🚨 Escalate overdue payout
+              </button>
+              <button type="button" onclick="setAuthorQuickQuery('What is the current production stage and release timeline for my upcoming book?')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-800 border border-slate-200 text-[11px] font-semibold transition cursor-pointer">
+                📘 Book production status
+              </button>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Your Message to BookLeaf Support (<span class="font-mono text-[11px] text-emerald-700">support@bookleafpub.com</span>)</label>
+              <textarea id="author-support-query" rows="4" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Write your question here...">Hello BookLeaf Team, could you please confirm when my pending royalty balance will be disbursed to my linked bank account and share my latest book sales breakdown?</textarea>
+            </div>
+
+            <button id="btn-author-send-query" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.99] text-white font-extrabold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2 cursor-pointer">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+              <span id="btn-author-send-query-text" class="text-xs sm:text-sm">Send Email &amp; Receive Instant AI Auto-Reply</span>
+            </button>
+          </div>
+
+          <!-- Instant AI Reply Display for Author -->
+          <div class="lg:col-span-7 bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
+              <span id="author-ar-ticket" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-slate-900 text-white">Auto-Reply Inbox</span>
+              <span id="author-ar-status" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Ready • Connected to Gmail</span>
+            </div>
+            <div class="bg-white px-3 py-2 rounded-xl border border-slate-200 text-xs">
+              <span class="font-bold text-slate-400">Subject: </span>
+              <span id="author-ar-subject" class="font-bold text-slate-900">Instant AI Response will appear here &amp; in your Gmail inbox</span>
+            </div>
+            <div id="author-ar-body" class="bg-white p-4 rounded-xl border border-slate-200 text-xs leading-relaxed text-slate-800 whitespace-pre-wrap max-h-[240px] overflow-y-auto custom-scroll font-sans">Send a question on the left to receive an immediate, policy-grounded response tailored to your book catalog and royalty ledger, plus an official HTML copy in your email inbox (ansarisaifuddin732@gmail.com).</div>
+          </div>
         </div>
       </div>
 
@@ -1398,9 +1637,214 @@
       showToast(`Updated payout bank account to ${masked}!`, "✓", "bg-emerald-800");
     });
 
+    // -------------------------------------------------------------
+    // OAUTH EMAIL & 4-STAGE AI AUTO-REPLY ENGINE CONTROLLERS
+    // -------------------------------------------------------------
+    const autoreplyAuthorSelect = document.getElementById("autoreply-author-select");
+    const autoreplyQueryInput = document.getElementById("autoreply-query-input");
+    const btnRunAutoreply = document.getElementById("btn-run-autoreply");
+    const btnRunAutoreplyText = document.getElementById("btn-run-autoreply-text");
+    const btnVerifyOauth = document.getElementById("btn-verify-oauth");
+    const btnVerifyOauthText = document.getElementById("btn-verify-oauth-text");
+    const btnHeaderOauth = document.getElementById("btn-header-oauth");
+    const headerOauthText = document.getElementById("header-oauth-text");
+    const oauthTelemetrySub = document.getElementById("oauth-telemetry-sub");
+
+    const arTicketBadge = document.getElementById("ar-ticket-badge");
+    const arIntentBadge = document.getElementById("ar-intent-badge");
+    const arConfidenceBadge = document.getElementById("ar-confidence-badge");
+    const arEscalationBadge = document.getElementById("ar-escalation-badge");
+    const arMetaAuthor = document.getElementById("ar-meta-author");
+    const arMetaMethod = document.getElementById("ar-meta-method");
+    const arMetaSla = document.getElementById("ar-meta-sla");
+    const arOutputSubject = document.getElementById("ar-output-subject");
+    const arOutputBody = document.getElementById("ar-output-body");
+
+    // Populate Auto-Reply Author Selector
+    AUTHORS.forEach(a => {
+      const opt = document.createElement("option");
+      opt.value = a.author_id;
+      opt.textContent = `${a.name} (${a.author_id}) — ${a.email} [${a.status}]`;
+      autoreplyAuthorSelect.appendChild(opt);
+    });
+    autoreplyAuthorSelect.value = "AUTH009"; // Default to Kavita (<₹1,000 rollover scenario)
+
+    // Preset Scenario Loader
+    window.loadAutoReplyPreset = function(type) {
+      if (type === "THRESHOLD") {
+        autoreplyAuthorSelect.value = "AUTH009";
+        autoreplyQueryInput.value = "Hi BookLeaf team, why has my pending royalty of ₹850 for The Nagpur Notebooks not been transferred to my bank account yet?";
+      } else if (type === "OVERDUE") {
+        autoreplyAuthorSelect.value = "AUTH004";
+        autoreplyQueryInput.value = "Urgent: My pending royalty of ₹3,350 for Debugging Life has been overdue for more than 90 days since August 2025. When will it be credited?";
+      } else if (type === "PRODUCTION") {
+        autoreplyAuthorSelect.value = "AUTH007";
+        autoreplyQueryInput.value = "Hello, what is the current production stage for my third book 'Midnight in Mysore' and how are sales doing on my other two romance books?";
+      } else if (type === "SALES") {
+        autoreplyAuthorSelect.value = "AUTH001";
+        autoreplyQueryInput.value = "Hi team, please share how many copies Whispers of the Ganges and The Saffron Diaries have sold on Amazon and Flipkart, and how my 80% net royalty is calculated.";
+      } else if (type === "ESCALATE") {
+        autoreplyAuthorSelect.value = "AUTH002";
+        autoreplyQueryInput.value = "I have a complex legal tax dispute regarding international GST and wire remittance for my ₹13,024 overdue balance. Please have a senior manager review this.";
+      }
+      showToast(`Loaded ${type} scenario into Auto-Reply Simulator`, "⚡");
+    };
+
+    // OAuth & Live IMAP Verification
+    async function verifyOAuthConnection(showFeedback = false) {
+      if (showFeedback) {
+        btnVerifyOauthText.textContent = "Verifying IMAP:993 & SMTP:465...";
+      }
+      try {
+        const res = await fetch("http://localhost:5001/api/oauth-status");
+        const data = await res.json();
+        if (data.success && data.oauth) {
+          headerOauthText.textContent = `OAuth Gmail: Connected (${data.oauth.inbox_messages || 0} msgs)`;
+          oauthTelemetrySub.textContent = `IMAP:993 Synced (${data.oauth.inbox_messages || 0} msgs, ${data.oauth.latency_ms}ms)`;
+          if (showFeedback) {
+            showToast(`OAuth Verified: ${data.oauth.account} (${data.oauth.inbox_messages} inbox emails synced in ${data.oauth.latency_ms}ms)`, "🔐", "bg-emerald-800");
+          }
+        }
+      } catch (e) {
+        if (showFeedback) {
+          showToast(`OAuth Bridge check: ${e.message}`, "⚠️", "bg-amber-800");
+        }
+      } finally {
+        if (showFeedback) {
+          btnVerifyOauthText.textContent = "Verify OAuth & Sync Inbox";
+        }
+      }
+    }
+
+    btnVerifyOauth.addEventListener("click", () => verifyOAuthConnection(true));
+    if (btnHeaderOauth) {
+      btnHeaderOauth.addEventListener("click", () => {
+        document.getElementById("admin-autoreply-section")?.scrollIntoView({ behavior: "smooth" });
+        verifyOAuthConnection(true);
+      });
+    }
+
+    // Run Admin Auto-Reply Simulator
+    btnRunAutoreply.addEventListener("click", async () => {
+      const authorId = autoreplyAuthorSelect.value;
+      const queryText = autoreplyQueryInput.value.trim();
+      if (!queryText) {
+        showToast("Please enter an author email query to test!", "⚠️", "bg-amber-800");
+        return;
+      }
+
+      btnRunAutoreply.disabled = true;
+      btnRunAutoreply.classList.add("opacity-60");
+      btnRunAutoreplyText.textContent = "Running 4-Stage AI Auto-Reply & Dispatching Email...";
+
+      try {
+        const res = await fetch("http://localhost:5001/api/auto-reply", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            author_id: authorId,
+            query_text: queryText,
+            send_real_email: true
+          })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error || "Auto-reply failed");
+
+        const r = data.record;
+        arTicketBadge.textContent = `#${r.ticket_id}`;
+        arIntentBadge.textContent = r.intent_label;
+        arConfidenceBadge.textContent = `Confidence: ${r.confidence}%`;
+
+        if (r.needs_human_escalation) {
+          arEscalationBadge.classList.remove("hidden");
+          arConfidenceBadge.className = "px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-amber-50 border border-amber-300 text-amber-900";
+        } else {
+          arEscalationBadge.classList.add("hidden");
+          arConfidenceBadge.className = "px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 border border-emerald-300 text-emerald-900";
+        }
+
+        arMetaAuthor.textContent = `${r.author_name} (${r.author_id})`;
+        arMetaMethod.textContent = r.match_method;
+        arMetaSla.textContent = `${r.sla_window} (${r.elapsed_ms}ms)`;
+        arOutputSubject.textContent = r.reply_subject;
+        arOutputBody.textContent = r.reply_body;
+
+        addAdminLog({
+          author_name: `${r.author_name} (Auto-Reply)`,
+          author_id: `${r.ticket_id} • ${r.confidence}%`,
+          status: "Success",
+          subject: r.reply_subject,
+          timestamp: r.timestamp,
+          body: r.reply_body
+        });
+
+        showToast(`Auto-Reply #${r.ticket_id} (${r.intent_label}) sent to ${r.delivered_to}!`, "🤖", "bg-brand-700");
+      } catch (err) {
+        showToast(`Auto-Reply Error: ${err.message}`, "❌", "bg-rose-700");
+      } finally {
+        btnRunAutoreply.disabled = false;
+        btnRunAutoreply.classList.remove("opacity-60");
+        btnRunAutoreplyText.textContent = "Run AI Auto-Reply & Send Real Email";
+      }
+    });
+
+    // Author Portal Self-Service Instant Auto-Reply Desk
+    const authorSupportQuery = document.getElementById("author-support-query");
+    const btnAuthorSendQuery = document.getElementById("btn-author-send-query");
+    const btnAuthorSendQueryText = document.getElementById("btn-author-send-query-text");
+    const authorArTicket = document.getElementById("author-ar-ticket");
+    const authorArStatus = document.getElementById("author-ar-status");
+    const authorArSubject = document.getElementById("author-ar-subject");
+    const authorArBody = document.getElementById("author-ar-body");
+
+    window.setAuthorQuickQuery = function(q) {
+      authorSupportQuery.value = q;
+      showToast("Question template loaded — click Send Email!", "✍️");
+    };
+
+    btnAuthorSendQuery.addEventListener("click", async () => {
+      const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value) || AUTHORS[0];
+      const q = authorSupportQuery.value.trim();
+      if (!q) return;
+
+      btnAuthorSendQuery.disabled = true;
+      btnAuthorSendQuery.classList.add("opacity-60");
+      btnAuthorSendQueryText.textContent = "Processing & Sending Auto-Reply to Gmail...";
+
+      try {
+        const res = await fetch("http://localhost:5001/api/auto-reply", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            author_id: currentAuthor.author_id,
+            sender_email: currentAuthor.email,
+            query_text: q,
+            send_real_email: true
+          })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error || "Failed");
+
+        const r = data.record;
+        authorArTicket.textContent = `Ticket #${r.ticket_id} • ${r.intent_label}`;
+        authorArStatus.textContent = `✓ Sent to Gmail (${r.confidence}% Confidence)`;
+        authorArSubject.textContent = r.reply_subject;
+        authorArBody.textContent = r.reply_body;
+
+        showToast(`Instant AI Auto-Reply received & delivered to your Gmail inbox!`, "✉️", "bg-emerald-800");
+      } catch (err) {
+        showToast(`Error: ${err.message}`, "❌", "bg-rose-700");
+      } finally {
+        btnAuthorSendQuery.disabled = false;
+        btnAuthorSendQuery.classList.remove("opacity-60");
+        btnAuthorSendQueryText.textContent = "Send Email & Receive Instant AI Auto-Reply";
+      }
+    });
+
     // Initial Renders
     filterAndRenderAdminAuthors();
     renderAuthorPortalView(AUTHORS[0].author_id);
+    verifyOAuthConnection(false);
   </script>
 </body>
 </html>
