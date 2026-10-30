@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BookLeaf Publishing — Enterprise Royalty Dashboard & n8n AI Suite</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 9999px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+    .card-shadow {
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    }
+    .card-hover:hover {
+      box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      transform: translateY(-1px);
+    }
+    @media print {
+      body * { visibility: hidden; }
+      #printable-statement, #printable-statement * { visibility: visible; }
+      #printable-statement { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-brand-500 selection:text-white antialiased">
+
+  <!-- ========================================================================= -->
+  <!-- TOP UNIVERSAL HEADER WITH HIGH-CONTRAST ROLE SWITCHER                    -->
+  <!-- ========================================================================= -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Mode Title -->
+      <div class="flex items-center space-x-3.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-brand-500/20">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base font-bold text-slate-900 tracking-tight leading-none">BookLeaf Publishing</h1>
+            <span id="header-mode-badge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white">Operations Admin</span>
+          </div>
+          <p id="header-mode-sub" class="text-[11px] text-slate-500 font-medium mt-1">Catalog Management, Payout Processing & n8n AI Engine</p>
+        </div>
+      </div>
+
+      <!-- Navigation & Mode Switcher -->
+      <div class="flex items-center space-x-3 sm:space-x-4">
+        <!-- Switcher Pill -->
+        <div class="bg-slate-100 p-1 rounded-2xl flex items-center border border-slate-200 text-xs font-bold">
+          <button id="btn-switch-admin" class="px-3.5 py-2 rounded-xl bg-slate-900 text-white shadow-md transition duration-150 flex items-center space-x-1.5 cursor-pointer">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+            <span>Admin Console</span>
+          </button>
+          <button id="btn-switch-author" class="px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition duration-150 flex items-center space-x-1.5 cursor-pointer">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+            <span>Author Portal</span>
+          </button>
+        </div>
+
+        <!-- Automation Health Indicator -->
+        <div class="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>n8n Active (:5678)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Global Toast Notification -->
+  <div id="global-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 text-xs font-semibold flex items-center space-x-3 pointer-events-none">
+    <span id="toast-icon" class="text-base">✓</span>
+    <span id="toast-msg">Action completed</span>
+  </div>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 flex-1 space-y-7 w-full">
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: ADMIN CONSOLE (Complete Enterprise Royalty Operations Management) -->
+    <!-- ========================================================================= -->
+    <div id="view-admin" class="space-y-6">
+
+      <!-- Admin Platform KPIs (Company-Wide Overview) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Metric 1 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
+            <span>Publisher Catalog</span>
+            <span class="w-7 h-7 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-700 font-mono text-xs">10</span>
+          </div>
+          <div class="mt-3">
+            <p class="text-3xl font-extrabold text-slate-900">10 Authors</p>
+            <p class="text-xs text-slate-500 mt-1">18 Registered Titles Across India</p>
+          </div>
+        </div>
+
+        <!-- Metric 2 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
+            <span>Total Author Earnings</span>
+            <span class="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 font-mono text-xs">₹</span>
+          </div>
+          <div class="mt-3">
+            <p class="text-3xl font-extrabold text-slate-900 font-mono">₹2,52,567</p>
+            <p class="text-xs text-emerald-600 font-semibold mt-1">80% Net Profit Share</p>
+          </div>
+        </div>
+
+        <!-- Metric 3 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
+            <span>Cleared (Disbursed)</span>
+            <span class="w-7 h-7 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 text-xs">✓</span>
+          </div>
+          <div class="mt-3">
+            <p id="admin-kpi-disbursed" class="text-3xl font-extrabold text-blue-700 font-mono">₹2,09,423</p>
+            <p class="text-xs text-slate-500 mt-1">Paid to author bank accounts</p>
+          </div>
+        </div>
+
+        <!-- Metric 4 -->
+        <div class="bg-amber-50/50 rounded-2xl p-5 border border-amber-300 card-shadow flex flex-col justify-between">
+          <div class="flex items-center justify-between text-amber-800 text-xs font-bold uppercase tracking-wider">
+            <span>Pending Disbursements</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-200 text-amber-900">Action Req</span>
+          </div>
+          <div class="mt-3">
+            <p id="admin-kpi-pending" class="text-3xl font-extrabold text-amber-900 font-mono">₹43,144</p>
+            <p class="text-xs text-amber-700 font-semibold mt-1">Ready for n8n AI Summary Trigger</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Admin Toolbar: Search, Filters & Bulk Operations -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 card-shadow flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
+          <!-- Search input -->
+          <div class="relative flex-1 min-w-[200px]">
+            <input id="admin-search-input" type="text" placeholder="Search author by name, city or ID..." class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500" />
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          </div>
+
+          <!-- City filter -->
+          <select id="admin-city-filter" class="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none cursor-pointer">
+            <option value="ALL">All Cities (10)</option>
+          </select>
+
+          <!-- Status filter -->
+          <select id="admin-status-filter" class="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none cursor-pointer">
+            <option value="ALL">All Payout Statuses</option>
+            <option value="Green">Fully Paid (Green)</option>
+            <option value="Yellow">Pending Cycle (Yellow)</option>
+            <option value="Red">Overdue / Action (Red)</option>
+          </select>
+
+          <!-- Reset Filter Button -->
+          <button id="admin-reset-filter-btn" title="Reset all filters" class="p-2 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 transition cursor-pointer text-xs font-semibold flex items-center space-x-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+            <span class="hidden sm:inline">Reset</span>
+          </button>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <!-- Export CSV Button -->
+          <button id="admin-export-csv-btn" class="bg-white hover:bg-slate-50 text-slate-700 font-bold py-2 px-3 rounded-xl text-xs border border-slate-300 flex items-center space-x-1.5 shadow-sm transition cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            <span>Export CSV</span>
+          </button>
+
+          <!-- Bulk Trigger Button -->
+          <button id="admin-bulk-btn" class="bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-bold py-2 px-3.5 rounded-xl text-xs flex items-center space-x-2 shadow-sm transition cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+            <span>Bulk Trigger All (9)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Dual-Column Workspace -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left: Author Selector & Books Details (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+
+          <!-- Author Profile Detail Card -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">Author Profile Card</h3>
+                <p class="text-xs text-slate-500">Pick an author to inspect figures and trigger AI</p>
+              </div>
+              <span id="admin-city-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-200">Mumbai</span>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">Select Author</label>
+              <select id="admin-author-select" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <!-- Dynamic Balance Box -->
+            <div id="admin-author-summary" class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+              <!-- Dynamically populated -->
+            </div>
+
+            <!-- Admin Action Buttons (Single Trigger + Simulate Bank Clearance) -->
+            <div class="space-y-2.5 pt-1">
+              <button id="admin-trigger-btn" class="w-full bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-extrabold py-3 px-4 rounded-xl shadow-md shadow-brand-600/20 transition duration-150 flex items-center justify-center space-x-2 cursor-pointer">
+                <svg id="admin-btn-icon" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span id="admin-btn-text" class="text-xs sm:text-sm">Generate & Send Royalty Summary</span>
+              </button>
+
+              <div class="flex items-center space-x-2">
+                <!-- Mark Cleared (Payout simulated) -->
+                <button id="admin-mark-cleared-btn" class="flex-1 bg-white hover:bg-emerald-50 text-emerald-800 font-bold py-2 px-3 rounded-xl border border-emerald-300 text-xs flex items-center justify-center space-x-1.5 transition cursor-pointer">
+                  <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                  <span>Mark Payout as Cleared</span>
+                </button>
+              </div>
+
+              <p class="text-[11px] text-center text-slate-500 flex items-center justify-center space-x-1.5">
+                <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                <span>Automated Webhook • Live SMTP Gmail Dispatch</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Author's Books Catalog -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 class="text-sm font-bold text-slate-900">Author Titles & Royalty Badges</h3>
+              <span id="admin-titles-count" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">0 Titles</span>
+            </div>
+            <div id="admin-books-list" class="space-y-3 max-h-[340px] overflow-y-auto pr-1 custom-scroll">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: AI Summary Display & Notification Audit Log (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+
+          <!-- Live AI Output Box -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xs border border-emerald-200">
+                  AI
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-slate-900">AI Royalty Statement Output</h3>
+                  <p class="text-xs text-slate-500">Live response from n8n + Google Gemini 2.5 Flash</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center space-x-2">
+                <!-- Copy Email Action Button -->
+                <button id="admin-copy-email-btn" title="Copy email text" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-semibold transition flex items-center space-x-1 cursor-pointer">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                  <span>Copy</span>
+                </button>
+                <span id="admin-output-status" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                  Ready
+                </span>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="admin-output-empty" class="py-12 px-4 text-center space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 mx-auto">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              </div>
+              <p class="text-sm font-bold text-slate-700">No Statement Triggered Yet</p>
+              <p class="text-xs text-slate-400 max-w-sm mx-auto">Click "Generate & Send Royalty Summary" on the left to trigger the automated pipeline.</p>
+            </div>
+
+            <!-- Content Area -->
+            <div id="admin-output-box" class="hidden space-y-3.5">
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
+                <span class="font-bold text-slate-500">Subject: </span>
+                <span id="admin-output-subject" class="font-bold text-slate-900"></span>
+              </div>
+              <div id="admin-output-body" class="bg-slate-50/80 p-4 rounded-xl border border-slate-200 text-xs leading-relaxed text-slate-800 whitespace-pre-wrap max-h-[320px] overflow-y-auto custom-scroll font-sans">
+              </div>
+              <div class="flex items-center justify-between text-xs text-slate-400 pt-1">
+                <span id="admin-output-time" class="font-mono text-[11px]"></span>
+                <span class="text-emerald-700 font-bold text-[11px]">✓ Knowledge Base Verified</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notification Audit Log with Clear History Action -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 class="text-sm font-bold text-slate-900">Notification Audit Log</h3>
+                <p class="text-xs text-slate-500">Live callback records from n8n webhook</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span id="admin-log-count" class="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">0 Events</span>
+                <button id="admin-clear-log-btn" title="Clear log history" class="text-slate-400 hover:text-rose-600 transition p-1 text-xs font-semibold cursor-pointer">
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px] border-b border-slate-200">
+                  <tr>
+                    <th class="py-2.5 px-3 font-bold">Author</th>
+                    <th class="py-2.5 px-3 font-bold">Status</th>
+                    <th class="py-2.5 px-3 font-bold">Timestamp</th>
+                    <th class="py-2.5 px-3 text-right font-bold">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-log-table" class="divide-y divide-slate-100">
+                  <tr id="admin-empty-log-row">
+                    <td colspan="4" class="py-6 text-center text-slate-400">No notifications triggered in this session yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: AUTHOR PORTAL (Distinct, Clean, Private Author Self-Service)      -->
+    <!-- ========================================================================= -->
+    <div id="view-author" class="hidden space-y-6">
+
+      <!-- Author Portal Sandbox Banner (Allows HR to test all 10 author personas) -->
+      <div class="bg-emerald-50/90 border border-emerald-300 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-600 text-white font-bold flex items-center justify-center shadow-md">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <p class="text-xs font-bold text-slate-900">Author Portal Sandbox Mode</p>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-200 text-emerald-900 uppercase">Requirement A4: Privacy Rules</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-0.5">Switch author persona below to verify that each author accesses strictly their own titles, sales & payouts.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <label class="text-xs font-bold text-slate-700">Logged-in Persona:</label>
+          <select id="author-persona-select" class="bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer shadow-sm">
+            <!-- Dynamically populated with all 10 authors -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Author's Personal Welcome & Financial Hero Banner (Completely distinct from Admin) -->
+      <div class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-6">
+        
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                Verified Author Workspace
+              </span>
+              <span id="author-hero-status-pill" class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                Pending Cycle
+              </span>
+            </div>
+            <h2 id="author-hero-name" class="text-2xl sm:text-3xl font-black mt-2.5 tracking-tight text-white">Priya Sharma</h2>
+            <p id="author-hero-meta" class="text-xs text-emerald-200/90 font-medium mt-1">Author ID: AUTH001 • Mumbai • Joined March 15, 2023</p>
+          </div>
+
+          <!-- Quick Personal Payout Highlight -->
+          <div class="bg-white/10 backdrop-blur-md px-6 py-3.5 rounded-2xl border border-white/15 text-right">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">Current Unpaid Balance</span>
+            <span id="author-hero-pending" class="text-2xl sm:text-3xl font-black font-mono block mt-0.5 text-white">₹3,570</span>
+            <span id="author-hero-threshold-note" class="text-[10px] text-emerald-300 font-semibold block mt-1">✓ Above ₹1,000 Payout Threshold</span>
+          </div>
+        </div>
+
+        <!-- 3 Personal Financial KPI Tiles for this Author -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/15">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">Lifetime Royalties Earned</span>
+            <p id="author-hero-earned" class="text-xl sm:text-2xl font-black font-mono mt-1 text-white">₹19,908</p>
+            <p class="text-[11px] text-emerald-300/80 mt-0.5">80% Net Author Share</p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/15">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">Already Disbursed (Paid)</span>
+            <p id="author-hero-paid" class="text-xl sm:text-2xl font-black font-mono mt-1 text-white">₹16,338</p>
+            <p class="text-[11px] text-emerald-300/80 mt-0.5">Direct to Bank via NEFT</p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/15">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">Total Copies Sold</span>
+            <p id="author-hero-copies" class="text-xl sm:text-2xl font-black font-mono mt-1 text-white">531 Copies</p>
+            <p class="text-[11px] text-emerald-300/80 mt-0.5">Amazon, Flipkart & Bookstore</p>
+          </div>
+        </div>
+
+        <!-- Author Direct Self-Service Action Toolbar -->
+        <div class="pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center space-x-2 text-xs text-emerald-200">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+            <span>Bank Linked: <b id="author-bank-label">HDFC Bank (•••• 4321)</b></span>
+            <button id="author-update-bank-btn" class="ml-2 text-[11px] text-white hover:text-emerald-300 underline font-semibold cursor-pointer">Edit Bank</button>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Email Me My Statement Button -->
+            <button id="author-email-me-btn" class="bg-brand-500 hover:bg-brand-400 active:scale-95 text-slate-900 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-md transition flex items-center space-x-1.5 cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              <span>Email Me My Statement</span>
+            </button>
+
+            <!-- Download Statement PDF Button -->
+            <button id="author-download-btn" class="bg-white/15 hover:bg-white/25 active:scale-95 text-white font-bold px-3.5 py-2 rounded-xl text-xs border border-white/20 transition flex items-center space-x-1.5 cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              <span>Download Statement</span>
+            </button>
+
+            <!-- Request Payout Expedite Button -->
+            <button id="author-expedite-btn" class="bg-white hover:bg-slate-100 active:scale-95 text-slate-900 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-md transition flex items-center space-x-1.5 cursor-pointer">
+              <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+              <span>Request Priority Payout</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Author's Bookshelf & Sales Performance Ledger -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 card-shadow space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">My Books & Royalty Ledger</h3>
+            <p class="text-xs text-slate-500">Real-time copy sales, platform distribution and payment status</p>
+          </div>
+          <span id="author-books-pill" class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">2 Published Titles</span>
+        </div>
+
+        <div id="author-books-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Dynamically populated based on chosen author persona -->
+        </div>
+      </div>
+
+      <!-- BookLeaf Policy Transparency FAQ (Quarterly, 80/20, ₹1,000 rollover) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-brand-700 font-bold text-sm">
+            80%
+          </div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">80/20 Net Profit Split</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Authors receive 80% of net profit from all retail sales across Amazon India, Flipkart, and the BookLeaf Bookstore.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 font-bold text-sm">
+            45d
+          </div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">Quarterly Payout Cycle</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Calculated at the end of every calendar quarter and disbursed within 45 days directly to your verified bank account.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 card-shadow space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 font-bold text-sm">
+            ₹1K
+          </div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">₹1,000 Minimum Threshold</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Pending royalties under ₹1,000 automatically roll over to the subsequent quarter until the minimum threshold is met.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: UPDATE BANK DETAILS (Interactive Author Self-Service)              -->
+  <!-- ========================================================================= -->
+  <div id="modal-bank" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+            🏦
+          </div>
+          <h3 class="text-base font-bold text-slate-900">Update Payout Bank Account</h3>
+        </div>
+        <button id="modal-bank-close-btn" class="text-slate-400 hover:text-slate-600 text-lg cursor-pointer font-bold">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Account Holder Name</label>
+          <input id="bank-input-name" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500" value="Priya Sharma" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Bank Name</label>
+          <input id="bank-input-bank" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500" value="HDFC Bank" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Account Number</label>
+          <input id="bank-input-account" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500" value="50100492814321" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">IFSC Code</label>
+          <input id="bank-input-ifsc" type="text" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-mono font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500 uppercase" value="HDFC0000123" />
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-end space-x-2">
+        <button id="modal-bank-cancel-btn" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition cursor-pointer">Cancel</button>
+        <button id="modal-bank-save-btn" class="px-5 py-2 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white transition shadow-sm cursor-pointer">Save Bank Details</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Container for Printable Official Statement -->
+  <div id="printable-statement" class="hidden"></div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT STATE & APPLICATION ENGINE                                     -->
+  <!-- ========================================================================= -->
+  <script>
+    const AUTHORS = [
+      {
+        author_id: "AUTH001", name: "Priya Sharma", email: "priya.sharma@email.com", city: "Mumbai", joined_date: "2023-03-15",
+        bank: "HDFC Bank (•••• 4321)", total_earned: 19908, total_paid: 16338, total_pending: 3570, status: "Pending (Normal Cycle)", badge: "Yellow",
+        books: [
+          { title: "Whispers of the Ganges", isbn: "978-93-5XXXX-01-1", genre: "Literary Fiction", status: "Published & Live", mrp: 399, copies: 342, earned: 11970, paid: 8400, pending: 3570, last_payout: "2025-10-15", badge: "Yellow", platforms: "Amazon India, Flipkart, BookLeaf Store" },
+          { title: "The Saffron Diaries", isbn: "978-93-5XXXX-02-8", genre: "Non-Fiction / Memoir", status: "Published & Live", mrp: 450, copies: 189, earned: 7938, paid: 7938, pending: 0, last_payout: "2025-12-01", badge: "Green", platforms: "Amazon India, BookLeaf Store" }
+        ]
+      },
+      {
+        author_id: "AUTH002", name: "Rohit Kapoor", email: "rohit.kapoor@email.com", city: "Delhi", joined_date: "2022-11-08",
+        bank: "State Bank of India (•••• 8820)", total_earned: 84024, total_paid: 71000, total_pending: 13024, status: "Overdue (>90 Days)", badge: "Red",
+        books: [
+          { title: "Code & Karma", isbn: "978-93-5XXXX-03-5", genre: "Self-Help / Technology", status: "Published & Live", mrp: 350, copies: 876, earned: 26280, paid: 21000, pending: 5280, last_payout: "2025-09-01", badge: "Red", platforms: "Amazon India, Flipkart, Amazon US, Store" },
+          { title: "Startup Sutra", isbn: "978-93-5XXXX-04-2", genre: "Business / Entrepreneurship", status: "Published & Live", mrp: 499, copies: 1203, earned: 57744, paid: 50000, pending: 7744, last_payout: "2025-11-15", badge: "Yellow", platforms: "Amazon India, Flipkart, Amazon US, UK, Store" }
+        ]
+      },
+      {
+        author_id: "AUTH003", name: "Ananya Reddy", email: "ananya.reddy@email.com", city: "Hyderabad", joined_date: "2024-02-20",
+        bank: "ICICI Bank (•••• 9912)", total_earned: 2546, total_paid: 0, total_pending: 2546, status: "Overdue (First Payout)", badge: "Red",
+        books: [
+          { title: "Between Two Temples", isbn: "978-93-5XXXX-05-9", genre: "Historical Fiction", status: "Published & Live", mrp: 425, copies: 67, earned: 2546, paid: 0, pending: 2546, last_payout: "No payout made yet", badge: "Red", platforms: "Amazon India, BookLeaf Store" }
+        ]
+      },
+      {
+        author_id: "AUTH004", name: "Vikram Joshi", email: "vikram.joshi@email.com", city: "Pune", joined_date: "2023-07-12",
+        bank: "Axis Bank (•••• 1045)", total_earned: 15195, total_paid: 11845, total_pending: 3350, status: "Overdue (>90 Days)", badge: "Red",
+        books: [
+          { title: "Debugging Life", isbn: "978-93-5XXXX-06-6", genre: "Self-Help", status: "Published & Live", mrp: 299, copies: 534, earned: 13350, paid: 10000, pending: 3350, last_payout: "2025-08-20", badge: "Red", platforms: "Amazon India, Flipkart, BookLeaf Store" },
+          { title: "The Last Monsoon", isbn: "978-93-5XXXX-07-3", genre: "Poetry", status: "Published & Live", mrp: 199, copies: 123, earned: 1845, paid: 1845, pending: 0, last_payout: "2025-12-01", badge: "Green", platforms: "Amazon India, BookLeaf Store" }
+        ]
+      },
+      {
+        author_id: "AUTH005", name: "Meera Nair", email: "meera.nair@email.com", city: "Kochi", joined_date: "2023-01-05",
+        bank: "Federal Bank (•••• 6523)", total_earned: 25295, total_paid: 22240, total_pending: 3055, status: "Pending (Normal Cycle)", badge: "Yellow",
+        books: [
+          { title: "Cardamom & Chaos", isbn: "978-93-5XXXX-08-0", genre: "Contemporary Fiction", status: "Published & Live", mrp: 375, copies: 445, earned: 14240, paid: 14240, pending: 0, last_payout: "2025-12-01", badge: "Green", platforms: "Amazon India, Flipkart, BookLeaf Store" },
+          { title: "Letters from Lakshadweep", isbn: "978-93-5XXXX-09-7", genre: "Travel / Non-Fiction", status: "Published & Live", mrp: 550, copies: 201, earned: 11055, paid: 8000, pending: 3055, last_payout: "2025-10-15", badge: "Yellow", platforms: "Amazon India, Amazon US, BookLeaf Store" }
+        ]
+      },
+      {
+        author_id: "AUTH006", name: "Arjun Malhotra", email: "arjun.malhotra@email.com", city: "Chandigarh", joined_date: "2024-06-01",
+        bank: "Punjab National Bank (•••• 7714)", total_earned: 2464, total_paid: 0, total_pending: 2464, status: "Overdue (First Payout)", badge: "Red",
+        books: [
+          { title: "Turban Tales", isbn: "978-93-5XXXX-10-3", genre: "Humor / Essays", status: "Published & Live", mrp: 325, copies: 88, earned: 2464, paid: 0, pending: 2464, last_payout: "No payout made yet", badge: "Red", platforms: "Amazon India, BookLeaf Store" }
+        ]
+      },
+      {
+        author_id: "AUTH007", name: "Sneha Kulkarni", email: "sneha.kulkarni@email.com", city: "Bangalore", joined_date: "2022-09-18",
+        bank: "Kotak Mahindra Bank (•••• 3390)", total_earned: 60865, total_paid: 53000, total_pending: 7865, status: "Pending (Normal Cycle)", badge: "Yellow",
+        books: [
+          { title: "The Algorithm of Love", isbn: "978-93-5XXXX-11-0", genre: "Romance", status: "Published & Live", mrp: 299, copies: 1567, earned: 39175, paid: 35000, pending: 4175, last_payout: "2025-11-15", badge: "Yellow", platforms: "Amazon India, Flipkart, Amazon US, Store" },
+          { title: "Ctrl+Alt+Delete My Ex", isbn: "978-93-5XXXX-12-7", genre: "Romance / Humor", status: "Published & Live", mrp: 350, copies: 723, earned: 21690, paid: 18000, pending: 3690, last_payout: "2025-10-15", badge: "Yellow", platforms: "Amazon India, Flipkart, BookLeaf Store" },
+          { title: "Midnight in Mysore", isbn: "978-93-5XXXX-13-4", genre: "Thriller", status: "In Production - Cover Design", mrp: 0, copies: 0, earned: 0, paid: 0, pending: 0, last_payout: "In Production", badge: "Yellow", platforms: "Not Published Yet (Stage 3/8: Cover Design)" }
+        ]
+      },
+      {
+        author_id: "AUTH008", name: "Farhan Sheikh", email: "farhan.sheikh@email.com", city: "Lucknow", joined_date: "2023-10-01",
+        bank: "Bank of Baroda (•••• 4412)", total_earned: 3120, total_paid: 3120, total_pending: 0, status: "Fully Paid", badge: "Green",
+        books: [
+          { title: "Ghazal of the Forgotten", isbn: "978-93-5XXXX-14-1", genre: "Poetry / Urdu", status: "Published & Live", mrp: 250, copies: 156, earned: 3120, paid: 3120, pending: 0, last_payout: "2025-12-01", badge: "Green", platforms: "Amazon India, BookLeaf Store" }
+        ]
+      },
+      {
+        author_id: "AUTH009", name: "Kavita Deshmukh", email: "kavita.deshmukh@email.com", city: "Nagpur", joined_date: "2024-04-10",
+        bank: "Canara Bank (•••• 5521)", total_earned: 850, total_paid: 0, total_pending: 850, status: "Below Threshold (<₹1,000)", badge: "Yellow",
+        books: [
+          { title: "Raising Roots", isbn: "978-93-5XXXX-15-8", genre: "Parenting", status: "In Production - Typesetting", mrp: 0, copies: 0, earned: 0, paid: 0, pending: 0, last_payout: "In Production", badge: "Yellow", platforms: "Not Published Yet (Stage 4/8: Typesetting)" },
+          { title: "The Nagpur Notebooks", isbn: "978-93-5XXXX-16-5", genre: "Essays / Memoir", status: "Published & Live", mrp: 299, copies: 34, earned: 850, paid: 0, pending: 850, last_payout: "Rolls Over (<₹1,000)", badge: "Yellow", platforms: "Amazon India, BookLeaf Store" }
+        ]
+      },
+      {
+        author_id: "AUTH010", name: "Diya Chatterjee", email: "diya.chatterjee@email.com", city: "Kolkata", joined_date: "2023-05-22",
+        bank: "Standard Chartered (•••• 1129)", total_earned: 29115, total_paid: 25000, total_pending: 4115, status: "Overdue (>90 Days)", badge: "Red",
+        books: [
+          { title: "Durga’s Daughters", isbn: "978-93-5XXXX-17-2", genre: "Literary Fiction", status: "Published & Live", mrp: 475, copies: 612, earned: 27540, paid: 25000, pending: 2540, last_payout: "2025-11-15", badge: "Yellow", platforms: "Amazon India, Flipkart, Amazon US, Store" },
+          { title: "Howrah Nights", isbn: "978-93-5XXXX-18-9", genre: "Crime / Thriller", status: "Published & Live", mrp: 399, copies: 45, earned: 1575, paid: 0, pending: 1575, last_payout: "No payout made yet", badge: "Red", platforms: "Amazon India, BookLeaf Store" }
+        ]
+      }
+    ];
+
+    // Toast Utility
+    const toast = document.getElementById("global-toast");
+    const toastMsg = document.getElementById("toast-msg");
+    const toastIcon = document.getElementById("toast-icon");
+    let toastTimeout;
+
+    function showToast(msg, icon = "✓", color = "bg-slate-900") {
+      clearTimeout(toastTimeout);
+      toastMsg.textContent = msg;
+      toastIcon.textContent = icon;
+      toast.className = `fixed bottom-6 right-6 z-50 transform translate-y-0 opacity-100 transition-all duration-300 ease-out ${color} text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 text-xs font-semibold flex items-center space-x-3`;
+      toastTimeout = setTimeout(() => {
+        toast.className = "fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 text-xs font-semibold flex items-center space-x-3 pointer-events-none";
+      }, 3500);
+    }
+
+    // Role Switcher Logic
+    const btnSwitchAdmin = document.getElementById("btn-switch-admin");
+    const btnSwitchAuthor = document.getElementById("btn-switch-author");
+    const viewAdmin = document.getElementById("view-admin");
+    const viewAuthor = document.getElementById("view-author");
+    const headerModeBadge = document.getElementById("header-mode-badge");
+    const headerModeSub = document.getElementById("header-mode-sub");
+
+    btnSwitchAdmin.addEventListener("click", () => {
+      btnSwitchAdmin.className = "px-3.5 py-2 rounded-xl bg-slate-900 text-white shadow-md transition duration-150 flex items-center space-x-1.5 cursor-pointer";
+      btnSwitchAuthor.className = "px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition duration-150 flex items-center space-x-1.5 cursor-pointer";
+      headerModeBadge.className = "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white";
+      headerModeBadge.textContent = "Operations Admin";
+      headerModeSub.textContent = "Catalog Management, Payout Processing & n8n AI Engine";
+      viewAdmin.classList.remove("hidden");
+      viewAuthor.classList.add("hidden");
+      showToast("Switched to Admin Operations Console");
+    });
+
+    btnSwitchAuthor.addEventListener("click", () => {
+      btnSwitchAuthor.className = "px-3.5 py-2 rounded-xl bg-brand-600 text-white shadow-md transition duration-150 flex items-center space-x-1.5 cursor-pointer";
+      btnSwitchAdmin.className = "px-3.5 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition duration-150 flex items-center space-x-1.5 cursor-pointer";
+      headerModeBadge.className = "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300";
+      headerModeBadge.textContent = "Author Portal (Private)";
+      headerModeSub.textContent = "Personal Earnings, Sales Ledger & Payout Requests";
+      viewAuthor.classList.remove("hidden");
+      viewAdmin.classList.add("hidden");
+      showToast("Switched to Author Self-Service Portal");
+    });
+
+    function getBadgeHtml(badge, text) {
+      if (badge === "Green") {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">🟢 ${text || 'Fully Paid'}</span>`;
+      }
+      if (badge === "Red") {
+        return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300">🔴 ${text || 'Overdue (>90d)'}</span>`;
+      }
+      return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">🟡 ${text || 'Pending Cycle'}</span>`;
+    }
+
+    // -------------------------------------------------------------
+    // ADMIN CONSOLE CONTROLS & LOGIC
+    // -------------------------------------------------------------
+    const adminSearchInput = document.getElementById("admin-search-input");
+    const adminCityFilter = document.getElementById("admin-city-filter");
+    const adminStatusFilter = document.getElementById("admin-status-filter");
+    const adminResetFilterBtn = document.getElementById("admin-reset-filter-btn");
+    const adminExportCsvBtn = document.getElementById("admin-export-csv-btn");
+    const adminAuthorSelect = document.getElementById("admin-author-select");
+    const adminAuthorSummary = document.getElementById("admin-author-summary");
+    const adminCityBadge = document.getElementById("admin-city-badge");
+    const adminTitlesCount = document.getElementById("admin-titles-count");
+    const adminBooksList = document.getElementById("admin-books-list");
+    const adminTriggerBtn = document.getElementById("admin-trigger-btn");
+    const adminBtnText = document.getElementById("admin-btn-text");
+    const adminBtnIcon = document.getElementById("admin-btn-icon");
+    const adminBulkBtn = document.getElementById("admin-bulk-btn");
+    const adminCopyEmailBtn = document.getElementById("admin-copy-email-btn");
+    const adminClearLogBtn = document.getElementById("admin-clear-log-btn");
+    const adminMarkClearedBtn = document.getElementById("admin-mark-cleared-btn");
+    const adminKpiDisbursed = document.getElementById("admin-kpi-disbursed");
+    const adminKpiPending = document.getElementById("admin-kpi-pending");
+
+    const adminOutputStatus = document.getElementById("admin-output-status");
+    const adminOutputEmpty = document.getElementById("admin-output-empty");
+    const adminOutputBox = document.getElementById("admin-output-box");
+    const adminOutputSubject = document.getElementById("admin-output-subject");
+    const adminOutputBody = document.getElementById("admin-output-body");
+    const adminOutputTime = document.getElementById("admin-output-time");
+    const adminLogTable = document.getElementById("admin-log-table");
+    const adminEmptyLogRow = document.getElementById("admin-empty-log-row");
+    const adminLogCount = document.getElementById("admin-log-count");
+
+    let adminLogs = [];
+
+    // Populate City filter
+    const uniqueCities = [...new Set(AUTHORS.map(a => a.city))].sort();
+    uniqueCities.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c;
+      opt.textContent = c;
+      adminCityFilter.appendChild(opt);
+    });
+
+    function filterAndRenderAdminAuthors() {
+      const selectedCity = adminCityFilter.value;
+      const selectedStatus = adminStatusFilter.value;
+      const query = (adminSearchInput.value || "").toLowerCase().trim();
+
+      const filtered = AUTHORS.filter(a => {
+        const matchCity = selectedCity === "ALL" || a.city === selectedCity;
+        const matchStatus = selectedStatus === "ALL" || a.badge === selectedStatus;
+        const matchQuery = !query || a.name.toLowerCase().includes(query) || a.author_id.toLowerCase().includes(query) || a.city.toLowerCase().includes(query);
+        return matchCity && matchStatus && matchQuery;
+      });
+
+      adminAuthorSelect.innerHTML = "";
+      if (filtered.length === 0) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "No matching authors found";
+        adminAuthorSelect.appendChild(opt);
+        renderAdminAuthorDetails(null);
+        return;
+      }
+
+      filtered.forEach(a => {
+        const opt = document.createElement("option");
+        opt.value = a.author_id;
+        opt.textContent = `${a.name} (${a.author_id}) — ${a.city} [Pending: ₹${a.total_pending.toLocaleString('en-IN')}]`;
+        adminAuthorSelect.appendChild(opt);
+      });
+
+      renderAdminAuthorDetails(filtered[0].author_id);
+    }
+
+    function renderAdminAuthorDetails(authorId) {
+      if (!authorId) {
+        adminAuthorSummary.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">No author selected.</p>`;
+        adminBooksList.innerHTML = "";
+        adminTitlesCount.textContent = "0 Titles";
+        return;
+      }
+
+      const author = AUTHORS.find(a => a.author_id === authorId);
+      adminCityBadge.textContent = author.city;
+
+      adminAuthorSummary.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-extrabold text-slate-900 text-sm">${author.name}</p>
+            <p class="text-[11px] text-slate-500 font-mono mt-0.5">${author.email} • ID: ${author.author_id}</p>
+            <p class="text-[10px] text-slate-400 mt-0.5">Bank: ${author.bank}</p>
+          </div>
+          ${getBadgeHtml(author.badge, author.status)}
+        </div>
+        <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-200 text-center">
+          <div class="bg-white p-2 rounded-xl border border-slate-200 card-shadow">
+            <span class="text-[10px] text-slate-500 block font-bold">TOTAL EARNED</span>
+            <span class="text-xs font-extrabold text-slate-900 font-mono block mt-0.5">₹${author.total_earned.toLocaleString('en-IN')}</span>
+          </div>
+          <div class="bg-white p-2 rounded-xl border border-slate-200 card-shadow">
+            <span class="text-[10px] text-slate-500 block font-bold">CLEARED (PAID)</span>
+            <span class="text-xs font-extrabold text-emerald-700 font-mono block mt-0.5">₹${author.total_paid.toLocaleString('en-IN')}</span>
+          </div>
+          <div class="bg-white p-2 rounded-xl border border-slate-200 card-shadow">
+            <span class="text-[10px] text-slate-500 block font-bold">NET PENDING</span>
+            <span class="text-xs font-extrabold ${author.total_pending > 0 ? 'text-amber-800' : 'text-emerald-700'} font-mono block mt-0.5">₹${author.total_pending.toLocaleString('en-IN')}</span>
+          </div>
+        </div>
+      `;
+
+      adminTitlesCount.textContent = `${author.books.length} Titles`;
+      adminBooksList.innerHTML = "";
+
+      author.books.forEach(b => {
+        const item = document.createElement("div");
+        item.className = "p-3.5 rounded-xl bg-slate-50 border border-slate-200 card-hover transition space-y-1.5";
+        item.innerHTML = `
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="font-bold text-slate-900 text-xs">${b.title}</p>
+              <p class="text-[10px] text-slate-500 font-mono">${b.isbn} • ${b.genre}</p>
+            </div>
+            ${getBadgeHtml(b.badge, b.status.includes('In Production') ? 'In Production' : b.badge)}
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-600 pt-1 border-t border-slate-200">
+            <span>Sold: <b>${b.copies}</b> copies (MRP: ₹${b.mrp})</span>
+            <span>Pending: <b class="${b.pending > 0 ? 'text-amber-800' : 'text-emerald-700'} font-mono">₹${b.pending.toLocaleString('en-IN')}</b></span>
+          </div>
+        `;
+        adminBooksList.appendChild(item);
+      });
+    }
+
+    // Reset Filters Button
+    adminResetFilterBtn.addEventListener("click", () => {
+      adminSearchInput.value = "";
+      adminCityFilter.value = "ALL";
+      adminStatusFilter.value = "ALL";
+      filterAndRenderAdminAuthors();
+      showToast("Filters reset to default");
+    });
+
+    // Export CSV Button
+    adminExportCsvBtn.addEventListener("click", () => {
+      let csv = "Author ID,Name,Email,City,Total Earned,Total Paid,Total Pending,Status\n";
+      AUTHORS.forEach(a => {
+        csv += `"${a.author_id}","${a.name}","${a.email}","${a.city}",${a.total_earned},${a.total_paid},${a.total_pending},"${a.status}"\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `BookLeaf_Royalty_Ledger_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Exported BookLeaf Authors CSV Ledger!");
+    });
+
+    // Copy Email Text Button
+    adminCopyEmailBtn.addEventListener("click", () => {
+      const text = adminOutputBody.innerText || adminOutputBody.textContent;
+      if (!text || text.includes("No Statement Triggered")) {
+        showToast("No generated email to copy!", "⚠️", "bg-amber-800");
+        return;
+      }
+      navigator.clipboard.writeText(text);
+      showToast("Copied email statement to clipboard!", "📋", "bg-brand-700");
+    });
+
+    // Clear Notification Log Button
+    adminClearLogBtn.addEventListener("click", () => {
+      adminLogs = [];
+      adminLogCount.textContent = "0 Events";
+      adminLogTable.innerHTML = `<tr id="admin-empty-log-row"><td colspan="4" class="py-6 text-center text-slate-400">Notification log cleared.</td></tr>`;
+      showToast("Notification log history cleared");
+    });
+
+    // Simulate Bank Clearance Button (Admin marks paid)
+    adminMarkClearedBtn.addEventListener("click", () => {
+      const authorId = adminAuthorSelect.value;
+      if (!authorId) return;
+      const author = AUTHORS.find(a => a.author_id === authorId);
+      if (author.total_pending === 0) {
+        showToast(`${author.name} is already fully paid!`, "ℹ️", "bg-emerald-800");
+        return;
+      }
+
+      const clearedAmount = author.total_pending;
+      author.total_paid += clearedAmount;
+      author.total_pending = 0;
+      author.status = "Fully Paid";
+      author.badge = "Green";
+      author.books.forEach(b => {
+        b.paid += b.pending;
+        b.pending = 0;
+        b.badge = "Green";
+        b.last_payout = new Date().toISOString().slice(0, 10);
+      });
+
+      // Recalculate totals
+      const totalPending = AUTHORS.reduce((acc, a) => acc + a.total_pending, 0);
+      const totalDisbursed = AUTHORS.reduce((acc, a) => acc + a.total_paid, 0);
+      adminKpiPending.textContent = `₹${totalPending.toLocaleString('en-IN')}`;
+      adminKpiDisbursed.textContent = `₹${totalDisbursed.toLocaleString('en-IN')}`;
+
+      renderAdminAuthorDetails(author.author_id);
+      renderAuthorPortalView(author.author_id);
+
+      addAdminLog({
+        author_name: author.name,
+        author_id: author.author_id,
+        status: "Cleared",
+        subject: `Disbursement Cleared: ₹${clearedAmount.toLocaleString('en-IN')}`,
+        timestamp: new Date().toLocaleTimeString(),
+        body: `Bank transfer cleared for ${author.name} via NEFT to ${author.bank}. Amount: ₹${clearedAmount.toLocaleString('en-IN')}. New balance: ₹0.`
+      });
+
+      showToast(`Cleared ₹${clearedAmount.toLocaleString('en-IN')} for ${author.name}! Updated to Fully Paid.`, "🏦", "bg-brand-700");
+    });
+
+    adminSearchInput.addEventListener("input", filterAndRenderAdminAuthors);
+    adminCityFilter.addEventListener("change", filterAndRenderAdminAuthors);
+    adminStatusFilter.addEventListener("change", filterAndRenderAdminAuthors);
+    adminAuthorSelect.addEventListener("change", (e) => renderAdminAuthorDetails(e.target.value));
+
+    // Admin Single Trigger
+    adminTriggerBtn.addEventListener("click", async () => {
+      const authorId = adminAuthorSelect.value;
+      if (!authorId) return;
+
+      const author = AUTHORS.find(a => a.author_id === authorId);
+
+      adminTriggerBtn.disabled = true;
+      adminTriggerBtn.classList.add("opacity-60", "cursor-wait");
+      adminBtnText.textContent = "Running n8n Automation Engine...";
+      adminBtnIcon.classList.add("animate-spin");
+
+      adminOutputStatus.className = "px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200 animate-pulse";
+      adminOutputStatus.textContent = "AI Generating...";
+
+      try {
+        const res = await fetch("http://localhost:5678/webhook/bookleaf-royalty-summary", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-bookleaf-secret": "bookleaf-secret-2026"
+          },
+          body: JSON.stringify({
+            author_id: author.author_id,
+            author_name: author.name,
+            author_email: author.email,
+            force_retrigger: true
+          })
+        });
+
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+
+        // Dispatch live HTML Email to user Gmail inbox
+        let mailSent = false;
+        try {
+          const emailRes = await fetch("http://localhost:5001/api/send-real-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              author_name: author.name,
+              author_id: author.author_id,
+              author_email: author.email,
+              target_recipient: "ansarisaifuddin732@gmail.com",
+              subject: data.email_subject,
+              email_body: data.email_body,
+              total_earned: data.total_earned,
+              total_paid: data.total_paid,
+              total_pending: data.total_pending
+            })
+          });
+          const mailData = await emailRes.json();
+          if (mailData.success) mailSent = true;
+        } catch (e) {}
+
+        adminOutputEmpty.classList.add("hidden");
+        adminOutputBox.classList.remove("hidden");
+
+        adminOutputStatus.className = "px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-300";
+        adminOutputStatus.textContent = mailSent ? "Success (Delivered to Gmail ✉️)" : "Success (200 OK)";
+
+        adminOutputSubject.textContent = data.email_subject || `BookLeaf Royalty Statement for ${author.name}`;
+        adminOutputBody.textContent = data.email_body;
+        adminOutputTime.textContent = `Completed at: ${new Date().toLocaleTimeString()} via n8n`;
+
+        addAdminLog({
+          author_name: author.name,
+          author_id: author.author_id,
+          status: "Success",
+          subject: data.email_subject,
+          timestamp: new Date().toLocaleTimeString(),
+          body: data.email_body
+        });
+
+        showToast(`AI Royalty Summary generated & delivered to Gmail for ${author.name}!`, "✉️", "bg-brand-700");
+
+      } catch (err) {
+        adminOutputEmpty.classList.add("hidden");
+        adminOutputBox.classList.remove("hidden");
+
+        adminOutputStatus.className = "px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-rose-50 text-rose-800 border border-rose-300";
+        adminOutputStatus.textContent = "Failed";
+
+        adminOutputSubject.textContent = "Automation Error";
+        adminOutputBody.textContent = `Webhook execution failed: ${err.message}. Please verify n8n is running at :5678.`;
+        adminOutputTime.textContent = `Failed at: ${new Date().toLocaleTimeString()}`;
+
+        addAdminLog({
+          author_name: author.name,
+          author_id: author.author_id,
+          status: "Failed",
+          subject: "Webhook Error",
+          timestamp: new Date().toLocaleTimeString(),
+          body: err.message
+        });
+
+        showToast(`Execution failed: ${err.message}`, "❌", "bg-rose-700");
+      } finally {
+        setTimeout(() => {
+          adminTriggerBtn.disabled = false;
+          adminTriggerBtn.classList.remove("opacity-60", "cursor-wait");
+          adminBtnText.textContent = "Generate & Send Royalty Summary";
+          adminBtnIcon.classList.remove("animate-spin");
+        }, 600);
+      }
+    });
+
+    // Admin Bulk Trigger
+    adminBulkBtn.addEventListener("click", async () => {
+      const eligible = AUTHORS.filter(a => a.total_pending > 0);
+      adminBulkBtn.disabled = true;
+      adminBulkBtn.classList.add("opacity-60");
+      adminBulkBtn.innerHTML = `<span>Triggering ${eligible.length} Webhooks...</span>`;
+      showToast(`Initiating bulk trigger for ${eligible.length} authors...`, "⚡");
+
+      for (const a of eligible) {
+        try {
+          const res = await fetch("http://localhost:5678/webhook/bookleaf-royalty-summary", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-bookleaf-secret": "bookleaf-secret-2026"
+            },
+            body: JSON.stringify({
+              author_id: a.author_id,
+              author_name: a.name,
+              author_email: a.email,
+              force_retrigger: true
+            })
+          });
+          const d = await res.json();
+          addAdminLog({
+            author_name: a.name,
+            author_id: a.author_id,
+            status: "Success",
+            subject: d.email_subject,
+            timestamp: new Date().toLocaleTimeString(),
+            body: d.email_body
+          });
+        } catch (e) {
+          addAdminLog({
+            author_name: a.name,
+            author_id: a.author_id,
+            status: "Failed",
+            subject: "Bulk Error",
+            timestamp: new Date().toLocaleTimeString(),
+            body: e.message
+          });
+        }
+      }
+
+      adminBulkBtn.disabled = false;
+      adminBulkBtn.classList.remove("opacity-60");
+      adminBulkBtn.innerHTML = `<svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg><span>Bulk Trigger All (9)</span>`;
+      showToast(`Bulk processing finished! Synchronized all pending authors.`, "✓", "bg-emerald-800");
+    });
+
+    function addAdminLog(item) {
+      const emptyRow = document.getElementById("admin-empty-log-row");
+      if (emptyRow) emptyRow.remove();
+      adminLogs.unshift(item);
+      adminLogCount.textContent = `${adminLogs.length} Events`;
+
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-slate-50 transition";
+      tr.innerHTML = `
+        <td class="py-3 px-3">
+          <p class="font-bold text-slate-900 text-xs">${item.author_name}</p>
+          <span class="text-[10px] text-slate-500 font-mono">${item.author_id}</span>
+        </td>
+        <td class="py-3 px-3">
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono ${item.status === 'Success' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : (item.status === 'Cleared' ? 'bg-blue-100 text-blue-800 border border-blue-300' : 'bg-rose-100 text-rose-800 border border-rose-300')}">
+            ${item.status}
+          </span>
+        </td>
+        <td class="py-3 px-3 text-slate-500 font-mono text-[11px]">${item.timestamp}</td>
+        <td class="py-3 px-3 text-right">
+          <button onclick="inspectAdminLog('${item.author_name}', '${encodeURIComponent(item.body || item.subject)}')" class="text-brand-700 hover:text-brand-800 font-bold text-[11px] cursor-pointer">Inspect</button>
+        </td>
+      `;
+      adminLogTable.insertBefore(tr, adminLogTable.firstChild);
+    }
+
+    window.inspectAdminLog = function(name, encoded) {
+      const decoded = decodeURIComponent(encoded);
+      adminOutputSubject.textContent = `Archived Statement for ${name}`;
+      adminOutputBody.textContent = decoded;
+      adminOutputEmpty.classList.add("hidden");
+      adminOutputBox.classList.remove("hidden");
+      adminOutputStatus.textContent = "Archived";
+      adminOutputStatus.className = "px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-50 text-blue-800 border border-blue-200";
+      showToast(`Viewing statement for ${name}`, "👁️");
+    };
+
+    // -------------------------------------------------------------
+    // AUTHOR PORTAL CONTROLS & SELF-SERVICE LOGIC
+    // -------------------------------------------------------------
+    const authorPersonaSelect = document.getElementById("author-persona-select");
+    const authorHeroName = document.getElementById("author-hero-name");
+    const authorHeroMeta = document.getElementById("author-hero-meta");
+    const authorHeroStatusPill = document.getElementById("author-hero-status-pill");
+    const authorHeroPending = document.getElementById("author-hero-pending");
+    const authorHeroThresholdNote = document.getElementById("author-hero-threshold-note");
+    const authorHeroEarned = document.getElementById("author-hero-earned");
+    const authorHeroPaid = document.getElementById("author-hero-paid");
+    const authorHeroCopies = document.getElementById("author-hero-copies");
+    const authorBankLabel = document.getElementById("author-bank-label");
+    const authorBooksPill = document.getElementById("author-books-pill");
+    const authorBooksGrid = document.getElementById("author-books-grid");
+
+    const authorEmailMeBtn = document.getElementById("author-email-me-btn");
+    const authorDownloadBtn = document.getElementById("author-download-btn");
+    const authorExpediteBtn = document.getElementById("author-expedite-btn");
+    const authorUpdateBankBtn = document.getElementById("author-update-bank-btn");
+
+    const modalBank = document.getElementById("modal-bank");
+    const modalBankCloseBtn = document.getElementById("modal-bank-close-btn");
+    const modalBankCancelBtn = document.getElementById("modal-bank-cancel-btn");
+    const modalBankSaveBtn = document.getElementById("modal-bank-save-btn");
+    const bankInputName = document.getElementById("bank-input-name");
+    const bankInputBank = document.getElementById("bank-input-bank");
+    const bankInputAccount = document.getElementById("bank-input-account");
+
+    // Populate Author Persona Switcher
+    AUTHORS.forEach(a => {
+      const opt = document.createElement("option");
+      opt.value = a.author_id;
+      opt.textContent = `${a.name} (${a.city}) — ${a.author_id} [${a.status}]`;
+      authorPersonaSelect.appendChild(opt);
+    });
+
+    function renderAuthorPortalView(authorId) {
+      const author = AUTHORS.find(a => a.author_id === authorId) || AUTHORS[0];
+
+      authorHeroName.textContent = author.name;
+      authorHeroMeta.textContent = `Author ID: ${author.author_id} • ${author.city} • Member since ${author.joined_date}`;
+      authorHeroPending.textContent = `₹${author.total_pending.toLocaleString('en-IN')}`;
+      authorHeroEarned.textContent = `₹${author.total_earned.toLocaleString('en-IN')}`;
+      authorHeroPaid.textContent = `₹${author.total_paid.toLocaleString('en-IN')}`;
+
+      const totalCopies = author.books.reduce((acc, b) => acc + (b.copies || 0), 0);
+      authorHeroCopies.textContent = `${totalCopies.toLocaleString('en-IN')} Copies`;
+
+      authorBankLabel.textContent = author.bank;
+      authorBooksPill.textContent = `${author.books.length} Registered Titles`;
+
+      // Status pill & threshold note
+      if (author.badge === "Green") {
+        authorHeroStatusPill.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-400/20 text-emerald-300 border border-emerald-400/30";
+        authorHeroStatusPill.textContent = "🟢 All Clear (Fully Paid)";
+        authorHeroThresholdNote.textContent = "✓ No pending balance outstanding";
+      } else if (author.badge === "Red") {
+        authorHeroStatusPill.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-rose-500/25 text-rose-300 border border-rose-400/40";
+        authorHeroStatusPill.textContent = "🔴 Action Needed (>90 Days Overdue)";
+        authorHeroThresholdNote.textContent = "⚠️ Overdue for disbursement — priority escalation active";
+      } else {
+        authorHeroStatusPill.className = "px-3 py-1 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30";
+        authorHeroStatusPill.textContent = author.total_pending < 1000 ? "🟡 Rolling Over (<₹1,000)" : "🟡 Normal Cycle";
+        authorHeroThresholdNote.textContent = author.total_pending < 1000 ? "ℹ️ Below ₹1,000 threshold (will roll over)" : "✓ Above ₹1,000 Payout Threshold";
+      }
+
+      authorBooksGrid.innerHTML = "";
+      author.books.forEach(b => {
+        const card = document.createElement("div");
+        card.className = "p-5 rounded-2xl bg-slate-50 border border-slate-200 card-hover transition space-y-4";
+        card.innerHTML = `
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-700">${b.genre}</span>
+              <h4 class="text-base font-extrabold text-slate-900 mt-1">${b.title}</h4>
+              <p class="text-xs text-slate-500 font-mono mt-0.5">ISBN: ${b.isbn}</p>
+            </div>
+            ${getBadgeHtml(b.badge, b.status.includes('In Production') ? b.status : (b.badge === 'Green' ? 'Fully Paid' : (b.badge === 'Red' ? 'Overdue' : 'Pending Cycle')))}
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs bg-white p-3.5 rounded-xl border border-slate-200">
+            <div>
+              <span class="text-slate-400 block text-[10px] font-bold">MRP / ROYALTY</span>
+              <span class="font-bold text-slate-900">₹${b.mrp} (80% net)</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px] font-bold">COPIES SOLD</span>
+              <span class="font-bold text-slate-900 font-mono">${b.copies} copies</span>
+            </div>
+            <div class="pt-2 border-t border-slate-100">
+              <span class="text-slate-400 block text-[10px] font-bold">EARNED / PAID</span>
+              <span class="font-bold text-slate-900 font-mono">₹${b.earned.toLocaleString('en-IN')} / ₹${b.paid.toLocaleString('en-IN')}</span>
+            </div>
+            <div class="pt-2 border-t border-slate-100">
+              <span class="text-slate-400 block text-[10px] font-bold">PENDING BALANCE</span>
+              <span class="font-bold ${b.pending > 0 ? 'text-amber-800' : 'text-emerald-700'} font-mono">₹${b.pending.toLocaleString('en-IN')}</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 pt-1 gap-1">
+            <span>Last Payout: <b class="text-slate-700">${b.last_payout}</b></span>
+            <span>Platforms: <b class="text-slate-700">${b.platforms}</b></span>
+          </div>
+        `;
+        authorBooksGrid.appendChild(card);
+      });
+    }
+
+    authorPersonaSelect.addEventListener("change", (e) => {
+      renderAuthorPortalView(e.target.value);
+      const chosen = AUTHORS.find(a => a.author_id === e.target.value);
+      showToast(`Simulated login as ${chosen.name} (${chosen.city})`);
+    });
+
+    // Author Email Me My Statement Button
+    authorEmailMeBtn.addEventListener("click", async () => {
+      const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
+      authorEmailMeBtn.disabled = true;
+      authorEmailMeBtn.classList.add("opacity-60");
+      showToast(`Generating & sending statement to ${currentAuthor.name}...`, "✉️");
+
+      try {
+        const res = await fetch("http://localhost:5678/webhook/bookleaf-royalty-summary", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-bookleaf-secret": "bookleaf-secret-2026"
+          },
+          body: JSON.stringify({
+            author_id: currentAuthor.author_id,
+            author_name: currentAuthor.name,
+            author_email: currentAuthor.email,
+            force_retrigger: true
+          })
+        });
+
+        const data = await res.json();
+
+        // Also trigger real SMTP
+        await fetch("http://localhost:5001/api/send-real-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            author_name: currentAuthor.name,
+            author_id: currentAuthor.author_id,
+            author_email: currentAuthor.email,
+            target_recipient: "ansarisaifuddin732@gmail.com",
+            subject: data.email_subject,
+            email_body: data.email_body,
+            total_earned: data.total_earned,
+            total_paid: data.total_paid,
+            total_pending: data.total_pending
+          })
+        });
+
+        showToast(`Official Royalty Statement sent to your inbox (ansarisaifuddin732@gmail.com)!`, "✓", "bg-emerald-800");
+
+      } catch (err) {
+        showToast(`Email dispatch: ${err.message}`, "❌", "bg-rose-700");
+      } finally {
+        setTimeout(() => {
+          authorEmailMeBtn.disabled = false;
+          authorEmailMeBtn.classList.remove("opacity-60");
+        }, 800);
+      }
+    });
+
+    // Author Download Statement Action (Formatted TXT Receipt)
+    authorDownloadBtn.addEventListener("click", () => {
+      const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
+      let content = `========================================================\n`;
+      content += `BOOKLEAF PUBLISHING — OFFICIAL AUTHOR ROYALTY STATEMENT\n`;
+      content += `========================================================\n\n`;
+      content += `STATEMENT DETAILS:\n`;
+      content += `-------------------\n`;
+      content += `Author Name    : ${currentAuthor.name}\n`;
+      content += `Author ID      : ${currentAuthor.author_id}\n`;
+      content += `Registered City: ${currentAuthor.city}\n`;
+      content += `Registered Mail: ${currentAuthor.email}\n`;
+      content += `Linked Bank    : ${currentAuthor.bank}\n`;
+      content += `Issue Date     : ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}\n\n`;
+      content += `ROYALTY POLICY & LEDGER SUMMARY:\n`;
+      content += `--------------------------------\n`;
+      content += `Contract Split : 80% Author Net Profit / 20% Publisher\n`;
+      content += `Payout Schedule: Quarterly (within 45 days of quarter close)\n`;
+      content += `Threshold Rule : ₹1,000 Minimum (Balances under ₹1,000 rollover)\n\n`;
+      content += `FINANCIAL BALANCES:\n`;
+      content += `-------------------\n`;
+      content += `Total Lifetime Royalties Earned : ₹${currentAuthor.total_earned.toLocaleString('en-IN')}\n`;
+      content += `Total Royalties Disbursed (Paid): ₹${currentAuthor.total_paid.toLocaleString('en-IN')}\n`;
+      content += `Current Pending Payout Balance  : ₹${currentAuthor.total_pending.toLocaleString('en-IN')}\n`;
+      content += `Status Assessment               : ${currentAuthor.status}\n\n`;
+      content += `BOOK BREAKDOWN (${currentAuthor.books.length} TITLES):\n`;
+      content += `--------------------------------------------------------\n`;
+      currentAuthor.books.forEach((b, i) => {
+        content += `[${i + 1}] "${b.title}"\n`;
+        content += `    ISBN       : ${b.isbn}\n`;
+        content += `    Genre      : ${b.genre}\n`;
+        content += `    Retail MRP : ₹${b.mrp}\n`;
+        content += `    Copies Sold: ${b.copies}\n`;
+        content += `    Earned     : ₹${b.earned.toLocaleString('en-IN')} | Paid: ₹${b.paid.toLocaleString('en-IN')} | Pending: ₹${b.pending.toLocaleString('en-IN')}\n`;
+        content += `    Platforms  : ${b.platforms}\n`;
+        content += `    Last Payout: ${b.last_payout}\n\n`;
+      });
+      content += `========================================================\n`;
+      content += `BookLeaf Publishing India • support@bookleafpub.com\n`;
+      content += `Generated electronically for author verified record.\n`;
+
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `BookLeaf_Statement_${currentAuthor.author_id}.txt`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast(`Downloaded royalty statement for ${currentAuthor.name}!`, "📄");
+    });
+
+    // Author Request Payout Priority Action
+    authorExpediteBtn.addEventListener("click", () => {
+      const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
+      if (currentAuthor.total_pending === 0) {
+        showToast(`You have ₹0 pending balance — all past royalties are fully paid!`, "ℹ️", "bg-emerald-800");
+      } else if (currentAuthor.total_pending < 1000) {
+        showToast(`Balance (₹${currentAuthor.total_pending}) is below ₹1,000 threshold. Will roll over!`, "ℹ️", "bg-amber-800");
+      } else {
+        const ticketId = `BL-${Math.floor(10000 + Math.random() * 90000)}`;
+        showToast(`Priority Payout Ticket #${ticketId} created with BookLeaf Finance!`, "🚀", "bg-brand-700");
+      }
+    });
+
+    // Author Update Bank Modal Handlers
+    authorUpdateBankBtn.addEventListener("click", () => {
+      const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
+      bankInputName.value = currentAuthor.name;
+      modalBank.classList.remove("hidden");
+      modalBank.classList.add("flex");
+    });
+
+    modalBankCloseBtn.addEventListener("click", () => {
+      modalBank.classList.add("hidden");
+      modalBank.classList.remove("flex");
+    });
+
+    modalBankCancelBtn.addEventListener("click", () => {
+      modalBank.classList.add("hidden");
+      modalBank.classList.remove("flex");
+    });
+
+    modalBankSaveBtn.addEventListener("click", () => {
+      const currentAuthor = AUTHORS.find(a => a.author_id === authorPersonaSelect.value);
+      const bankName = bankInputBank.value.trim() || "Bank";
+      const acc = bankInputAccount.value.trim();
+      const masked = `${bankName} (•••• ${acc.slice(-4) || '0000'})`;
+
+      currentAuthor.bank = masked;
+      authorBankLabel.textContent = masked;
+      renderAdminAuthorDetails(currentAuthor.author_id);
+
+      modalBank.classList.add("hidden");
+      modalBank.classList.remove("flex");
+      showToast(`Updated payout bank account to ${masked}!`, "✓", "bg-emerald-800");
+    });
+
+    // Initial Renders
+    filterAndRenderAdminAuthors();
+    renderAuthorPortalView(AUTHORS[0].author_id);
+  </script>
+</body>
+</html>

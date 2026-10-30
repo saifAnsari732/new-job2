@@ -1,0 +1,16 @@
+# n8n local runtime database and logs
+.n8n_data/
+*.sqlite
+*.log
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+*.exe
