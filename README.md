@@ -39,7 +39,94 @@ sequenceDiagram
 
 ---
 
-## 2. Bubble Database Schema & Design Rationale (Requirement A1)
+## 2. 🚀 Quickstart & Local Setup Guide (Run in 3 Steps)
+
+Follow these simple instructions to run and test the complete system locally:
+
+### 2.1 Prerequisites
+- **Node.js**: v18 or higher (`node -v`)
+- **n8n**: Installed globally (`npm install -g n8n`)
+- **Google Gemini API Key**: Free API key from [Google AI Studio](https://aistudio.google.com/)
+- **Modern Web Browser**: Chrome / Edge / Brave
+
+---
+
+### 2.2 Installation & Startup (3 Terminal Windows)
+
+#### Step 1: Clone Repository
+```bash
+git clone https://github.com/saifAnsari732/new-job2.git
+cd new-job2
+```
+
+#### Step 2: Launch the 3 Services
+
+**🟢 Terminal 1: Start n8n Automation Engine (Port 5678)**
+```bash
+# Windows PowerShell
+$env:GEMINI_API_KEY="your-gemini-api-key"
+$env:BOOKLEAF_WEBHOOK_SECRET="bookleaf-secret-2026"
+n8n start
+
+# macOS / Linux Bash
+export GEMINI_API_KEY="your-gemini-api-key"
+export BOOKLEAF_WEBHOOK_SECRET="bookleaf-secret-2026"
+n8n start
+```
+1. Open your browser at **`http://localhost:5678`**.
+2. Click **Workflows -> Import from File** and select `n8n/bookleaf_n8n_workflow.json`.
+3. Toggle the workflow to **Active** (switch on top right).
+
+**🟢 Terminal 2: Start Real HTML SMTP Dispatcher (Port 5001)**
+```bash
+node scripts/real-smtp-server.cjs
+```
+> Dispatches real executive HTML email statements with BookLeaf branding directly to the author recipient via Gmail SMTP.
+
+**🟢 Terminal 3: Start Enterprise Web Portal (Port 3000)**
+```bash
+npx serve -l 3000 .
+```
+Open **`http://localhost:3000`** in your browser!
+
+---
+
+### 2.3 Interactive Testing & Verification Guide
+
+1. **Admin Operations Console (`http://localhost:3000`):**
+   - **Platform KPIs**: Verify 10 Authors, 18 Titles, ₹2,52,567 total author earnings at 80% net split, ₹2,09,423 cleared, and ₹43,144 pending.
+   - **Filter & Search**: Search authors by name or city (e.g. `Mumbai`, `Delhi`), or filter by status (`Yellow - Pending Cycle`, `Red - Overdue >90 Days`).
+   - **Trigger Single AI Statement**: Select **Priya Sharma (`AUTH001`)** and click **"Generate & Send Royalty Summary"**.
+     - Notice the button disables with a loading spinner (double-click guard).
+     - n8n executes the Gemini AI pipeline, displays the structured statement, and sends an HTML copy to the inbox!
+   - **Bulk Trigger**: Click **"Bulk Trigger All (9)"** to trigger automated statements across all eligible authors at once.
+   - **Export CSV**: Click **"Export CSV"** to download the complete BookLeaf royalty audit ledger.
+   - **Simulate Bank Clearance**: Click **"Mark Payout as Cleared"** to simulate banking disbursement, instantly converting pending balance to cleared.
+
+2. **Author Self-Service Portal (Requirement A4 Privacy Rules Test):**
+   - Click the **"Author Portal"** button in the top navigation bar.
+   - Use the **"Simulate Login As"** dropdown to test different author personas:
+     - **Priya Sharma**: ₹3,570 Pending (Normal quarterly cycle).
+     - **Kavita Deshmukh**: ₹850 Pending — verify the **< ₹1,000 threshold rollover** policy alert.
+     - **Vikram Joshi**: ₹3,350 Pending — verify the **> 90 days overdue** priority escalation banner.
+     - **Farhan Sheikh**: ₹0 Pending — verify the **🟢 Fully Paid** status.
+   - Click **"Email Me My Statement"** to test instant self-service email delivery.
+   - Click **"Download Statement"** to download an official structured statement receipt (`.txt`).
+   - Click **"Edit Bank"** to open the interactive modal and update bank account details.
+
+---
+
+### 2.4 Service Ports Architecture
+| Service | Local URL | Role |
+| :--- | :--- | :--- |
+| **Enterprise Portal** | `http://localhost:3000` | Dual-view Admin & Author UI with working logic buttons |
+| **n8n Automation Engine** | `http://localhost:5678` | Webhook listener, 60s idempotency lock, Gemini 2.5 Flash caller |
+| **SMTP Dispatcher** | `http://localhost:5001` | Live Gmail relay sending formatted HTML statements |
+| **Bubble.io Cloud App** | [Live Editor Link](https://bubble.io/page?id=bookleaf-royalty-portal-80258&tab=Design&name=index) | Cloud backend with data types, API connector & privacy rules |
+
+---
+
+## 3. Bubble Database Schema & Design Rationale (Requirement A1)
 
 To follow relational database best practices while optimizing for Bubble's Repeating Group search speed and privacy rules, the database is cleanly separated into **4 Data Types**:
 
@@ -107,7 +194,7 @@ To follow relational database best practices while optimizing for Bubble's Repea
 
 ---
 
-## 3. Bubble Privacy Rules (Requirement A4)
+## 4. Bubble Privacy Rules (Requirement A4)
 
 Data isolation between authors and admins is enforced at the server level using **Bubble Privacy Rules** (`Data -> Privacy`):
 
@@ -124,7 +211,7 @@ Data isolation between authors and admins is enforced at the server level using 
 
 ---
 
-## 4. Bubble ↔ n8n Integration & Data Fetching Justification (Requirement B)
+## 5. Bubble ↔ n8n Integration & Data Fetching Justification (Requirement B)
 
 ### Why We Use a Hybrid Payload + Fallback Architecture (Step 2 Justification)
 The assignment specifies: *"n8n pulls the author's complete data — either by querying the Bubble Data API or by receiving the full payload in the webhook. Either approach is acceptable; justify your choice."*
@@ -136,7 +223,7 @@ We pass the author's identifier and structured book payload directly from Bubble
 
 ---
 
-## 5. AI Prompt Strategy & Edge-Case Handling (Requirement B3)
+## 6. AI Prompt Strategy & Edge-Case Handling (Requirement B3)
 
 Our n8n workflow (`4. Prepare Author Context & AI Prompt`) injects the **BookLeaf Knowledge Base & Communication Tone Guidelines** from Assignment 1 into the system prompt and pre-computes factual diagnostics so the LLM never hallucinates numbers:
 
@@ -150,7 +237,7 @@ Our n8n workflow (`4. Prepare Author Context & AI Prompt`) injects the **BookLea
 
 ---
 
-## 6. Security, Error Handling & Idempotency (Requirement C)
+## 7. Security, Error Handling & Idempotency (Requirement C)
 
 1. **Webhook Security (`x-bookleaf-secret`):**
    - Every webhook call from Bubble's API Connector includes the custom header `x-bookleaf-secret: bookleaf-secret-2026`.
@@ -164,7 +251,7 @@ Our n8n workflow (`4. Prepare Author Context & AI Prompt`) injects the **BookLea
 
 ---
 
-## 7. My Bubble Learning Process & Challenges Overcome
+## 8. My Bubble Learning Process & Challenges Overcome
 
 Coming from a code-first MERN/Next.js background (Assignment 1), adapting to Bubble.io within a few days was an exciting learning experience:
 1. **Challenge 1 — Relational Aggregations vs. Filtering Performance:**
@@ -177,7 +264,7 @@ Coming from a code-first MERN/Next.js background (Assignment 1), adapting to Bub
 
 ---
 
-## 8. Live Deployment & Submission Links
+## 9. Live Deployment & Submission Links
 
 - **Bubble.io Live Application:** [https://bubble.io/page?id=bookleaf-royalty-portal-80258&tab=Design&name=index](https://bubble.io/page?id=bookleaf-royalty-portal-80258&tab=Design&name=index)
 - **Local Enterprise Operations Portal:** `http://localhost:3000`
@@ -187,7 +274,7 @@ Coming from a code-first MERN/Next.js background (Assignment 1), adapting to Bub
 
 ---
 
-## 9. 3–5 Minute Loom / Screen Recording Script (Ready to Present)
+## 10. 3–5 Minute Loom / Screen Recording Script (Ready to Present)
 
 | Minute | Screen Shown | Key Talking Points & Actions |
 | :--- | :--- | :--- |
